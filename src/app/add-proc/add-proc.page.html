@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+    	
+      	<img style="max-height: 4vh;" src="/assets/gsk-logo.png" alt="" />
+		Add Item
+	</ion-title>
+		<ion-buttons slot="start">
+    		<ion-back-button></ion-back-button>
+    	</ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+	<ion-card style="background-color: white !important; ">
+			<ion-card-header > <h3 text style="margin:auto;">Add Item</h3></ion-card-header>
+			<ion-card-content>
+					<br/>
+					<p>First step, choose if is a Proccess or an Idea</p>
+					<ion-select [(ngModel)]="type">
+						<ion-select-option value="Proccess">Proccess</ion-select-option>
+						<ion-select-option value="Idea">Idea</ion-select-option>
+					</ion-select>
+				<ion-item>
+				  <ion-label position="floating">Proccess Name</ion-label>
+				  <ion-input [(ngModel)]="nameProc"></ion-input>
+				</ion-item>
+
+				<ion-item>
+				  <ion-label position="floating">Short Description </ion-label>
+				  <ion-input maxLenght="40" [(ngModel)]="resumo" type="text"></ion-input>
+				</ion-item>	
+
+				<ion-item>
+				  <ion-label position="floating">E-mail</ion-label>
+				  <ion-input placeholder="{{email}}" disabled type="text"></ion-input>
+				</ion-item>
+
+				<ion-item>
+				  <ion-label position="floating">Tell us about it! (: </ion-label>
+				  <ion-input [(ngModel)]="tellme" type="text"></ion-input>
+				</ion-item>
+				<br/>
+				<p>Upload a photo:
+					<ion-button shape="outline" (click)="photo()" color="findme" ><ion-icon name="camera"></ion-icon>	</ion-button>
+				</p>
+				<br/>
+				<!-- <img src="{{img.src}}"> -->
+				
+				<ion-button (click)="create()" color="findme" style="color:white !important; max-width: 25vh;" >
+					 Create 
+				</ion-button>
+			
+			</ion-card-content>
+			
+	</ion-card>
+</ion-content>

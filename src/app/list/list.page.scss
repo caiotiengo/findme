@@ -1,0 +1,29 @@
+img{
+	max-width:20vh
+}
+ion-content{
+	--background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('../../assets/imagemfoda.jpg') no-repeat no-repeat center; 
+
+}
+ion-list{
+	max-width: 95%;
+    display: block;
+    margin: auto;
+}
+ion-modal{
+	--width: 100% !important;
+	--height: 100% !important;
+}
+
+
+@media only screen and (min-height: 600px) and (min-width: 768px){
+	.sc-ion-modal-md-h{
+		--width: 100% !important;
+		--height: 100% !important;
+	}
+ion-modal{
+	--width: 100% !important;
+	--height: 100% !important;
+}
+
+}

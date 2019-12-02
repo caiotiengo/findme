@@ -1,0 +1,74 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+            <img style="max-height: 4vh;" src="/assets/gsk-logo.png" alt="" />
+    </ion-title>
+    <!--ion-buttons slot="start">
+      <ion-back-button ></ion-back-button>
+    </ion-buttons-->
+  </ion-toolbar>
+</ion-header>
+<ion-fab  vertical="top" horizontal="end" slot="fixed">
+    <ion-fab-button class="findme" color="findme" (click)="home()">
+      <ion-icon style="color:#ffffff !important" name="home"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+<ion-content>
+
+
+<ion-card>
+  <ion-card-header ><h1 style="    text-align: center;"> {{proccesso.name}}</h1> </ion-card-header>
+    <ion-slides #mySlider>
+
+      <ion-slide>
+            <img src="./assets/Capture_1.jpg">
+      </ion-slide>
+      <ion-slide>
+        <img src="./assets/Capture_2.jpg">
+      </ion-slide>
+     
+    </ion-slides>  
+    
+   <ion-item >
+     <ion-button fill="clear" expand="block" style=" margin-right: auto; margin-left: auto; " (click)="slidePrev(mySlider)"> <ion-icon color="findme" style="" name="arrow-round-back"></ion-icon> Prev </ion-button>
+     <ion-button fill="clear" expand="block" style=" margin-right: auto; margin-left: auto; "  (click)="nextSlide(mySlider)"> Next <ion-icon color="findme" style="" name="arrow-round-forward"></ion-icon></ion-button>
+    </ion-item>
+
+  
+    <ion-card-content>
+      {{proccesso.tellme}}
+    
+    </ion-card-content>
+    <ion-item>
+    <ion-icon name="paper" slot="start"></ion-icon>
+    <ion-label>{{proccesso.autor}}</ion-label>
+    </ion-item>
+
+    <ion-item>
+    <ion-icon name="mail" slot="start"></ion-icon>
+    <ion-label>{{proccesso.email}}</ion-label>
+    </ion-item>
+    
+    <ion-item>
+    <ion-icon name="people" slot="start"></ion-icon>
+    <ion-label>{{proccesso.reportsTo}}</ion-label>
+    </ion-item>
+    <ion-item>
+    <ion-icon name="create" slot="start"></ion-icon>
+    <ion-label>{{proccesso.lastEdit}}</ion-label>
+    </ion-item>
+     <ion-item> 
+        <p style="color: gray;">This post was useful?</p>
+         <ion-button fill="outline" color="findme" (click)="handleLike()">
+              <ion-icon name="thumbs-up"></ion-icon>
+                 {{proccesso.LikeValue}}
+          </ion-button>
+         
+          <ion-button fill="outline" color="findme" (click)="handleDislike()">
+              <ion-icon name="thumbs-down"></ion-icon>
+          </ion-button>
+      </ion-item>
+
+  </ion-card>
+
+</ion-content>

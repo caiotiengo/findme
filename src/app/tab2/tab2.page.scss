@@ -1,1 +1,15 @@
+ion-content{
+	--background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('../../assets/imagemfoda.jpg') no-repeat no-repeat center; 
+}
 
+ion-card{
+	--background: white !important;
+	width: 80%;
+    height: auto;
+    display: block;
+    margin: auto;
+    margin-top: 3%;
+            margin-bottom: 3%;
+
+    padding: 0 0 0 3px;
+}

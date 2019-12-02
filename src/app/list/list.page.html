@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+            <img style="max-height: 4vh;" src="/assets/gsk-logo.png" alt="" />
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-fab  vertical="top" horizontal="end" slot="fixed">
+    <ion-fab-button class="findme" color="findme" (click)="perfilPage()">
+      <ion-icon style="color:#ffffff !important" name="person"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+<ion-content>
+	<img class="welcome-card" src="/assets/Find Me.png"/>
+      <ion-searchbar animated style="width: 85%; margin: auto;" placeholder="What do you need?" (ionInput)="filterList($event)"></ion-searchbar>
+	
+			
+          <ion-list style="background: rgba(255, 255, 255, 0.9);" *ngFor="let items of goalList">
+          
+            <ion-card style="    border: 1px solid rgba(128, 0, 128, 0.33);">
+              <ion-fab  vertical="bottom" horizontal="end" slot="fixed">
+                      <ion-fab-button class="findme" color="findme" (click)="dismiss()" [routerLink]="['item/' + items.id]">
+                        View
+                      </ion-fab-button>
+                  
+                </ion-fab>
+              <ion-card-header>
+                <h4 style="text-align: center;
+    color: purple;">{{items.name}}</h4>   
+              </ion-card-header>
+
+                <ion-card-content>
+                    {{items.resumo}}
+                    <p slot="end">Likes  • {{items.LikeValue}}</p><br/>
+                </ion-card-content>  
+                <ion-label>
+                  <ion-button fill="clear" (click)="verifica()" color="findme" [routerLink]="['edit-page/' + items.id]" > Edit
+                  </ion-button>
+                </ion-label>
+          </ion-card>
+          </ion-list>
+       
+
+			<br/>
+	
+</ion-content>
