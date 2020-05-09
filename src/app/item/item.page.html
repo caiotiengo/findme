@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-            <img style="max-height: 4vh;" src="/assets/gsk-logo.png" alt="" />
+            <img style="max-height: 6vh;" src="/assets/logo_menor.png" alt="" />
     </ion-title>
     <!--ion-buttons slot="start">
       <ion-back-button ></ion-back-button>
@@ -10,65 +10,108 @@
 </ion-header>
 <ion-fab  vertical="top" horizontal="end" slot="fixed">
     <ion-fab-button class="findme" color="findme" (click)="home()">
-      <ion-icon style="color:#ffffff !important" name="home"></ion-icon>
+      <ion-icon style="color:#ffcb02 !important" name="home"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 <ion-content>
 
 
 <ion-card>
-  <ion-card-header ><h1 style="    text-align: center;"> {{proccesso.name}}</h1> </ion-card-header>
+  <ion-card-header style=" color: black; background: linear-gradient(180deg, #ffce00, #ffce0091, #2224280a);" >
+      <h1 style="text-align: center;"> {{loja.nome}}</h1>
+
+      <ion-item style="border-radius: 25px; border: 2px solid rgba(0, 0, 0, 0.3);
+    box-shadow: 5px 5px rgba(128, 128, 128, 0.4);">
+          <ion-icon name="pin" style="color: #3eab3e" slot="start"></ion-icon>
+          <ion-label>{{loja.bairro}},{{loja.cidade}}</ion-label>
+          {{loja.LikeValue}}
+
+          <ion-icon slot="end" style="color: red" name="heart" (click)="handleLike()"></ion-icon>
+      </ion-item>
+      <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+
+      <ion-fab-button color="findme">
+
+          </ion-fab-button>
+      </ion-fab>
+  </ion-card-header>
     <ion-slides #mySlider>
 
       <ion-slide>
-            <img src="./assets/Capture_1.jpg">
+          <img style="max-width: 50%" src="./assets/slide3.png">
       </ion-slide>
       <ion-slide>
-        <img src="./assets/Capture_2.jpg">
+          <img style="max-width: 50%" src="./assets/logo_menor.png">
       </ion-slide>
      
     </ion-slides>  
     
-   <ion-item >
+   <!--ion-item >
      <ion-button fill="clear" expand="block" style=" margin-right: auto; margin-left: auto; " (click)="slidePrev(mySlider)"> <ion-icon color="findme" style="" name="arrow-round-back"></ion-icon> Prev </ion-button>
      <ion-button fill="clear" expand="block" style=" margin-right: auto; margin-left: auto; "  (click)="nextSlide(mySlider)"> Next <ion-icon color="findme" style="" name="arrow-round-forward"></ion-icon></ion-button>
-    </ion-item>
+    </ion-item-->
 
   
     <ion-card-content>
-      {{proccesso.tellme}}
-    
+            <h4 text-center style="color: black"> Descrição </h4>
+            <p text-center> {{loja.resumo}}</p>
+            <ion-item style="border-radius: 25px;
+    border: 2px solid rgba(0, 0, 0, 0.21);
+    box-shadow: 3px 3px rgba(128, 128, 128, 0.4);">
+                <ion-icon slot="start" name="car"></ion-icon>
+                <p slot="end">R$8,00</p>
+            </ion-item>
     </ion-card-content>
-    <ion-item>
-    <ion-icon name="paper" slot="start"></ion-icon>
-    <ion-label>{{proccesso.autor}}</ion-label>
-    </ion-item>
 
-    <ion-item>
-    <ion-icon name="mail" slot="start"></ion-icon>
-    <ion-label>{{proccesso.email}}</ion-label>
-    </ion-item>
-    
-    <ion-item>
-    <ion-icon name="people" slot="start"></ion-icon>
-    <ion-label>{{proccesso.reportsTo}}</ion-label>
-    </ion-item>
-    <ion-item>
-    <ion-icon name="create" slot="start"></ion-icon>
-    <ion-label>{{proccesso.lastEdit}}</ion-label>
-    </ion-item>
-     <ion-item> 
-        <p style="color: gray;">This post was useful?</p>
+    <!--ion-select style="border: 1px solid black; border-radius: 25px; padding: 10px;" placeholder="Escolha uma categoria" [(ngModel)]="categoria">
+        <ion-select-option value="Velas">Velas</ion-select-option>
+        <ion-select-option value="Louca">Produtos de Louça</ion-select-option>
+        <ion-select-option value="Barro">Produtos de Barro</ion-select-option>
+        <ion-select-option value="Imagens">Imagens</ion-select-option>
+        <ion-select-option value="Contas">Contas</ion-select-option>
+        <ion-select-option value="Madeiras">Produtos de Madeira</ion-select-option>
+        <ion-select-option value="Fumos">Fumos</ion-select-option>
+        <ion-select-option value="Decoracao">Decoração</ion-select-option>
+        <ion-select-option value="Jogos">Jogos</ion-select-option>
+    </ion-select-->
+    <h4 style="background: #ffd112;margin: 0;border: 10px solid #ffd112;color: black;" text-center>Produtos</h4>
+    <ion-searchbar  animated style="color: black; background: linear-gradient(180deg, #ffce00, #ffce0091, #2224280a);" placeholder="Pesquise um produto"
+                    (ionInput)="filterList($event)">
+
+
+
+    </ion-searchbar>
+    <ion-list *ngFor="let items of goalList" >
+
+            <ion-item (click)="addCarrinho(items)">
+
+                <ion-avatar slot="start">
+                    <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+                </ion-avatar>
+                <ion-label slot="start">{{items.nome}}<p>{{items.valor}}</p></ion-label>
+                <ion-icon slot="end" name="add-circle" style="color:#ffcb02 !important" color="findme"></ion-icon>
+
+            </ion-item>
+
+
+    </ion-list>
+
+
+        <!--ion-item>
+        <p style="color: gray;">Avalie essa loja:</p>
          <ion-button fill="outline" color="findme" (click)="handleLike()">
               <ion-icon name="thumbs-up"></ion-icon>
-                 {{proccesso.LikeValue}}
           </ion-button>
-         
           <ion-button fill="outline" color="findme" (click)="handleDislike()">
               <ion-icon name="thumbs-down"></ion-icon>
           </ion-button>
-      </ion-item>
+      </ion-item-->
 
   </ion-card>
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button (click)="finalizarCompra()" color="findme">
+            <ion-icon style="color:#ffcb02 !important" name="cart"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
 
 </ion-content>

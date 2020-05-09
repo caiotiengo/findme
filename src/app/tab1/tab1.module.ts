@@ -12,7 +12,7 @@ import { ListPage } from '../list/list.page';
     CommonModule,
     FormsModule,
     RouterModule.forChild([{ path: '', component: Tab1Page }])
-  ],entryComponents: [ListPage],
-  declarations: [Tab1Page,ListPage],
+  ],
+  declarations: [Tab1Page],
 })
 export class Tab1PageModule {}

@@ -1,11 +1,10 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title> 
-    	<img style="max-height: 4vh;" src="/assets/gsk-logo.png" alt="" />
-		User
+    <ion-title>
+        <img style="max-height: 6vh;" src="/assets/logo_menor.png" alt="" />
+
 	</ion-title>
 	<ion-buttons slot="start">
-        <ion-back-button></ion-back-button>
       </ion-buttons>
   </ion-toolbar>
 
@@ -22,13 +21,14 @@
 <ion-content>
 
 <ion-card style="background-color: white !important">
-    <ion-card-header > <h3 text center>Hello, {{name}}!</h3></ion-card-header>
+    <ion-card-header > <h3 text center>Olá, {{nome}}!</h3></ion-card-header>
     <ion-card-content>
-      <h4>Your informations:</h4>
+      <h4>Suas Informações:</h4>
       <p>Email: {{email}}</p>
-      <p>Reports to: {{boss}}</p>
-      <p>Role: {{role}}</p>
-      <p>BU: {{company}}</p>
+      <p>Endereço: {{endereco}}</p>
+      <p>Bairro: {{bairro}}</p>
+      <p>Cidade: {{cidade}}</p>
+      <p>Zona: {{zona}}</p>
       <br/>
       <ion-button color="findme" (click)="sair()">Logout</ion-button>
 
@@ -36,11 +36,11 @@
   </ion-card>
 
   <ion-card style="background-color: white !important">
-    <ion-card-header > <h3 text center>{{name}}, Here's your items!</h3>  <ion-button color="findme" (click)="addProc()">Add now</ion-button></ion-card-header>
+    <ion-card-header > <h3 text center>{{nome}}, Aqui está suas compras!</h3>  <!--ion-button color="findme" (click)="addProc()"></ion-button--></ion-card-header>
    
     <ion-card-content>
-      <ion-list *ngFor="let items of goalList">
-      <ion-item *ngIf="items.email === email" >
+      <ion-list *ngFor="let items of goalListFiltrado">
+      <ion-item>
             <h2>{{items.name}}</h2><br/>
             <p slot="end">Likes  • {{items.LikeValue}}</p><br/>
       </ion-item>

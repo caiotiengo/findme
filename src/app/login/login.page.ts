@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {NavController} from '@ionic/angular';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase/app';
-import {AlertController} from '@ionic/angular'
+import {AlertController} from '@ionic/angular';
 import { ServiceService } from '../service.service';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
@@ -16,53 +16,53 @@ import { ModalController } from '@ionic/angular';
 })
 export class LoginPage implements OnInit {
 
-  email:string ="";
-  password:string="";
+  email = '';
+  password = '';
 
-  constructor(public navCtrl:NavController,private storage: Storage,
-    public router: Router, public alertCtrl: AlertController,public afAuth: AngularFireAuth,
-     public services: ServiceService, public modalController: ModalController) {
+  constructor(public navCtrl: NavController, private storage: Storage,
+              public router: Router, public alertCtrl: AlertController, public afAuth: AngularFireAuth,
+              public services: ServiceService, public modalController: ModalController) {
 
 
-      this.modalController.dismiss({
-        'dismissed': true
-      });
 
       }
 
   ngOnInit() {
   }
-  registrar(){
+  registrar() {
 
-  	this.navCtrl.navigateForward('/registro')
-  	console.log('Fine')
-   //saudade do meu amor
+  	this.navCtrl.navigateForward('/registro');
+  	console.log('Fine');
+   // saudade do meu amor
   }
- async entrar(){
-    const{email, password } = this
-    try{
-      const res = await this.afAuth.auth.signInWithEmailAndPassword(email, password)
-      if(res.user){
-        this.storage.set('email', res.user.email)
-        this.showalert('Welcome Back!', "Let's get to work now.")
-        this.navCtrl.navigateForward('/user');
+ async entrar() {
+    const{email, password } = this;
+    try {
+      const res = await this.afAuth.auth.signInWithEmailAndPassword(email, password);
+      if (res.user) {
+        this.storage.set('email', res.user.email);
+        this.showalert('Bem-vindo de volta!', 'Vamos macumbar!');
+        this.navCtrl.navigateRoot('/user');
       }
 
-    }catch(err){
+    } catch (err) {
       console.dir(err);
-      if(err.code === "auth/user-not-found"){
-        console.log("password not match")
-         this.showalert('Hey there!', "Looks like you don't have an account with us, but it's ok... hit the button below and join us now!")
-        const res = await this.afAuth.auth.createUserWithEmailAndPassword(email, password)
+      if (err.code === 'auth/user-not-found') {
+        console.log('password not match');
+        this.showalert('Opa!', 'Parece que você ainda não é cadastrado, mas não tem problema! Clique em "Ok" para se cadastrar');
+        const res = await this.afAuth.auth.createUserWithEmailAndPassword(email, password);
         this.storage.set('email', this.email);
-        this.navCtrl.navigateForward('/register');
-       
+        this.navCtrl.navigateRoot('/register');
+
+
+      } else if (err.code === 'auth/wrong-password'){
+          this.showalert('Hmmm...', 'Parece que você digitou a senha errada, tente novamente.');
 
       }
     }
   }
 
-  async showalert(header:string, message:string){
+  async showalert(header: string, message: string) {
     const alert = await this.alertCtrl.create({
       header,
       message,
@@ -72,5 +72,5 @@ export class LoginPage implements OnInit {
     await alert.present();
   }
 
-  
+
 }

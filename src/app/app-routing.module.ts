@@ -4,7 +4,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'tabs',
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
   },
   {
@@ -13,7 +13,6 @@ const routes: Routes = [
   },
   {
     path: 'list',
- 
     loadChildren: () => import('./list/list.module').then( m => m.ListPageModule)
   },
   {
@@ -35,7 +34,16 @@ const routes: Routes = [
   {
     path: 'edit-page/:id',
     loadChildren: () => import('./edit-page/edit-page.module').then( m => m.EditPagePageModule)
+  },
+  {
+    path: '',
+    loadChildren: () => import('./slides/slides.module').then( m => m.SlidesPageModule)
+  },  {
+    path: 'carrinho',
+    loadChildren: () => import('./carrinho/carrinho.module').then( m => m.CarrinhoPageModule)
   }
+
+
 ];
 @NgModule({
   imports: [

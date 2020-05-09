@@ -3,21 +3,22 @@ import {NavController} from '@ionic/angular';
 import { ServiceService } from '../service.service';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
-import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore'
+import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { Subscription } from 'rxjs';
 import { ModalController } from '@ionic/angular';
 
 
 export interface Processo {
-    name: string 
-    role: string 
-    boss:string 
-    company:string
+    nome: string ;
+    endereco: string ;
+    cidade: string ;
+    bairro: string ;
+    telefone: string ;
     LikeValue: number;
     DislikeValue: number;
-    tellme:string;
-    email:string;
+    tellme: string;
+    email: string;
 }
 @Component({
   selector: 'app-user',
@@ -26,104 +27,85 @@ export interface Processo {
 })
 
 export class UserPage implements OnInit {
-  
-  mainuser: AngularFirestoreDocument
-    name: string ;
-    role: string ;
-    boss:  string ;
-    company:  string ;
+
+  mainuser: AngularFirestoreDocument;
+    nome: string ;
+    endereco: string ;
+    cidade: string ;
+    bairro: string ;
+    telefone: string ;
     email: string;
-    sub
-    proc
-    que:any
-    procUser
+    zona: string;
+    sub;
+    proc;
+    que: any;
+    procUser;
     private goalList: any[];
     private loadedGoalList: any[];
-    processos
+    processos;
     currentGoale;
     public products = new Array<Processo>();
     private proccessSubscription: Subscription;
-  constructor(public navCtrl: NavController,private storage: Storage,
-    public afStore:AngularFirestore, public modalController: ModalController,  public services: ServiceService) {
-    let user = firebase.auth().currentUser;
-    console.log(user)
-        if (user) {
-            this.mainuser = this.afStore.doc(`users/${user.uid}`)
+    goalListFiltrado;
+    loadedGoalListFiltrado;
+  constructor(public navCtrl: NavController, private storage: Storage,
+              public afStore: AngularFirestore, public modalController: ModalController,  public services: ServiceService) {
+    const user = firebase.auth().currentUser;
+    console.log(user);
+    if (user) {
+            this.mainuser = this.afStore.doc(`users/${user.uid}`);
 
       } else {
-    // No user is signed in.
+
       }
-      this.proccessSubscription = this.services.getProccessos().subscribe(data => {
-          this.goalList = data;
-          this.loadedGoalList = data;
-          console.log(this.goalList)
-
-
-    });
-      this.modalController.dismiss({
-      'dismissed': true
-    });
-   
-     this.sub = this.mainuser.valueChanges().subscribe(event => {
-      this.name = event.name
-      this.role = event.role
-      this.boss = event.boss
-      this.email = event.email
-      this.company = event.company
-
-     
-    })
-      this.proc = this.afStore.collection('proccess').valueChanges().subscribe(data =>{
-          this.que = data;
-           console.log(this.que)
-          
-      })
-
-/*
-
-   this.proc = this.services.getProccessos().subscribe(data => {
-          this.que = data;
-        
+    this.proccessSubscription = this.services.getProccessos().subscribe(data => {
+          this.goalListFiltrado = data.filter(i => i.email === user.email);
+          this.loadedGoalListFiltrado = data.filter(i => i.email === user.email);
+          console.log(this.goalList);
 
 
     });
 
 
+    this.sub = this.mainuser.valueChanges().subscribe(event => {
+      this.nome = event.nome;
+      this.endereco = event.endereco;
+      this.cidade = event.cidade;
+      this.email = event.email;
+      this.bairro = event.bairro;
+      this.telefone = event.telefone;
+      this.zona = event.zona;
 
-*/
-
-
-
+    });
    }
-   
+
   ngOnInit() {
   }
 
-  sair(){
-    this.navCtrl.navigateForward('/tabs/tab1');
-    this.storage.clear()
-    firebase.auth().signOut()
-      
+  sair() {
+    this.navCtrl.navigateRoot('/login');
+    this.storage.clear();
+    firebase.auth().signOut();
+
   }
-  home(){
+  home() {
    this.navCtrl.navigateForward('/tabs/tab1');
-
   }
-perfilPage(){
+perfilPage() {
   	this.navCtrl.navigateForward('/login');
-  	console.log('Fine')
+  	console.log('Fine');
   }
-  user(){
+  user() {
   	this.navCtrl.navigateForward('/user');
-  	console.log('Fine')
+  	console.log('Fine');
   // Deletar quando tiver conexão com o firebase.
-  
+
   }
 
-  addProc(){
+  addProc() {
   	this.navCtrl.navigateForward('/add-proc');
-  	console.log('Fine')
+  	console.log('Fine');
   // Deletar quando tiver conexão com o firebase.
-  
+
   }
 }

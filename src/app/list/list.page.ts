@@ -1,23 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import {NavController } from '@ionic/angular';
-import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore'
+import {Component, NgZone, OnInit} from '@angular/core';
+import {AlertController, NavController, Platform} from '@ionic/angular';
+import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
 import { Storage } from '@ionic/storage';
 import { ModalController } from '@ionic/angular';
-import { Router,ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ServiceService } from '../service.service';
 import * as firebase from 'firebase/app';
-
-
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
+import {HttpClient} from '@angular/common/http';
+declare var google;
 export interface Processo {
-    name: string 
-    role: string 
-    boss:string 
-    company:string
+    zona: string;
+    role: string;
+    boss: string ;
+    company: string;
     LikeValue: number;
     DislikeValue: number;
-    tellme:string;
-    email:string;
+    tellme: string;
+    email: string;
 }
 @Component({
   selector: 'app-list',
@@ -25,133 +27,137 @@ export interface Processo {
   styleUrls: ['./list.page.scss'],
 })
 export class ListPage implements OnInit {
-  proccess: string =""
-  proc
+
+    geoLatitude: number;
+    geoLongitude: number;
+    geoAccuracy: number;
+    geoAddress: string;
+
+    watchLocationUpdates: any;
+    loading: any;
+    isWatching: boolean;
+
+    // Geocoder configuration
+    geoencoderOptions: NativeGeocoderOptions = {
+        useLocale: true,
+        maxResults: 5
+    };
+    email: string;
+  proccess = '';
+  proc;
   private goalList: any[];
   private loadedGoalList: any[];
-  processos
+  processos;
   currentGoale;
   public products = new Array<Processo>();
   private proccessSubscription: Subscription;
-
-   mainuser
-    sub
-    name
-    boss 
-    email
-  constructor(public navCtrl:NavController,public router :Router,
-    public modalController: ModalController, private storage: Storage, public afStore: AngularFirestore, 
-     public services: ServiceService) { 
-       
-
-            
-      /*
-
-      let user = firebase.auth().currentUser;
-          console.log(user.email)
-            if (user) {
-            this.mainuser = this.afStore.doc(`users/${user.uid}`)
-            this.sub = this.mainuser.valueChanges().subscribe(event => {      
-            this.email = event.email
-            this.name = event.name 
-            this.boss = event.boss
-            
-          })
-
-            } else {
-             this.mainuser = {
-               name: 'No User',
-               role: 'No User',
-               boss: 'No User',
-               company: 'No User',
-               email: 'nouser@findme.com',
-             }
-             this.sub = this.mainuser.valueChanges().subscribe(event => {      
-             this.email = 'nouser@findme.com'
-             this.name = event.name 
-             this.boss = event.boss
-            
-          })
-         }
-
-
-  this.proc = this.afStore.collection('proccess').valueChanges().subscribe(goalList =>{
-          this.goalList = goalList;
-          this.loadedGoalList = goalList;
-           console.log(this.goalList)
-          
-      })
-        this.currentGoale = this.storage.get('procede')
-        console.log(this.currentGoale)
-
-      */
-    this.proccessSubscription = this.services.getProccessos().subscribe(data => {
+    userLocation;
+    userCity;
+    lat;
+    lng;
+    location;
+    latLngResult;
+    userLocationFromLatLng;
+    mainuser: AngularFirestoreDocument;
+    sub;
+    name;
+    boss;
+    zona;
+    goalListFiltrado;
+    loadedGoalListFiltrado;
+  constructor(public navCtrl: NavController, public router: Router, private geolocation: Geolocation,
+              public modalController: ModalController,  public alertCtrl: AlertController, private storage: Storage, public afStore: AngularFirestore,
+              public services: ServiceService) {
+      this.proccessSubscription = this.services.getUsers().subscribe(data => {
           this.goalList = data;
           this.loadedGoalList = data;
-          console.log(this.goalList)
+          let user = firebase.auth().currentUser;
+          console.log(user);
+          if (user) {
+              this.mainuser = this.afStore.doc(`users/${user.uid}`);
 
+          } else {
+              this.showalert('Bem-vindo ao Axé delivery!', 'Faça o login para começar a explorar o mundo macumbistico na sua região');
+              this.navCtrl.navigateRoot('/login');
 
+          }
+          this.sub = this.mainuser.valueChanges().subscribe(event => {
+              this.zona = event.zona;
+              console.log();
+              this.goalListFiltrado = this.goalList.filter(i => i.zona === this.zona && i.tipo === 'Loja' && i.aprovado === true);
+              this.loadedGoalListFiltrado = this.loadedGoalList.filter(i => i.zona === this.zona && i.tipo === 'Loja' && i.aprovado === true);
+
+          });
     });
 
+      const user = firebase.auth().currentUser;
+      console.log(user);
+      if (user) {
+          this.mainuser = this.afStore.doc(`users/${user.uid}`);
+
+      } else {
+          // No user is signed in.
+      }
   }
 
+
   ngOnInit() {
+
   }
   initializeItems(): void {
-    this.goalList = this.loadedGoalList;
+    this.goalListFiltrado = this.loadedGoalListFiltrado;
   }
-  filterList(evt){
+  filterList(evt) {
     this.initializeItems();
 
     const searchTerm = evt.srcElement.value;
 
-     if(!searchTerm){
-       return
+    if (!searchTerm) {
+       return;
      }
-     this.goalList = this.goalList.filter(currentGoal =>{
-       if(currentGoal.name && searchTerm){
-           if(currentGoal.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1){
-               
-             return true
-           }else{
-             return false
+    this.goalListFiltrado = this.goalListFiltrado.filter(currentGoal => {
+       if (currentGoal.nome && searchTerm) {
+           if (currentGoal.nome.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1) {
+
+             return true;
+           } else {
+             return false;
            }
        }
-     })
+     });
   }
-  
+    async showalert(header: string, message: string) {
+        const alert = await this.alertCtrl.create({
+            header,
+            message,
+            buttons: ['Ok']
+        });
+
+        await alert.present();
+    }
+
    dismiss() {
     // using the injected ModalController this page
     // can "dismiss" itself and optionally pass back data
     this.modalController.dismiss({
-      'dismissed': true
+      dismissed: true
     });
   }
-  addProc(){
-     let user = firebase.auth().currentUser;
-
-    if(user){
-      this.navCtrl.navigateForward('/add-proc');
-      console.log('Fine')
-  }else{
-    this.navCtrl.navigateForward('/login');
-  }
-  }
-  verifica(){
-      let user = firebase.auth().currentUser;
-    if(!user){
-      this.navCtrl.navigateForward('/login')
+  verifica() {
+      const user = firebase.auth().currentUser;
+      if (!user) {
+      this.navCtrl.navigateForward('/login');
         }
 
       }
-      
-  perfilPage(){
-      let user = firebase.auth().currentUser;
 
-    if(user){
-      this.navCtrl.navigateForward('/user')
-    }else{
-      this.navCtrl.navigateForward('/login')
+  perfilPage() {
+      const user = firebase.auth().currentUser;
+
+      if (user) {
+      this.navCtrl.navigateForward('/user');
+    } else {
+      this.navCtrl.navigateForward('/login');
     }
   }
 

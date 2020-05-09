@@ -1,9 +1,8 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-    	
-      	<img style="max-height: 4vh;" src="/assets/gsk-logo.png" alt="" />
-		Add Item
+
+		<img style="max-height: 6vh;" src="/assets/logo_menor.png" alt="" />
 	</ion-title>
 		<ion-buttons slot="start">
     		<ion-back-button></ion-back-button>
@@ -13,35 +12,42 @@
 
 <ion-content>
 	<ion-card style="background-color: white !important; ">
-			<ion-card-header > <h3 text style="margin:auto;">Add Item</h3></ion-card-header>
+			<ion-card-header > <h3 text style="margin:auto;">Adicione um produto</h3></ion-card-header>
 			<ion-card-content>
 					<br/>
-					<p>First step, choose if is a Proccess or an Idea</p>
-					<ion-select [(ngModel)]="type">
-						<ion-select-option value="Proccess">Proccess</ion-select-option>
-						<ion-select-option value="Idea">Idea</ion-select-option>
-					</ion-select>
+				<p>Escolha o tipo de produto:</p>
+				<ion-select style="border: 1px solid black; border-radius: 25px; padding: 10px;" [(ngModel)]="type">
+					<ion-select-option value="Velas">Velas</ion-select-option>
+					<ion-select-option value="Louca">Produtos de Louça</ion-select-option>
+					<ion-select-option value="Barro">Produtos de Barro</ion-select-option>
+					<ion-select-option value="Imagens">Imagens</ion-select-option>
+					<ion-select-option value="Contas">Contas</ion-select-option>
+					<ion-select-option value="Madeiras">Produtos de Madeira</ion-select-option>
+					<ion-select-option value="Fumos">Fumos</ion-select-option>
+					<ion-select-option value="Decoracao">Decoração</ion-select-option>
+					<ion-select-option value="Jogos">Jogos</ion-select-option>
+
+				</ion-select>
 				<ion-item>
-				  <ion-label position="floating">Proccess Name</ion-label>
-				  <ion-input [(ngModel)]="nameProc"></ion-input>
+				  <ion-label position="floating">Nome do produto</ion-label>
+				  <ion-input [(ngModel)]="nomePrd"></ion-input>
 				</ion-item>
 
 				<ion-item>
-				  <ion-label position="floating">Short Description </ion-label>
+				  <ion-label position="floating">Descrição</ion-label>
 				  <ion-input maxLenght="40" [(ngModel)]="resumo" type="text"></ion-input>
 				</ion-item>	
 
 				<ion-item>
-				  <ion-label position="floating">E-mail</ion-label>
-				  <ion-input placeholder="{{email}}" disabled type="text"></ion-input>
+				  <ion-label position="floating">Nome da Loja</ion-label>
+				  <ion-input placeholder="{{nome}}" disabled type="text"></ion-input>
 				</ion-item>
-
 				<ion-item>
-				  <ion-label position="floating">Tell us about it! (: </ion-label>
-				  <ion-input [(ngModel)]="tellme" type="text"></ion-input>
+					<ion-label position="floating">Valor</ion-label>
+					<ion-input [(ngModel)]="valor" type="text"></ion-input>
 				</ion-item>
 				<br/>
-				<p>Upload a photo:
+				<p>Coloque uma foto do produto:
 					<ion-button shape="outline" (click)="photo()" color="findme" ><ion-icon name="camera"></ion-icon>	</ion-button>
 				</p>
 				<br/>

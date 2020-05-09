@@ -1,11 +1,12 @@
   const firebaseConfig = {
-    apiKey: "AIzaSyClKyROR6Ys0bsF53dooKEsiXo5gDERUig",
-    authDomain: "findmegsk.firebaseapp.com",
-    databaseURL: "https://findmegsk.firebaseio.com",
-    projectId: "findmegsk",
-    storageBucket: "findmegsk.appspot.com",
-    messagingSenderId: "190461911308",
-    appId: "1:190461911308:web:bb73a02376290779b3a929"
+    apiKey: "AIzaSyBK5vrNTjVXBGiu6DLVavw8OeX19uDxsMY",
+    authDomain: "axedelivery-1.firebaseapp.com",
+    databaseURL: "https://axedelivery-1.firebaseio.com",
+    projectId: "axedelivery-1",
+    storageBucket: "axedelivery-1.appspot.com",
+    messagingSenderId: "612729787094",
+    appId: "1:612729787094:web:c95577208ee3cdb2726f77",
+    measurementId: "G-T4SS54E24B"
   };
   // Initialize Firebase
 export default firebaseConfig

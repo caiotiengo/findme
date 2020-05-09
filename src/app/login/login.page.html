@@ -2,8 +2,7 @@
   <ion-toolbar>
     <ion-title>
     	
-      	<img style="max-height: 4vh;" src="/assets/gsk-logo.png" alt="" />
-		Login
+      	<img style="max-height: 6vh;" src="/assets/logo_menor.png" alt="" />
 	</ion-title>
 		<ion-buttons slot="start">
     		<ion-back-button></ion-back-button>
@@ -19,15 +18,15 @@
 
 			<ion-item>
 			  <ion-label position="floating">E-mail</ion-label>
-			  <ion-input type="text" [(ngModel)]="email" placeholder="@gsk.com"></ion-input>
+			  <ion-input type="text" [(ngModel)]="email" placeholder="seuemail@email.com"></ion-input>
 			</ion-item>
 
 			<ion-item>
-			  <ion-label position="floating">Password</ion-label>
-			  <ion-input [(ngModel)]="password" type="password"></ion-input>
+			  <ion-label position="floating">Senha</ion-label>
+			  <ion-input [(ngModel)]="password" type="password" ></ion-input>
 			</ion-item>
 			<br/>
-			<ion-button (click)="entrar()" expand="" color="findme" style="color:white !important; max-width: 25vh;" > Sign in </ion-button>
+			<ion-button (click)="entrar()" expand="" color="findme" style="color:white !important; max-width: 25vh;" > Entrar </ion-button>
 			</ion-card-content>
 	</ion-card>
 </ion-content>

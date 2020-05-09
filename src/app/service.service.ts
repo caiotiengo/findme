@@ -6,60 +6,72 @@ import { map } from 'rxjs/operators';
 
 
 export interface User {
-	name: string 
-	role: string 
-  	boss:string 
-  	company:string
-  	email: string
-}
-export interface Processo {
-	  name?: string 
+    nome: string ;
+    endereco: string ;
+    cidade: string ;
+    bairro: string ;
+    telefone: string ;
     LikeValue?: number;
     DislikeValue?: number;
-    tellme?:string;
-    email?:string;
-    type?:string;
-    resumo?:string;
-       lastEdit?:string;
+    tellme: string;
+    email: string;
+    type?: string;
+    resumo?: string;
+    lastEdit?: string;
+}
+export interface Processo {
+    // tslint:disable-next-line:indent
+    nome?: string;
+    LikeValue?: number;
+    DislikeValue?: number;
+    valor?: string;
+    email?: string;
+    type?: string;
+    resumo?: string;
+    lastEdit?: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServiceService {
-	LikeValue: number;
+  LikeValue: number;
   DislikeValue: number;
   private userCollection: AngularFirestoreCollection<User>;
   private processoCollection: AngularFirestoreCollection<Processo>;
   users: Observable<User[]>;
   processos: Observable<Processo[]>;
-  private user: User
-  
+  private user: User;
+
     likes: number;
-    dislikes:number
-    proccesso
+    dislikes: number;
+    proccesso;
   constructor(private afs: AngularFirestore) {
-      
+
+      // tslint:disable-next-line:indent
   	 this.userCollection = afs.collection<User>('users');
-  	 //this.users = this.userCollection.valueChanges();
-  
-  	 this.processoCollection = afs.collection<Processo>('proccess', ref => ref.orderBy('LikeValue','desc'));
-  	 //this.processos = this.processoCollection.valueChanges();
+  	 // this.users = this.userCollection.valueChanges();
+
+    this.processoCollection = afs.collection<Processo>('produto');
+  	 // this.processos = this.processoCollection.valueChanges();
+
+    this.getUsers();
+      // tslint:disable-next-line:indent
+    this.getProccessos();
 
 
-  	 this.users = this.userCollection.snapshotChanges().pipe(
-      map(actions => actions.map(a => {
-        const data = a.payload.doc.data() as User;
-        const id = a.payload.doc.id;
-        return { id, ...data };
-      }))
-
-    );
-     this.getProccessos();
-
-  	
   }
-	getProccessos(){
+  getUsers() {
+     return this.users = this.userCollection.snapshotChanges().pipe(
+          map(actions => actions.map(a => {
+              const data = a.payload.doc.data() as User;
+              const id = a.payload.doc.id;
+              return { id, ...data };
+          }))
+
+      );
+  }
+  getProccessos() {
    return this.processos = this.processoCollection.snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data() as Processo;
@@ -74,36 +86,36 @@ addUser(user: User) {
   addProc(processo: Processo) {
     this.processoCollection.add(processo);
   }
-  update(id: string, processo:Processo){
-    this.processoCollection.doc<Processo>(id).update(processo);
+  update(id: string, user: User) {
+    this.userCollection.doc<User>(id).update(user);
   }
-  getEmail(){
-  	return this.user.email
+  getEmail() {
+  	return this.user.email;
   }
-  getProc(id: string){
+  getProc(id: string) {
+    return this.userCollection.doc<User>(id).valueChanges();
+  }
+  getProdutos(id: string) {
     return this.processoCollection.doc<Processo>(id).valueChanges();
   }
-  getUser(id:string){
-    return this.userCollection.doc<User>(id).valueChanges()
-  }
- getLikes(id: string){
-    return this.processoCollection.doc<Processo>(id).valueChanges().subscribe((data) =>{
-      this.likes = data.LikeValue
-      this.dislikes = data.DislikeValue
-      console.log(this.likes)
+ getLikes(id: string) {
+    return this.userCollection.doc<User>(id).valueChanges().subscribe((data) => {
+      this.likes = data.LikeValue;
+      this.dislikes = data.DislikeValue;
+      console.log(this.likes);
     });
  }
 
-  like(id: string, proccess: Processo) {
-      this.likes++
-       return this.processoCollection.doc<Processo>(id).update({LikeValue: this.likes});
+  like(id: string , loja: Processo) {
+      this.likes++;
+      return this.userCollection.doc<User>(id).update({LikeValue: this.likes});
 
   }
-  dislike(id: string, proccess: Processo){
-    this.dislikes++
+  dislike(id: string, loja: Processo) {
+    this.dislikes++;
     return this.processoCollection.doc<Processo>(id).update({DislikeValue: this.dislikes});
   }
- 
+
 
 /*
 
@@ -115,7 +127,7 @@ addUser(user: User) {
     return this.productsCollection.doc<Product>(id).valueChanges();
   }
 
-  
+
 
   deleteProduct(id: string) {
     return this.productsCollection.doc(id).delete();
