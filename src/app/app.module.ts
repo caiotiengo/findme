@@ -20,6 +20,9 @@ import { ListPage } from './list/list.page';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder,  NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
 import {HttpClientModule} from '@angular/common/http';
+import {BrMaskerModule} from 'brmasker-ionic-3';
+import { PayPal, PayPalPayment, PayPalConfiguration } from '@ionic-native/paypal/ngx';
+
 
 firebase.initializeApp(firebaseConfig);
 @NgModule({
@@ -32,7 +35,8 @@ firebase.initializeApp(firebaseConfig);
   HttpClientModule,
   IonicModule.forRoot(),
   IonicStorageModule.forRoot(),
-  AppRoutingModule],
+  AppRoutingModule, BrMaskerModule
+  ],
   providers: [
     StatusBar,
     NativeGeocoder,
@@ -40,6 +44,7 @@ firebase.initializeApp(firebaseConfig);
     SplashScreen,
     ServiceService,
     AngularFirestore,
+    PayPal,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

@@ -16,7 +16,7 @@
 			<ion-card-content>
 					<br/>
 				<p>Escolha o tipo de produto:</p>
-				<ion-select style="border: 1px solid black; border-radius: 25px; padding: 10px;" [(ngModel)]="type">
+				<ion-select placeholder="Tipo de produto" style="border: 1px solid black; border-radius: 25px; padding: 10px;" [(ngModel)]="type">
 					<ion-select-option value="Velas">Velas</ion-select-option>
 					<ion-select-option value="Louca">Produtos de Louça</ion-select-option>
 					<ion-select-option value="Barro">Produtos de Barro</ion-select-option>
@@ -42,10 +42,13 @@
 				  <ion-label position="floating">Nome da Loja</ion-label>
 				  <ion-input placeholder="{{nome}}" disabled type="text"></ion-input>
 				</ion-item>
+
 				<ion-item>
 					<ion-label position="floating">Valor</ion-label>
-					<ion-input [(ngModel)]="valor" type="text"></ion-input>
+					<ion-input placeholder="   "  [(ngModel)]="valor"type="text">R$</ion-input>
 				</ion-item>
+				<p style="color: red"><b>Atenção: Coloque o valor separado por PONTO. Ex: 110.00</b></p>
+
 				<br/>
 				<p>Coloque uma foto do produto:
 					<ion-button shape="outline" (click)="photo()" color="findme" ><ion-icon name="camera"></ion-icon>	</ion-button>

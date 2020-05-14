@@ -15,7 +15,7 @@ export class AddProcPage implements OnInit {
     nomePrd = '';
     email = '';
     tellme = '';
-    valor = '';
+    valor: number;
     nomeLoja = '';
     LikeValue: number;
     DislikeValue: number;
@@ -32,7 +32,7 @@ export class AddProcPage implements OnInit {
   constructor(public navCtrl: NavController, public afStore: AngularFirestore,
               public alertCtrl: AlertController,
               public services: ServiceService) {
-      this.procUser = this.services.getProc(this.que);
+     // this.procUser = this.services.getProc(this.que);
       const user = firebase.auth().currentUser;
       console.log(user.email);
       if (user) {
@@ -57,7 +57,7 @@ export class AddProcPage implements OnInit {
       this.afStore.collection('produto').add({
          nome: this.nomePrd,
          email: user.email,
-         valor: this.valor,
+         valor: Number(this.valor),
          tipoPrd: this.type,
          resumo: this.resumo
       });

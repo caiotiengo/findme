@@ -41,6 +41,14 @@ const routes: Routes = [
   },  {
     path: 'carrinho',
     loadChildren: () => import('./carrinho/carrinho.module').then( m => m.CarrinhoPageModule)
+  },
+  {
+    path: 'item-view',
+    loadChildren: () => import('./item-view/item-view.module').then( m => m.ItemViewPageModule)
+  },
+  {
+    path: 'status',
+    loadChildren: () => import('./status/status.module').then( m => m.StatusPageModule)
   }
 
 

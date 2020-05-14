@@ -6,7 +6,7 @@
       <ion-label>Home</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button *ngIf="typeUser === 'Loja'" tab="tab2">
+    <ion-tab-button *ngIf="typeUser === 'Loja'" (click)="addProc()" tab="tab2">
       <ion-icon name="cash"></ion-icon>
       <ion-label>Adicione um produto</ion-label>
     </ion-tab-button>

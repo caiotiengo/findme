@@ -192,6 +192,9 @@ export class ItemPage implements OnInit {
             email: items.email,
             itemId: items.id
         });
+        this.valores = this.produtos.map(res => res.valor);
+        this.valorCompra = this.valores.reduce((acc, val) => acc += val, 0);
+        console.log(this.valorCompra);
 
     }
     finalizarCompra() {
@@ -213,6 +216,12 @@ export class ItemPage implements OnInit {
         this.storage.set('valorFinal', this.valorCompra)
         this.storage.set('carrinhoUser', JSON.stringify(this.produtos));
         this.navCtrl.navigateRoot('/carrinho');
+    }
+    veritem(items) {
+      console.log(items)
+      this.storage.set('itemAberto', JSON.stringify(items)).then(() => {
+          this.navCtrl.navigateForward('/item-view');
+      });
     }
     filterList(evt) {
         this.initializeItems();

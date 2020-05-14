@@ -3,16 +3,22 @@
     <ion-title>
             <img style="max-height: 6vh;" src="/assets/logo_menor.png" alt="" />
     </ion-title>
-    <!--ion-buttons slot="start">
-      <ion-back-button ></ion-back-button>
-    </ion-buttons-->
+      <ion-buttons  slot="start">
+          <ion-back-button></ion-back-button>
+      </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-fab  vertical="top" horizontal="end" slot="fixed">
-    <ion-fab-button class="findme" color="findme" (click)="home()">
-      <ion-icon style="color:#ffcb02 !important" name="home"></ion-icon>
+
+<ion-fab vertical="top" horizontal="end" *ngIf="produtos.length > 0 " slot="fixed">
+
+
+    <ion-badge class="badge-produtos" *ngIf="produtos.length > 0" color="danger">{{produtos.length}}</ion-badge>
+
+    <ion-fab-button (click)="finalizarCompra()" color="findme">
+
+        <ion-icon style="color:#ffcb02 !important" name="cart"></ion-icon>
     </ion-fab-button>
-  </ion-fab>
+</ion-fab>
 <ion-content>
 
 
@@ -57,10 +63,18 @@
             <p text-center> {{loja.resumo}}</p>
             <ion-item style="border-radius: 25px;
     border: 2px solid rgba(0, 0, 0, 0.21);
-    box-shadow: 3px 3px rgba(128, 128, 128, 0.4);">
-                <ion-icon slot="start" name="car"></ion-icon>
+    box-shadow: 3px 3px rgba(128, 128, 128, 0.4); margin-bottom: 5%">
+                <ion-icon slot="start"  style="color: black" name="car"></ion-icon>
+                <p>Delivery</p>
                 <p slot="end">R$8,00</p>
             </ion-item>
+        <ion-item *ngIf="valorCompra > 0" style="border-radius: 25px;
+    border: 2px solid rgba(0, 0, 0, 0.21);
+    box-shadow: 3px 3px rgba(128, 128, 128, 0.4);">
+            <ion-icon slot="start" style="color: green" name="cash"></ion-icon>
+            <p>Valor da suas compras</p>
+            <p slot="end">R${{valorCompra}}</p>
+        </ion-item>
     </ion-card-content>
 
     <!--ion-select style="border: 1px solid black; border-radius: 25px; padding: 10px;" placeholder="Escolha uma categoria" [(ngModel)]="categoria">
@@ -74,6 +88,8 @@
         <ion-select-option value="Decoracao">Decoração</ion-select-option>
         <ion-select-option value="Jogos">Jogos</ion-select-option>
     </ion-select-->
+
+
     <h4 style="background: #ffd112;margin: 0;border: 10px solid #ffd112;color: black;" text-center>Produtos</h4>
     <ion-searchbar  animated style="color: black; background: linear-gradient(180deg, #ffce00, #ffce0091, #2224280a);" placeholder="Pesquise um produto"
                     (ionInput)="filterList($event)">
@@ -81,15 +97,21 @@
 
 
     </ion-searchbar>
+
     <ion-list *ngFor="let items of goalList" >
 
-            <ion-item (click)="addCarrinho(items)">
+
+            <ion-item>
 
                 <ion-avatar slot="start">
                     <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
                 </ion-avatar>
-                <ion-label slot="start">{{items.nome}}<p>{{items.valor}}</p></ion-label>
-                <ion-icon slot="end" name="add-circle" style="color:#ffcb02 !important" color="findme"></ion-icon>
+                <ion-label >{{items.nome}}<p>{{items.valor}}</p></ion-label>
+
+                <ion-button (click)="addCarrinho(items)" slot="end" fill="solid" color="warning" style="color:#ffcb02 !important">
+                    <ion-icon name="cart"></ion-icon>
+                </ion-button>
+                <ion-button fill="solid" color="warning" slot="end"(click)="veritem(items)">Veja</ion-button>
 
             </ion-item>
 
@@ -108,10 +130,7 @@
       </ion-item-->
 
   </ion-card>
-    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button (click)="finalizarCompra()" color="findme">
-            <ion-icon style="color:#ffcb02 !important" name="cart"></ion-icon>
-        </ion-fab-button>
-    </ion-fab>
+
+
 
 </ion-content>

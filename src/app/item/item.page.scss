@@ -2,6 +2,24 @@ ion-content{
   --background: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)), url('../../assets/logo.png') no-repeat no-repeat center;
 
 }
+.cart-item-valor{
+  position: absolute;
+  right: 100%;
+  top: 33%;
+  width: 50%;
+  font-size: initial;
+  border: 2px solid;
+  border-radius: 25px;
+}
+.badge-produtos{
+  border-radius: 25px;
+  padding: 7px;
+  position: absolute;
+  bottom: 65%;
+  right: -5%;
+  z-index: 10;
+  width: 50%;
+}
 ion-select{
 
   border: 1px solid black;
