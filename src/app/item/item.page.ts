@@ -11,8 +11,8 @@ import { IonSlides} from '@ionic/angular';
 import {AlertController} from '@ionic/angular';
 
 export interface User {
-  name: string;
-  role: string;
+    name: string;
+    role: string;
     boss: string;
     company: string;
     email: string;
@@ -34,6 +34,10 @@ export interface Produtos {
     qtd?: number;
     email?: string;
     itemId?: any;
+    itemNumber?: any;
+    dia?: number;
+    lojaUID?: string;
+    emailLoja?: string;
 }
 
 @Component({
@@ -69,7 +73,7 @@ export class ItemPage implements OnInit {
     private loadedGoalList: any[];
     emailLoja;
     qualquer;
-    produtos:  Array<Produtos> = [];
+    produtos: Array<Produtos> = [];
     slideOpts = {
        initialSlide: 1,
        speed: 400
@@ -85,7 +89,8 @@ export class ItemPage implements OnInit {
     bairro;
     telefone;
     zona;
-  constructor(public navCtrl: NavController, public alertCtrl: AlertController, private route: ActivatedRoute, private storage: Storage,
+  constructor(public navCtrl: NavController, public alertCtrl: AlertController,
+              private route: ActivatedRoute, private storage: Storage,
               public afStore: AngularFirestore,  public services: ServiceService,
               public modalController: ModalController) {
 
@@ -108,15 +113,15 @@ export class ItemPage implements OnInit {
           this.zona = event.zona;
 
       });
- this.que = this.route.snapshot.paramMap.get('id');
+      this.que = this.route.snapshot.paramMap.get('id');
 
- console.log(this.que);
- this.procUser = this.services.getProc(this.que);
- console.log(this.services.getProc(this.que));
- if (this.que) {
+      console.log(this.que);
+      this.procUser = this.services.getProc(this.que);
+      console.log(this.services.getProc(this.que));
+      if (this.que) {
             this.loadProduct();
         }
- console.log(this.services.getLikes(this.que));
+      console.log(this.services.getLikes(this.que));
 
 
    }
@@ -171,7 +176,7 @@ export class ItemPage implements OnInit {
       }
   async handleLike() {
        this.likes++;
-     try{
+       try {
           await this.services.like(this.que, this.loja);
           this.showalert('Obrigado pelo feedback!', 'Isso ajuda a todos nós!');
         } catch (e) {
@@ -185,40 +190,38 @@ export class ItemPage implements OnInit {
     addCarrinho(items) {
       console.log(items);
       this.qtd++;
-      //console.log(this.qtd)
-        this.produtos.push({
+      console.log(this.qtd);
+      this.produtos.push({
             nome: items.nome,
             valor: items.valor,
             email: items.email,
-            itemId: items.id
+            itemId: items.id,
+            lojaUID: this.que,
+            itemNumber: this.qtd,
+            emailLoja: this.loja.email
         });
-        this.valores = this.produtos.map(res => res.valor);
-        this.valorCompra = this.valores.reduce((acc, val) => acc += val, 0);
-        console.log(this.valorCompra);
+      this.valores = this.produtos.map(res => res.valor);
+      this.valorCompra = this.valores.reduce((acc, val) => acc += val, 0);
+      console.log(this.valorCompra);
+      console.log(this.produtos);
 
     }
     finalizarCompra() {
         this.valores = this.produtos.map(res => res.valor);
         this.valorCompra = this.valores.reduce((acc, val) => acc += val, 0);
-        let date = new Date();
-        date.setMonth(date.getMonth() + 1)
-        let dia = date.getDate() + '/' + date.getMonth()  + '/' + date.getFullYear();
+        const date = new Date();
+        date.setMonth(date.getMonth() + 1);
+        const dia = date.getDate() + '/' + date.getMonth()  + '/' + date.getFullYear();
         console.log(dia);
-        this.afStore.collection('vendas').add({
-            nomeUsr: this.nome,
-            endereco: this.endereco,
-            nomeLoja: this.loja.nome,
-            valor: this.valorCompra,
-            dia: dia,
-            produtos: this.produtos
+        this.storage.set('loja', this.loja);
+        this.storage.set('valorFinal', this.valorCompra);
+        this.storage.set('carrinhoUser', JSON.stringify(this.produtos)).then(() =>{
+            this.navCtrl.navigateRoot('/carrinho');
         });
-        this.storage.set('loja', this.loja)
-        this.storage.set('valorFinal', this.valorCompra)
-        this.storage.set('carrinhoUser', JSON.stringify(this.produtos));
-        this.navCtrl.navigateRoot('/carrinho');
+
     }
     veritem(items) {
-      console.log(items)
+      console.log(items);
       this.storage.set('itemAberto', JSON.stringify(items)).then(() => {
           this.navCtrl.navigateForward('/item-view');
       });

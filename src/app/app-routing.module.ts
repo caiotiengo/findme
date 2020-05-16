@@ -38,7 +38,8 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () => import('./slides/slides.module').then( m => m.SlidesPageModule)
-  },  {
+  },
+  {
     path: 'carrinho',
     loadChildren: () => import('./carrinho/carrinho.module').then( m => m.CarrinhoPageModule)
   },
@@ -49,6 +50,10 @@ const routes: Routes = [
   {
     path: 'status',
     loadChildren: () => import('./status/status.module').then( m => m.StatusPageModule)
+  },
+  {
+    path: 'item-venda/:id',
+    loadChildren: () => import('./item-venda/item-venda.module').then( m => m.ItemVendaPageModule)
   }
 
 

@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons  slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title><img style="max-height: 6vh;" src="/assets/logo_menor.png" alt="" />
+    </ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content>
+  <ion-card >
+    <ion-card-header  style=" color: black; background: linear-gradient(180deg, #ffce00, #ffce0091, #2224280a);" >
+      <h1 style="text-align: center;">{{venda?.nomeLoja}}</h1>
+
+    </ion-card-header>
+
+
+        <img style="max-width: 50%; margin: auto" src="./assets/slide3.png">
+
+
+
+    <ion-card-content>
+      <h4 text-center style="color: black"> Status da entrega: </h4>
+      <p text-center> {{venda?.statusEnt}}</p>
+      <ion-item style="border-radius: 25px; border: 2px solid rgba(0, 0, 0, 0.3);
+    box-shadow: 5px 5px rgba(128, 128, 128, 0.4);">
+        <ion-icon slot="start" style="color: green" name="cash"></ion-icon>
+        <p slot="end">{{venda?.statusPag}}</p>
+      </ion-item>
+      <ion-label  *ngIf="typeUser === 'Loja' ">
+        <ion-select style="border: 1px solid black; margin-top: 5% !important; border-radius: 25px; padding: 10px;"
+                    placeholder="Altere o status da entrega" [(ngModel)]="statusEnt">
+          <ion-select-option value="Preparando Entrega">Preparando Entrega</ion-select-option>
+          <ion-select-option value="Saiu para Entrega">Saiu para Entrega</ion-select-option>
+          <ion-select-option value="Entregue">Entregue</ion-select-option>
+
+        </ion-select>
+        <ion-button fill="solid" color="warning" (click)="save()">Salvar</ion-button>
+      </ion-label>
+    </ion-card-content>
+    <ion-list *ngFor="let items of venda?.produtos">
+      <ion-item>
+        <ion-avatar slot="start">
+          <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+        </ion-avatar>
+        <p>{{items.nome}}</p>
+        <ion-button fill="solid" color="warning" slot="end"(click)="veritem(items)">Veja</ion-button>
+
+      </ion-item>
+    </ion-list>
+
+  </ion-card>
+</ion-content>

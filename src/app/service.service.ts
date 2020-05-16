@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import {Produtos} from './item/item.page';
 
 
 
@@ -30,6 +31,18 @@ export interface Processo {
     resumo?: string;
     lastEdit?: string;
 }
+export interface Vendas {
+    nomeComprador?: string;
+    endereco?: string;
+    nomeLoja?: string;
+    valor?: number;
+    dia?: string;
+    emailComprador?: string;
+    produtos?: string;
+    statusPag?: string;
+    statusEnt?: string;
+    emailLoja?:string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -39,10 +52,11 @@ export class ServiceService {
   DislikeValue: number;
   private userCollection: AngularFirestoreCollection<User>;
   private processoCollection: AngularFirestoreCollection<Processo>;
+  public vendasCollection: AngularFirestoreCollection<Vendas>;
   users: Observable<User[]>;
   processos: Observable<Processo[]>;
+  vendas: Observable<Vendas[]>;
   private user: User;
-
     likes: number;
     dislikes: number;
     proccesso;
@@ -54,10 +68,12 @@ export class ServiceService {
 
     this.processoCollection = afs.collection<Processo>('produto');
   	 // this.processos = this.processoCollection.valueChanges();
+    this.vendasCollection = afs.collection<Vendas>('vendas');
 
     this.getUsers();
       // tslint:disable-next-line:indent
     this.getProccessos();
+    this.getVendas();
 
 
   }
@@ -80,6 +96,15 @@ export class ServiceService {
       }))
     );
   }
+    getVendas() {
+        return this.vendas = this.vendasCollection.snapshotChanges().pipe(
+            map(actions => actions.map(a => {
+                const data = a.payload.doc.data() as Vendas;
+                const id = a.payload.doc.id;
+                return { id, ...data };
+            }))
+        );
+    }
 addUser(user: User) {
     this.userCollection.add(user);
   }
@@ -94,6 +119,9 @@ addUser(user: User) {
   }
   getProc(id: string) {
     return this.userCollection.doc<User>(id).valueChanges();
+  }
+  getStatusProd(id: string) {
+    return this.vendasCollection.doc<Vendas>(id).valueChanges();
   }
   getProdutos(id: string) {
     return this.processoCollection.doc<Processo>(id).valueChanges();
@@ -113,7 +141,7 @@ addUser(user: User) {
   }
   dislike(id: string, loja: Processo) {
     this.dislikes++;
-    return this.processoCollection.doc<Processo>(id).update({DislikeValue: this.dislikes});
+    return this.userCollection.doc<User>(id).update({DislikeValue: this.dislikes});
   }
 
 

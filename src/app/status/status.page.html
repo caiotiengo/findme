@@ -1,0 +1,80 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      <img style="max-height: 6vh;" src="/assets/logo_menor.png" alt="" />
+    </ion-title>
+    <!--ion-buttons slot="start">
+      <ion-back-button ></ion-back-button>
+    </ion-buttons-->
+  </ion-toolbar>
+</ion-header>
+<ion-fab  vertical="top" horizontal="end" slot="fixed">
+  <ion-fab-button class="findme" color="findme">
+    <ion-icon style="color:#ffcb02 !important" name="home" (click)="home()"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+
+<ion-content>
+  <ion-searchbar  animated style="margin-top:3.5% !important;" placeholder="Pesquise" (ionInput)="filterList($event)"></ion-searchbar>
+
+  <ion-list *ngFor="let items of goalListUs" >
+    <ion-card   style=" background:white; border: 1px solid #ffcb02;">
+      <img style="margin:auto;" src="/assets/slide3.png" alt="" />
+
+      <ion-item>
+        <ion-icon name="notifications" color="danger" slot="start"></ion-icon>
+        <ion-label> {{items.statusEnt}}</ion-label>
+        <ion-button fill="solid" color="warning" slot="end" [routerLink]="['/item-venda/' + items.id]">Veja</ion-button>
+
+      </ion-item>
+
+      <ion-card-header>
+        <h4 style="text-align: center;">{{items.nomeLoja}}</h4>
+        <ion-item *ngIf="items.statusEnt === 'Entregue' && typeUser === 'user'">
+            <p>Avalie essa loja!</p>
+          <ion-icon slot="end" style="color: red" name="heart" (click)="handleLike(items)"></ion-icon>
+          <ion-icon name="heart-dislike" slot="end" (click)="handleDislike(items)"></ion-icon>
+        </ion-item>
+      </ion-card-header>
+
+      <ion-card-content>
+        <p> Valor • R${{items.valor}}</p>
+        <p> Data da compra • {{items.dia}}</p>
+        <p> Status de pagamento • {{items.statusPag}}</p>
+        <p slot="end">Endereço • {{items.endereco}} </p><br/>
+      </ion-card-content>
+
+    </ion-card>
+
+  </ion-list>
+  <ion-list *ngFor="let items of goalListST" >
+    <ion-card   style=" background:white; border: 1px solid #ffcb02;">
+      <img style="margin:auto;" src="/assets/slide3.png" alt="" />
+
+      <ion-item>
+        <ion-icon name="notifications" color="danger" slot="start"></ion-icon>
+        <ion-label> {{items.statusEnt}}</ion-label>
+        <ion-button fill="solid" color="warning" slot="end" [routerLink]="['/item-venda/' + items.id]">Veja</ion-button>
+
+      </ion-item>
+
+      <ion-card-header>
+        <h4 style="text-align: center;">{{items.nomeLoja}}</h4>
+        <ion-item *ngIf="items.statusEnt === 'Entregue' && typeUser === 'user'">
+            <p>Avalie essa loja!</p>
+          <ion-icon slot="end" style="color: red" name="heart" (click)="handleLike(items)"></ion-icon>
+          <ion-icon name="heart-dislike" slot="end" (click)="handleDislike(items)"></ion-icon>
+        </ion-item>
+      </ion-card-header>
+
+      <ion-card-content>
+        <p> Valor • R${{items.valor}}</p>
+        <p> Data da compra • {{items.dia}}</p>
+        <p> Status de pagamento • {{items.statusPag}}</p>
+        <p slot="end">Endereço • {{items.endereco}} </p><br/>
+      </ion-card-content>
+
+    </ion-card>
+
+  </ion-list>
+</ion-content>
