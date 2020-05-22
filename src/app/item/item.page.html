@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-            <img style="max-height: 6vh;" src="/assets/logo_menor.png" alt="" />
+            <img style="max-height: 5vh;" src="/assets/logo_menor.png" alt="" />
     </ion-title>
       <ion-buttons  slot="start">
           <ion-back-button></ion-back-button>
@@ -90,7 +90,12 @@
     </ion-select-->
 
 
-    <h4 style="background: #ffd112;margin: 0;border: 10px solid #ffd112;color: black;" text-center>Produtos</h4>
+    <h4 style="background: rgb(255, 209, 18);
+    margin: 0;
+    border-top-left-radius: 30px;
+    border: 10px solid rgb(255, 209, 18);
+    color: black;
+    border-top-right-radius: 30px;" text-center>Produtos</h4>
     <ion-searchbar  animated style="color: black; background: linear-gradient(180deg, #ffce00, #ffce0091, #2224280a);" placeholder="Pesquise um produto"
                     (ionInput)="filterList($event)">
 

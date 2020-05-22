@@ -40,7 +40,7 @@
     border: 2px solid rgba(0, 0, 0, 0.21);margin-bottom: 5%;
     box-shadow: 3px 3px rgba(128, 128, 128, 0.4);">
         <ion-icon slot="start" style="color: black" name="car"></ion-icon>
-        <p >Delivery</p>
+        <p >Entrega</p>
         <p slot="end">R$8,00</p>
 
       </ion-item>
@@ -56,10 +56,12 @@
     <h4 style="margin: 0;" text-center>Seu pedido</h4>
 
     <ion-item *ngIf="pagamento ==='credito'">
-      <ion-button color="warning" (click)="pagarCred()"> Pagamento com Crédito </ion-button>
+      <p style="font-size: 12px; color:red;">Tudo certo? Clique para confirmar o pagamento!</p>
+      <ion-button color="success" style="margin: auto" (click)="pagarCred()"> Confirmar Pagamento </ion-button>
     </ion-item>
     <ion-item *ngIf="pagamento ==='dinheiro'">
-      <ion-button color="warning" (click)="pagarDin()"> Pagarmento em Dinheiro </ion-button>
+      <p style="font-size: 12px; color:red;">Tudo certo? Clique para confirmar o pagamento!</p>
+      <ion-button color="success" style="margin: auto" (click)="pagarDin()"> Confirmar Pagamento </ion-button>
     </ion-item>
 
     <ion-list *ngFor="let items of carrinho">

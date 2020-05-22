@@ -25,7 +25,9 @@ export class RegisterPage implements OnInit {
     type = '';
     typeUser = '';
     resumo = '';
-    email: string;
+   
+  email = '';
+  password = '';
 
   constructor(public navCtrl: NavController, private storage: Storage,
               public afAuth: AngularFireAuth, public router: Router, public actRouter: ActivatedRoute,
@@ -38,12 +40,15 @@ export class RegisterPage implements OnInit {
   ngOnInit() {
   }
   async registrar() {
+   const{email, password } = this;
+
     try {
+       const res = await this.afAuth.auth.createUserWithEmailAndPassword(email, password).then(() => {
 
        const user = firebase.auth().currentUser;
        this.afStore.doc(`users/${user.uid}`).set({
             nome: this.nome,
-            email: user.email,
+            email: this.email,
             endereco: this.endereco,
             telefone:  this.telefone,
             bairro: this.bairro,
@@ -54,14 +59,19 @@ export class RegisterPage implements OnInit {
             DislikeValue: 0,
             aprovado: false,
             resumo: this.resumo
-       });
-       console.log(user);
+       }).then(() => {
+              this.navCtrl.navigateRoot('/user');
+              console.log(user);
 
+       });
+
+
+       })
+       
     } catch (err) {
         console.dir(err);
     }
       // tslint:disable-next-line:indent
-  	 this.navCtrl.navigateForward('/user');
       // tslint:disable-next-line:indent
   	 console.log('Fine');
 

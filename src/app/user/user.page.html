@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-        <img style="max-height: 6vh;" src="/assets/logo_menor.png" alt="" />
+        <img style="max-height: 5vh;" src="/assets/logo_menor.png" alt="" />
 
 	</ion-title>
 	<ion-buttons slot="start">
@@ -35,16 +35,16 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card style="background-color: white !important">
-    <ion-card-header > <h3 text center>{{nome}}, Aqui está suas compras!</h3>  <!--ion-button color="findme" (click)="addProc()"></ion-button--></ion-card-header>
-   
+  <ion-card *ngIf="typeUser === 'Loja'">
+    <ion-card-header > <h3 text center>{{nome}}, Aqui está seus produtos!</h3>  <!--ion-button color="findme" (click)="addProc()"></ion-button--></ion-card-header>
+
     <ion-card-content>
       <ion-list *ngFor="let items of goalListFiltrado">
       <ion-item>
-            <h2>{{items.name}}</h2><br/>
-            <p slot="end">Likes  • {{items.LikeValue}}</p><br/>
+            <h2>{{items.nome}}</h2><br/>
+            <ion-button color="findme" slot="end">deletar produto</ion-button><br/>
       </ion-item>
-       
+
     </ion-list>
     </ion-card-content>
   </ion-card>

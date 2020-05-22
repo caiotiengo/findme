@@ -19,6 +19,7 @@ export interface Processo {
     DislikeValue: number;
     tellme: string;
     email: string;
+    typeUser:string;
 }
 @Component({
   selector: 'app-user',
@@ -43,6 +44,7 @@ export class UserPage implements OnInit {
     private goalList: any[];
     private loadedGoalList: any[];
     processos;
+    typeUser;
     currentGoale;
     public products = new Array<Processo>();
     private proccessSubscription: Subscription;
@@ -75,6 +77,7 @@ export class UserPage implements OnInit {
       this.bairro = event.bairro;
       this.telefone = event.telefone;
       this.zona = event.zona;
+      this.typeUser = event.tipo;
 
     });
    }
@@ -83,9 +86,11 @@ export class UserPage implements OnInit {
   }
 
   sair() {
-    this.navCtrl.navigateRoot('/login');
+    
     this.storage.clear();
-    firebase.auth().signOut();
+    firebase.auth().signOut().then(() => {
+      this.navCtrl.navigateRoot('/');
+    });
 
   }
   home() {

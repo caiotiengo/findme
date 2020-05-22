@@ -1,18 +1,14 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>
-
-		<img style="max-height: 6vh;" src="/assets/logo_menor.png" alt="" />
-
-		</ion-title>
+  
 		<ion-buttons slot="start">
     		<ion-back-button></ion-back-button>
-    	</ion-buttons>
-  </ion-toolbar>
+    </ion-buttons>
 </ion-header>
 
 <ion-content>
-	<ion-card style="background-color: white !important">
+<div class="background-traco">
+
+		<ion-card style="background-color: white !important">
 			<ion-card-header > <h3 text-center style="margin:auto;">Registro</h3></ion-card-header>
 			<ion-card-content>
 					<br/>
@@ -31,7 +27,18 @@
 					<ion-select-option value="Zona Sul">Zona Sul</ion-select-option>
 					<ion-select-option value="Baixada">Baixada</ion-select-option>
 				</ion-select>
+			<ion-item>
+			 
+			  <ion-label position="floating">E-mail</ion-label>
+			  <ion-input type="text" [(ngModel)]="email" ></ion-input>
+			</ion-item>
 
+			<ion-item>
+			  <ion-label position="floating"> 
+			  	Senha
+			  </ion-label>
+			  <ion-input [(ngModel)]="password" type="password" ></ion-input>
+			</ion-item>
 				<ion-item *ngIf="typeUser === 'Loja'">
 					<ion-label position="floating">Nome da sua Loja</ion-label>
 					<ion-input [(ngModel)]="nome"></ion-input>
@@ -74,5 +81,6 @@
 				</ion-label>
 			</ion-card-content>
 			
-	</ion-card>
+		</ion-card>
+</div>
 </ion-content>

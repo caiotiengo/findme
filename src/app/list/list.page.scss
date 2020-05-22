@@ -2,17 +2,24 @@ img{
 	max-width:20vh
 }
 ion-content{
-	--background: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)), url('../../assets/logo.png') no-repeat no-repeat center;
 
 }
 ion-list{
-	max-width: 95%;
+	max-width: 100%;
     display: block;
     margin: auto;
 }
 ion-modal{
 	--width: 100% !important;
 	--height: 100% !important;
+}
+
+.background-traco{
+	background: linear-gradient(rgba(255, 206, 0, 0.86), rgba(0, 0, 0, 0.12)), url('../../assets/logo.png') no-repeat no-repeat center;
+	border-top-left-radius: 30px;
+    padding: 10px;
+    border-top-right-radius: 30px;
+
 }
 
 

@@ -1,16 +1,34 @@
 
+
+
+.background-traco{
+	background: linear-gradient(rgba(255, 206, 0, 0.86), rgba(0, 0, 0, 0.12)), url('../../assets/logo.png') no-repeat no-repeat center;
+  border-top-left-radius: 30px;
+    padding: 10px;
+    border-top-right-radius: 30px;
+}
+
 ion-content{
-  --background: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)), url('../../assets/logo.png') no-repeat no-repeat center;
+	  --background: linear-gradient(rgba(255, 206, 0, 0.5),rgba(255, 206, 0, 0.45), rgba(255, 254, 250, 0.98)), url('../../assets/Orixas.jpg');
+    color: white;
+    border: 0.2px solid white;
 
 }
+div{
+		animation: mymove 1s;
+		position: relative;
+	}
+#motion {animation-timing-function: linear;}
+@keyframes mymove {
+  from {bottom: -100px;}
+  to {bottom: 0px;}
+}
 ion-card{
-	--background: white !important;
-	width: 80%;
+	  --background: white !important;
+	  width: 90%;
     height: auto;
     display: block;
     margin: auto;
     margin-top: 3%;
-            margin-bottom: 3%;
-
-    padding: 0 0 0 3px;
+    
 }

@@ -42,6 +42,8 @@ export class StatusPage implements OnInit {
   itemVenda;
   likes: 0;
   dislikes: 0;
+  somar: any[];
+  somei: any[];
 
   constructor(public navCtrl: NavController, public alertCtrl: AlertController,
               private route: ActivatedRoute, private storage: Storage,
@@ -58,6 +60,11 @@ export class StatusPage implements OnInit {
         this.loadedGoalListUs = res.filter(i => i.emailComprador  === this.emailUsr);
         this.goalListST = res.filter(i => i.emailLoja === this.emailUsr);
         this.loadedGoalListST = res.filter(i => i.emailLoja  === this.emailUsr);
+        this.somar = this.goalListST.map(i => {if(i.statusPag === 'Aprovado'){return i.valor}else{}}).reduce(function(a, b) { return a + b; })
+        //calc porcentagem
+        this.somei = this.goalListST.map(i => {return i.valor}).reduce(function(a, b) { return a + b; })
+
+    console.log(this.somar)
         console.log(this.emailUsr);
       } else {
 
@@ -67,6 +74,7 @@ export class StatusPage implements OnInit {
 
       });
     });
+ 
   }
 
   async handleLike(items) {

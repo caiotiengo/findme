@@ -9,7 +9,6 @@ import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestor
 import * as firebase from 'firebase';
 
 
-
 const azpay = Azpay({
   id: '487',
   key: '4ceb4990a151347494ce06f4ee071bbf',
@@ -53,7 +52,7 @@ export class CarrinhoPage implements OnInit {
   email;
   mainuser: AngularFirestoreDocument;
   sub;
-  lojaUID
+  lojaUID;
   produtinz;
   constructor(private payPal: PayPal, public afStore: AngularFirestore,
               public navCtrl: NavController, public alertCtrl: AlertController, private storage: Storage) {
@@ -91,19 +90,19 @@ export class CarrinhoPage implements OnInit {
   }
 
   deletaItem(items) {
-    console.log(items)
+    console.log(items);
     console.log(this.carrinho);
 
     _.remove(this.carrinho, n => n.itemNumber === items.itemNumber);
-      console.log(this.carrinho);
-      this.storage.remove('carrinhoUser').then(() => {
+    console.log(this.carrinho);
+    this.storage.remove('carrinhoUser').then(() => {
         this.storage.set('carrinhoUser', JSON.stringify(this.carrinho)).then((data) => {
           this.carrinho = JSON.parse(data);
         });
       });
-      this.valores = this.carrinho.map(res => res.valor);
-      this.valorCompra = this.valores.reduce((acc, val) => acc += val, 0);
-      this.storage.remove('valorFinal').then(() => {
+    this.valores = this.carrinho.map(res => res.valor);
+    this.valorCompra = this.valores.reduce((acc, val) => acc += val, 0);
+    this.storage.remove('valorFinal').then(() => {
         this.storage.set('valorFinal', this.valorCompra).then((data) => {
           this.valor =  data + 8;
           console.log(this.valor);
@@ -117,7 +116,7 @@ export class CarrinhoPage implements OnInit {
       console.log(user);
     } else {}
     this.showalert('Obrigado pela compra!', 'A loja foi informada e você' +
-        ' pode acompanhar o seu pedido pela aba "Suas Entregas"');
+        ' pode acompanhar o seu pedido pela aba "Seus Pedidos"');
     this.sub = this.mainuser.valueChanges().subscribe(event => {
       this.nome = event.nome;
       this.endereco = event.endereco;
@@ -155,13 +154,18 @@ export class CarrinhoPage implements OnInit {
           statusPag: 'Aprovado',
           statusEnt: 'Loja informada'
         }).then(() => {
-          this.storage.remove('carrinhoUser').then(() =>{
+          this.storage.remove('carrinhoUser').then(() => {
             this.navCtrl.navigateRoot('/status');
           });        });
       });
     });
 
   }
+
+  async pagarCred2() {
+
+  }
+
   async pagarCred() {
     this.payPal.init({
       PayPalEnvironmentProduction: 'AQEv75SGaLlQt6HIwYB2jwf7pVPcnNF_GN4Cnt_13YQlFGNOA71GNr1SRxxHlKah9Fn9SUHGa3dj2p7n',
@@ -172,11 +176,14 @@ export class CarrinhoPage implements OnInit {
         // Only needed if you get an "Internal Service Error" after PayPal login!
         // payPalShippingAddressOption: 2 // PayPalShippingAddressOptionPayPal
       })).then(() => {
-        const payment = new PayPalPayment(this.valor, 'BRL', 'Axé Delivery - ' + this.loja.nome, 'sale');
+        const payment = new PayPalPayment(this.valor, 'USD', 'Axé Delivery - ' + this.loja.nome, 'sale');
         this.payPal.renderSinglePaymentUI(payment).then(() => {
           // Successfully paid
-
-          this.showalert('Obrigado pela compra!', 'A loja foi informada e você pode acompanhar o seu pedido pela aba "Suas Entregas"');
+          const user = firebase.auth().currentUser;
+          if (user) {
+            this.mainuser = this.afStore.doc(`users/${user.uid}`);
+            console.log(user);
+          } else {}
           this.sub = this.mainuser.valueChanges().subscribe(event => {
             this.nome = event.nome;
             this.endereco = event.endereco;
@@ -217,7 +224,8 @@ export class CarrinhoPage implements OnInit {
                 statusPag: 'Aprovado',
                 statusEnt: 'Loja informada'
               }).then(() => {
-                this.storage.remove('carrinhoUser').then(() =>{
+                this.showalert('Obrigado pela compra!', 'A loja foi informada e você pode acompanhar o seu pedido pela aba "Seus Pedidos"');
+                this.storage.remove('carrinhoUser').then(() => {
                   this.navCtrl.navigateRoot('/status');
                 });
               });

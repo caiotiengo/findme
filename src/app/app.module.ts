@@ -22,6 +22,7 @@ import { NativeGeocoder,  NativeGeocoderOptions } from '@ionic-native/native-geo
 import {HttpClientModule} from '@angular/common/http';
 import {BrMaskerModule} from 'brmasker-ionic-3';
 import { PayPal, PayPalPayment, PayPalConfiguration } from '@ionic-native/paypal/ngx';
+import { HttpModule } from '@angular/http';
 
 
 firebase.initializeApp(firebaseConfig);
@@ -31,6 +32,7 @@ firebase.initializeApp(firebaseConfig);
   imports: [
   AngularFireModule.initializeApp(firebaseConfig),
   AngularFireAuthModule,
+    HttpModule,
   BrowserModule,
   HttpClientModule,
   IonicModule.forRoot(),

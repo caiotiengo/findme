@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      <img style="max-height: 6vh;" src="/assets/logo_menor.png" alt="" />
+      <img style="max-height: 5vh;" src="/assets/logo_menor.png" alt="" />
     </ion-title>
     <!--ion-buttons slot="start">
       <ion-back-button ></ion-back-button>
@@ -16,8 +16,24 @@
 
 <ion-content>
   <ion-searchbar  animated style="margin-top:3.5% !important;" placeholder="Pesquise" (ionInput)="filterList($event)"></ion-searchbar>
-
-  <ion-list *ngFor="let items of goalListUs" >
+<div style="text-align-last: center;" *ngIf="typeUser === 'Loja'">
+  <h2>Seus números</h2>
+<ion-grid>
+  <ion-row>
+    <ion-col>
+      <h2 style="color: green; font-weight: bold;">R${{somar}}</h2>
+      <p style="font-size: 12px; font-style: italic;">Total em Vendas</p>
+    </ion-col>
+    <ion-col>
+      <h2 style="color: gray; font-weight: bold;">R${{somei}}</h2>
+      <p style="font-size: 12px; font-style: italic;">Total em Taxas</p>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+</div>
+<div class="background-traco">
+  <h2 style="text-align-last: center;">Seus Pedidos</h2>
+  <ion-list style="background: transparent"  *ngFor="let items of goalListUs" >
     <ion-card   style=" background:white; border: 1px solid #ffcb02;">
       <img style="margin:auto;" src="/assets/slide3.png" alt="" />
 
@@ -77,4 +93,5 @@
     </ion-card>
 
   </ion-list>
+</div>
 </ion-content>

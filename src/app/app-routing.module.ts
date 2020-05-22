@@ -1,5 +1,10 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import * as firebase from 'firebase';
+
+
+
+
 
 
 const routes: Routes = [
@@ -8,7 +13,7 @@ const routes: Routes = [
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
   },
   {
-    path: 'login',
+    path: '',
     loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
   },
   {
@@ -36,7 +41,7 @@ const routes: Routes = [
     loadChildren: () => import('./edit-page/edit-page.module').then( m => m.EditPagePageModule)
   },
   {
-    path: '',
+    path: 'slides',
     loadChildren: () => import('./slides/slides.module').then( m => m.SlidesPageModule)
   },
   {

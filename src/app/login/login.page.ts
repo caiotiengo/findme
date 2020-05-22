@@ -29,9 +29,10 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
   }
+
   registrar() {
 
-  	this.navCtrl.navigateForward('/registro');
+  	this.navCtrl.navigateForward('/register');
   	console.log('Fine');
    // saudade do meu amor
   }
@@ -50,8 +51,6 @@ export class LoginPage implements OnInit {
       if (err.code === 'auth/user-not-found') {
         console.log('password not match');
         this.showalert('Opa!', 'Parece que você ainda não é cadastrado, mas não tem problema! Clique em "Ok" para se cadastrar');
-        const res = await this.afAuth.auth.createUserWithEmailAndPassword(email, password);
-        this.storage.set('email', this.email);
         this.navCtrl.navigateRoot('/register');
 
 
