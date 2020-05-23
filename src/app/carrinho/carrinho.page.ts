@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewChecked } from '@angular/core';
 import {Storage} from '@ionic/storage';
 import {AlertController, NavController} from '@ionic/angular';
 import Azpay from 'azpay';
@@ -8,7 +8,7 @@ import * as _ from 'lodash';
 import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
 import * as firebase from 'firebase';
 
-
+declare let paypal: any;
 const azpay = Azpay({
   id: '487',
   key: '4ceb4990a151347494ce06f4ee071bbf',
@@ -50,6 +50,7 @@ export class CarrinhoPage implements OnInit {
   like: number;
   disklike: number;
   email;
+  paypalConfig
   mainuser: AngularFirestoreDocument;
   sub;
   lojaUID;
@@ -167,7 +168,70 @@ export class CarrinhoPage implements OnInit {
   }
 
   async pagarCred() {
-    this.payPal.init({
+   
+  this.paypalConfig ={
+    env:'sandbox',
+    client:{
+      sandbox:'AUL78e1xYqL9BppwbCQWmrVNd46DpEdPI7guKwwC9k8pTqacP608ORZSEwp6jla8jKgx6ZD6ya7CPvld'
+    },
+    commit: true,
+    payment:(data, actions) =>{
+      return actions.payment.create({
+        payment: {
+          transactions: [
+            {amount:{total: this.valor, currency: 'BRL'}}
+          ]
+        }
+      })
+    },
+    onAutorize: (data, actions) =>{
+      return actions.payment.execute().then((payment) => {
+        console.log('pagamento lindo! foi papai!')
+      })
+    },
+    ngAfterViewChecked():void{
+      if(!this.addPaypalScript){
+        this.addPaypalScript().then(() =>{
+          paypal.Button.render(this.paypalConfig, '#paypal-checkout-btn')
+        })
+      }
+    },
+    addPaypalScript() {
+      this.addScript = true;
+      return new Promise((resolve,reject) =>{
+        let scriptagElement= document.createElement('script')
+        scriptagElement.src = 'http://www.paypalobjects.com/api/checkout.js'
+        scriptagElement.onload = resolve
+        document.body.appendChild(scriptagElement)
+      })
+    }
+  }
+
+
+  }
+
+
+  home() {
+
+   // this.showalert('Atenção', 'Ao sair dessa pagina');
+    this.storage.remove('carrinhoUser').then(() => {
+      this.navCtrl.navigateRoot('/tabs/tab1');
+    });
+
+  }
+  async showalert(header: string, message: string) {
+    const alert = await this.alertCtrl.create({
+      header,
+      message,
+      buttons: ['Ok']
+    });
+
+    await alert.present();
+  }
+
+
+paypal(){
+   this.payPal.init({
       PayPalEnvironmentProduction: 'AQEv75SGaLlQt6HIwYB2jwf7pVPcnNF_GN4Cnt_13YQlFGNOA71GNr1SRxxHlKah9Fn9SUHGa3dj2p7n',
       PayPalEnvironmentSandbox: 'AUL78e1xYqL9BppwbCQWmrVNd46DpEdPI7guKwwC9k8pTqacP608ORZSEwp6jla8jKgx6ZD6ya7CPvld'
     }).then(() => {
@@ -267,24 +331,6 @@ export class CarrinhoPage implements OnInit {
 
       // Error in initialization, maybe PayPal isn't supported or something else
     });
-  }
+}
 
-
-  home() {
-
-   // this.showalert('Atenção', 'Ao sair dessa pagina');
-    this.storage.remove('carrinhoUser').then(() => {
-      this.navCtrl.navigateRoot('/tabs/tab1');
-    });
-
-  }
-  async showalert(header: string, message: string) {
-    const alert = await this.alertCtrl.create({
-      header,
-      message,
-      buttons: ['Ok']
-    });
-
-    await alert.present();
-  }
 }

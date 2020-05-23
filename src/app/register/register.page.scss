@@ -1,18 +1,38 @@
 ion-select{
   border: 1px solid black;
-  border-radius: 25px;
+  border-radius: 15px;
   padding: 10px;
   background: linear-gradient(180deg, #ffcb02, #ffce005c, #00000000);
   color: black;
   text-align: center;
+  margin-bottom: 1%;
 }
 ion-content{
-
+    --background: linear-gradient(rgba(255, 206, 0, 0.86), rgba(0, 0, 0, 0.12)),url('../../assets/logo.png') ;
+    color: white;
+    border: 0.2px solid white;
 }
 .background-traco{
-	background: linear-gradient(rgba(255, 206, 0, 0.86), rgba(0, 0, 0, 0.12)), url('../../assets/logo.png') no-repeat no-repeat center;
+	background: linear-gradient(#ffffff, rgba(212, 216, 226, 0.88));
 	border-top-left-radius: 30px;
     padding: 10px;
     border-top-right-radius: 30px;
+
+}
+.bg-transparent{
+  --background: rgb(254, 214, 43);
+}
+ion-label{
+  font-size: 18px;
+}
+ion-input{
+      --background: rgba(255, 255, 255, 0.29);
+    border: 1px solid rgba(34, 36, 40, 0.51);
+    border-radius: 15px;
+    margin-top: 1%;
+    margin-bottom: 1%
+}
+div{
+          text-align-last: center;
 
 }

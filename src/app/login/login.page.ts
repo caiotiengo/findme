@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 import {NavController} from '@ionic/angular';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase/app';
@@ -7,6 +7,7 @@ import { ServiceService } from '../service.service';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
 import { ModalController } from '@ionic/angular';
+declare let paypal: any;
 
 
 @Component({
@@ -14,10 +15,12 @@ import { ModalController } from '@ionic/angular';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements OnInit {
+export class LoginPage implements AfterViewChecked {
 
   email = '';
   password = '';
+  paypalConfig
+  valor = '';
 
   constructor(public navCtrl: NavController, private storage: Storage,
               public router: Router, public alertCtrl: AlertController, public afAuth: AngularFireAuth,
@@ -27,9 +30,48 @@ export class LoginPage implements OnInit {
 
       }
 
-  ngOnInit() {
-  }
+  
 
+  async pagarCred() {
+   
+  this.paypalConfig ={
+    env:'sandbox',
+    client:{
+      sandbox:'AUL78e1xYqL9BppwbCQWmrVNd46DpEdPI7guKwwC9k8pTqacP608ORZSEwp6jla8jKgx6ZD6ya7CPvld'
+    },
+    commit: true,
+    payment:(data, actions) =>{
+      return actions.payment.create({
+        payment: {
+          transactions: [
+            {amount:{total: this.valor, currency: 'BRL'}}
+          ]
+        }
+      })
+    },
+    onAutorize: (data, actions) =>{
+      return actions.payment.execute().then((payment) => {
+        console.log('pagamento lindo! foi papai!')
+      })
+    },
+    ngAfterViewChecked():void{
+      if(!this.addPaypalScript){
+        this.addPaypalScript().then(() =>{
+          paypal.Button.render(this.paypalConfig, '#paypal-checkout-btn')
+        })
+      }
+    },
+    addPaypalScript() {
+      this.addScript = true;
+      return new Promise((resolve,reject) =>{
+        let scriptagElement= document.createElement('script')
+        scriptagElement.src = 'http://www.paypalobjects.com/api/checkout.js'
+        scriptagElement.onload = resolve
+        document.body.appendChild(scriptagElement)
+      })
+    }
+  }
+}
   registrar() {
 
   	this.navCtrl.navigateForward('/register');

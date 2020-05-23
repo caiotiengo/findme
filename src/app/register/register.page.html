@@ -1,18 +1,22 @@
 <ion-header>
-  
+  <ion-toolbar  class="bg-transparent">
 		<ion-buttons slot="start">
     		<ion-back-button></ion-back-button>
     </ion-buttons>
+</ion-toolbar>
 </ion-header>
 
 <ion-content>
-<div class="background-traco">
+		<div style="text-align: center;">	
+				<img style="width:50%"src="/assets/slide3feito.png">
 
-		<ion-card style="background-color: white !important">
-			<ion-card-header > <h3 text-center style="margin:auto;">Registro</h3></ion-card-header>
-			<ion-card-content>
-					<br/>
-				<p>Escolha o tipo de usuario entrar como:</p>
+    		<h1>Compre e venda agora!</h1>
+    		<p><i>Com o processo de registro no nosso app, você consegue rapidamente ter seus produtos anunciados e aproveitar pra fazer aquela comprinha!</i></p>
+	
+				
+		</div>
+<div class="background-traco">
+<p>Escolha o tipo de usuario entrar como:</p>
 				<ion-select placeholder="Tipo de Usuario" style="border: 1px solid black; border-radius: 25px; padding: 10px;" [(ngModel)]="typeUser">
 					<ion-select-option value="Loja">Loja</ion-select-option>
 					<ion-select-option value="user">Usúario</ion-select-option>
@@ -27,47 +31,47 @@
 					<ion-select-option value="Zona Sul">Zona Sul</ion-select-option>
 					<ion-select-option value="Baixada">Baixada</ion-select-option>
 				</ion-select>
-			<ion-item>
-			 
+			<div>
+ 
 			  <ion-label position="floating">E-mail</ion-label>
 			  <ion-input type="text" [(ngModel)]="email" ></ion-input>
-			</ion-item>
+			</div>
 
-			<ion-item>
+			<div>
 			  <ion-label position="floating"> 
 			  	Senha
 			  </ion-label>
 			  <ion-input [(ngModel)]="password" type="password" ></ion-input>
-			</ion-item>
-				<ion-item *ngIf="typeUser === 'Loja'">
+			</div>
+				<div *ngIf="typeUser === 'Loja'">
 					<ion-label position="floating">Nome da sua Loja</ion-label>
 					<ion-input [(ngModel)]="nome"></ion-input>
-				</ion-item>
-				<ion-item *ngIf="typeUser === 'user'" >
+				</div>
+				<div *ngIf="typeUser === 'user'" >
 				  <ion-label position="floating">Seu nome</ion-label>
 				  <ion-input [(ngModel)]="nome"></ion-input>
-				</ion-item>
+				</div>
 
-				<ion-item>
+				<div>
 				  <ion-label position="floating">Endereço</ion-label>
 				  <ion-input [(ngModel)]="endereco" type="text"></ion-input>
-				</ion-item>
-				<ion-item>
+				</div>
+				<div>
 				  <ion-label position="floating">Bairro</ion-label>
 				  <ion-input [(ngModel)]="bairro" type="text"></ion-input>
-				</ion-item>
-				<ion-item>
+				</div>
+				<div>
 				  <ion-label position="floating">Cidade</ion-label>
 				  <ion-input [(ngModel)]="cidade" type="text"></ion-input>
-				</ion-item>
-				<ion-item>
+				</div>
+				<div>
 				  <ion-label position="floating">Telefone</ion-label>
 				  <ion-input [(ngModel)]="telefone" type="text"></ion-input>
-				</ion-item>
-				<ion-item *ngIf="typeUser === 'Loja'">
+				</div>
+				<div *ngIf="typeUser === 'Loja'">
 					<ion-label position="floating">Descrição</ion-label>
 					<ion-input maxLenght="40" [(ngModel)]="resumo" type="text"></ion-input>
-				</ion-item>
+				</div>
 				<br/>
 				<p>Foto de perfil:
 					<ion-button shape="outline" (click)="photo()" color="findme" ><ion-icon name="camera"></ion-icon></ion-button>
@@ -79,8 +83,7 @@
 						 Confirmar
 					</ion-button>
 				</ion-label>
-			</ion-card-content>
-			
-		</ion-card>
+
 </div>
+
 </ion-content>

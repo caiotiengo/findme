@@ -1,45 +1,23 @@
 
 <ion-content>
 
-	
 			<img src="/assets/Picture1.png">
+			
 
 </ion-content>
 <div id="motion" class="background-traco">
-
-	<ion-card style="background-color: white !important">
-			<ion-card-header > <h3 text style="margin:auto;">Entrar</h3></ion-card-header>
-			<ion-card-content>
-				<br/>
-
-			<ion-item>
-			 
-			  <ion-label position="floating"> <ion-icon name="person"></ion-icon>E-mail</ion-label>
-			  <ion-input type="text" [(ngModel)]="email" placeholder="seuemail@email.com"></ion-input>
-			</ion-item>
-
-			<ion-item>
-			  <ion-label position="floating"> 
-			  	<ion-icon name="apps"></ion-icon>
-			  	Senha
-			  </ion-label>
-			  <ion-input [(ngModel)]="password" type="password" placeholder="•••••••••••••"></ion-input>
-			</ion-item>
-			<br/>
+ <ion-label position="floating"> E-mail</ion-label>
+  		<ion-input type="text" [(ngModel)]="email" ></ion-input>
+ 		<br/>
+  <ion-label position="floating">Senha</ion-label>
+    	<ion-input [(ngModel)]="password" type="password" ></ion-input>
+		<br/>
+<div style="text-align-last: center;">
+		<ion-button (click)="entrar()" expand="" color="findme" style="color:white !important; max-width: 25vh;" >Entrar</ion-button>
+		<ion-button (click)="registrar()" expand="" color="warning" style="color:black !important;" >Cadastre-se</ion-button>
+		<br/>
+		<a style="font-size: 12px; color:black;" href="#">Esqueci a senha</a>			
+</div>
 			
-			<div style="text-align-last: center;">
-			<ion-button (click)="entrar()" expand="" color="findme" style="color:white !important; max-width: 25vh;" > Entrar
-
-					</ion-button>
-					<ion-button (click)="registrar()" expand="" color="warning" style="color:black !important;" > Cadastre-se
-
-					</ion-button>
-			<br/>
-			 <ion-item-divider>
-			 </ion-item-divider>
-							  	<a style="font-size: 12px; color:black;" href="#">Esqueci a senha</a>			
 	
-			</div>
-			</ion-card-content>
-	</ion-card>
 </div>

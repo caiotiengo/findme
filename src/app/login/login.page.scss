@@ -2,10 +2,15 @@
 
 
 .background-traco{
-	background: linear-gradient(rgba(255, 206, 0, 0.86), rgba(0, 0, 0, 0.12)), url('../../assets/logo.png') no-repeat no-repeat center;
-  border-top-left-radius: 30px;
-    padding: 10px;
+
+
+    background: linear-gradient(#ffffff, rgba(34, 36, 40, 0.14));
+    border-top-left-radius: 30px;
+    padding: 25px;
+    position: absolute;
     border-top-right-radius: 30px;
+    animation-fill-mode: both;
+    width: 100%;
 }
 
 ion-content{
@@ -14,9 +19,12 @@ ion-content{
     border: 0.2px solid white;
 
 }
+
+
 div{
 		animation: mymove 1s;
 		position: relative;
+        text-align-last: center;
 	}
 #motion {animation-timing-function: linear;}
 @keyframes mymove {
@@ -31,4 +39,13 @@ ion-card{
     margin: auto;
     margin-top: 3%;
     
+}
+ion-label{
+  font-size: 18px;
+}
+ion-input{
+      --background: rgba(255, 255, 255, 0.29);
+    border: 1px solid rgba(34, 36, 40, 0.51);
+    border-radius: 15px;
+    margin-top: 1%;
 }
