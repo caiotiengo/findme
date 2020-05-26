@@ -41,10 +41,6 @@ const routes: Routes = [
     loadChildren: () => import('./edit-page/edit-page.module').then( m => m.EditPagePageModule)
   },
   {
-    path: 'slides',
-    loadChildren: () => import('./slides/slides.module').then( m => m.SlidesPageModule)
-  },
-  {
     path: 'carrinho',
     loadChildren: () => import('./carrinho/carrinho.module').then( m => m.CarrinhoPageModule)
   },

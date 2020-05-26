@@ -2,13 +2,17 @@ import { Component, OnInit, AfterViewChecked } from '@angular/core';
 import {Storage} from '@ionic/storage';
 import {AlertController, NavController} from '@ionic/angular';
 import Azpay from 'azpay';
-import {Produtos} from '../item/item.page';
+
+import jsencrypt from 'jsencrypt';
+import { MoipCreditCard } from 'moip-sdk-js';
 import { PayPal, PayPalPayment, PayPalConfiguration } from '@ionic-native/paypal/ngx';
 import * as _ from 'lodash';
 import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
 import * as firebase from 'firebase';
+import moipSdk from 'moip-sdk-node'
 
 declare let paypal: any;
+
 const azpay = Azpay({
   id: '487',
   key: '4ceb4990a151347494ce06f4ee071bbf',
@@ -21,6 +25,9 @@ export interface Produtos {
   itemId?: any;
   itemNumber?: any;
   dia?: number;
+  lojaUID?:any;
+  emailLoja?:string;
+
 }
 @Component({
   selector: 'app-carrinho',
@@ -84,32 +91,112 @@ export class CarrinhoPage implements OnInit {
                      DQIDAQAB
                     -----END PUBLIC KEY-----`;
 
+  this.moip = moipSdk({
+    //accessToken: 'C5LQHXVYGJLN0XYSTRZCQY6LRQZVV6AR',
+     token: 'C5LQHXVYGJLN0XYSTRZCQY6LRQZVV6AR',
+     key: 'LNRERY9ULDQSPBXYR2BTJLNKRKLWTPEIUKAV9E1Z',
+        // production: false
+    production: false
+  })
+
   }
+
+teste(){
+  MoipCreditCard
+    .setEncrypter(jsencrypt, 'ionic')
+    .setPubKey(this.pubKey)
+    .setCreditCard({
+        number: '4012001037141112',
+        cvc: '123',
+        expirationMonth: '05',
+        expirationYear: '22'
+    })
+    .hash()
+    .then(hash => {
+      console.log('hash', hash)
+      this.hash = hash;
+        this.moip.order.create({
+            ownId: '1521656695',
+            amount: {
+                currency: 'BRL',
+                subtotals: {
+                    shipping: 1000
+                }
+            },
+            items: [{
+                product: 'Descrição do pedido',
+                quantity: 1,
+                detail: 'Mais info...',
+                price: 1000
+            }],
+            customer: {
+                ownId: '1521656726',
+                fullname: 'Jose Silva',
+                email: 'jose_silva0@email.com',
+                birthDate: '1988-12-30',
+                taxDocument: {
+                    type: 'CPF',
+                    number: '22222222222'
+                },
+                phone: {
+                    countryCode: '55',
+                    areaCode: '11',
+                    number: '66778899'
+                },
+                shippingAddress: {
+                    street: 'Avenida Faria Lima',
+                    streetNumber: 2927,
+                    complement: 8,
+                    district: 'Itaim',
+                    city: 'Sao Paulo',
+                    state: 'SP',
+                    country: 'BRA',
+                    zipCode: '01234000'
+                }
+            }
+        }).then((response) => {
+            console.log(response.body)
+            this.moip.payment.create(response.body.id, {
+            installmentCount: 1,
+            fundingInstrument: {
+                method: 'CREDIT_CARD',
+                creditCard: {
+                    hash: this.hash,
+                    holder: {
+                        fullname: 'Jose Santos',
+                        birthdate: '1980-01-02',
+                        taxDocument: {
+                            type: 'CPF',
+                            number: '12345679891'
+                        },
+                        phone: {
+                            countryCode: '55',
+                            areaCode: '11',
+                            number: '25112511'
+                        }
+                    }
+                }
+            }
+        }).then((response) => {
+            console.log(response.body)
+        }).catch((err) => {
+            console.log(err)
+        })
+        }).catch((err) => {
+            console.log(err)
+        })
+
+  });
+
+}
 
   ngOnInit() {
 
   }
 
-  deletaItem(items) {
-    console.log(items);
-    console.log(this.carrinho);
 
-    _.remove(this.carrinho, n => n.itemNumber === items.itemNumber);
-    console.log(this.carrinho);
-    this.storage.remove('carrinhoUser').then(() => {
-        this.storage.set('carrinhoUser', JSON.stringify(this.carrinho)).then((data) => {
-          this.carrinho = JSON.parse(data);
-        });
-      });
-    this.valores = this.carrinho.map(res => res.valor);
-    this.valorCompra = this.valores.reduce((acc, val) => acc += val, 0);
-    this.storage.remove('valorFinal').then(() => {
-        this.storage.set('valorFinal', this.valorCompra).then((data) => {
-          this.valor =  data + 8;
-          console.log(this.valor);
-        });
-      });
-  }
+
+  
   async pagarDin() {
     const user = firebase.auth().currentUser;
     if (user) {
@@ -163,52 +250,31 @@ export class CarrinhoPage implements OnInit {
 
   }
 
-  async pagarCred2() {
 
+
+
+
+  deletaItem(items) {
+    console.log(items);
+    console.log(this.carrinho);
+
+    _.remove(this.carrinho, n => n.itemNumber === items.itemNumber);
+    console.log(this.carrinho);
+    this.storage.remove('carrinhoUser').then(() => {
+        this.storage.set('carrinhoUser', JSON.stringify(this.carrinho)).then((data) => {
+          this.carrinho = JSON.parse(data);
+        });
+      });
+    this.valores = this.carrinho.map(res => res.valor);
+    this.valorCompra = this.valores.reduce((acc, val) => acc += val, 0);
+    this.storage.remove('valorFinal').then(() => {
+        this.storage.set('valorFinal', this.valorCompra).then((data) => {
+          this.valor =  data + 8;
+          console.log(this.valor);
+        });
+      });
   }
 
-  async pagarCred() {
-   
-  this.paypalConfig ={
-    env:'sandbox',
-    client:{
-      sandbox:'AUL78e1xYqL9BppwbCQWmrVNd46DpEdPI7guKwwC9k8pTqacP608ORZSEwp6jla8jKgx6ZD6ya7CPvld'
-    },
-    commit: true,
-    payment:(data, actions) =>{
-      return actions.payment.create({
-        payment: {
-          transactions: [
-            {amount:{total: this.valor, currency: 'BRL'}}
-          ]
-        }
-      })
-    },
-    onAutorize: (data, actions) =>{
-      return actions.payment.execute().then((payment) => {
-        console.log('pagamento lindo! foi papai!')
-      })
-    },
-    ngAfterViewChecked():void{
-      if(!this.addPaypalScript){
-        this.addPaypalScript().then(() =>{
-          paypal.Button.render(this.paypalConfig, '#paypal-checkout-btn')
-        })
-      }
-    },
-    addPaypalScript() {
-      this.addScript = true;
-      return new Promise((resolve,reject) =>{
-        let scriptagElement= document.createElement('script')
-        scriptagElement.src = 'http://www.paypalobjects.com/api/checkout.js'
-        scriptagElement.onload = resolve
-        document.body.appendChild(scriptagElement)
-      })
-    }
-  }
-
-
-  }
 
 
   home() {
@@ -230,107 +296,6 @@ export class CarrinhoPage implements OnInit {
   }
 
 
-paypal(){
-   this.payPal.init({
-      PayPalEnvironmentProduction: 'AQEv75SGaLlQt6HIwYB2jwf7pVPcnNF_GN4Cnt_13YQlFGNOA71GNr1SRxxHlKah9Fn9SUHGa3dj2p7n',
-      PayPalEnvironmentSandbox: 'AUL78e1xYqL9BppwbCQWmrVNd46DpEdPI7guKwwC9k8pTqacP608ORZSEwp6jla8jKgx6ZD6ya7CPvld'
-    }).then(() => {
-      // Environments: PayPalEnvironmentNoNetwork, PayPalEnvironmentSandbox, PayPalEnvironmentProduction
-      this.payPal.prepareToRender('PayPalEnvironmentSandbox', new PayPalConfiguration({
-        // Only needed if you get an "Internal Service Error" after PayPal login!
-        // payPalShippingAddressOption: 2 // PayPalShippingAddressOptionPayPal
-      })).then(() => {
-        const payment = new PayPalPayment(this.valor, 'USD', 'Axé Delivery - ' + this.loja.nome, 'sale');
-        this.payPal.renderSinglePaymentUI(payment).then(() => {
-          // Successfully paid
-          const user = firebase.auth().currentUser;
-          if (user) {
-            this.mainuser = this.afStore.doc(`users/${user.uid}`);
-            console.log(user);
-          } else {}
-          this.sub = this.mainuser.valueChanges().subscribe(event => {
-            this.nome = event.nome;
-            this.endereco = event.endereco;
-            this.cidade = event.cidade;
-            this.email = event.email;
-            this.bairro = event.bairro;
-            this.telefone = event.telefone;
-            this.zona = event.zona;
-            this.like = event.LikeValue;
-            this.disklike = event.DislikeValue;
-            // tslint:disable-next-line:no-shadowed-variable
-            const date = new Date();
-            date.setMonth(date.getMonth() + 1);
-            const dia = date.getDate() + '/' + date.getMonth()  + '/' + date.getFullYear();
-            console.log(dia);
-            this.valores = this.carrinho.map(res => res.valor);
-            this.valorCompra = this.valores.reduce((acc, val) => acc += val, 0);
-            this.storage.get('valorFinal').then((data) => {
-              this.valor =  data + 8;
-              console.log(this.valor);
-            });
-            this.storage.get('carrinhoUser').then((data) => {
-              this.produtos =  JSON.parse(data);
-              console.log(this.produtos);
 
-              this.afStore.collection('vendas').add({
-                nomeComprador: this.nome,
-                endereco: this.endereco + ', ' + this.bairro + ', ' + this.cidade,
-                nomeLoja: this.loja.nome,
-                valor: this.valor,
-                likeLoja: this.like,
-                dislikeLoja: this.disklike,
-                dia,
-                lojaUID: this.produtos[0].lojaUID,
-                produtos: this.produtos,
-                emailComprador: this.email,
-                emailLoja: this.produtos[0].emailLoja,
-                statusPag: 'Aprovado',
-                statusEnt: 'Loja informada'
-              }).then(() => {
-                this.showalert('Obrigado pela compra!', 'A loja foi informada e você pode acompanhar o seu pedido pela aba "Seus Pedidos"');
-                this.storage.remove('carrinhoUser').then(() => {
-                  this.navCtrl.navigateRoot('/status');
-                });
-              });
-            });
-          });
-
-          // Example sandbox response
-          //
-          // {
-          //   "client": {
-          //     "environment": "sandbox",
-          //     "product_name": "PayPal iOS SDK",
-          //     "paypal_sdk_version": "2.16.0",
-          //     "platform": "iOS"
-          //   },
-          //   "response_type": "payment",
-          //   "response": {
-          //     "id": "PAY-1AB23456CD789012EF34GHIJ",
-          //     "state": "approved",
-          //     "create_time": "2016-10-03T13:33:33Z",
-          //     "intent": "sale"
-          //   }
-          // }
-        }, () => {
-          this.showalert('Hmmm...', 'Verifique o seu cartão, provavelmente houve algum problema com ele.' +
-              'Tente novamente mais tarde.');
-
-          // Error or render dialog closed without being successful
-        });
-      }, () => {
-        // tslint:disable-next-line:max-line-length
-        this.showalert('Erro na configuração!', 'Estamos verificando o que aconteceu. Pode ficar tranquilo, nada será debitado do seu cartão!');
-
-        // Error in configuration
-      });
-    }, () => {
-      // tslint:disable-next-line:max-line-length
-      this.showalert('Erro na inicialização!', 'Estamos verificando o que aconteceu. Pode ficar tranquilo, nada será debitado do seu cartão!');
-
-      // Error in initialization, maybe PayPal isn't supported or something else
-    });
-}
 
 }

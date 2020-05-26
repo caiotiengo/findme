@@ -15,7 +15,7 @@ declare let paypal: any;
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements AfterViewChecked {
+export class LoginPage implements OnInit {
 
   email = '';
   password = '';
@@ -30,7 +30,9 @@ export class LoginPage implements AfterViewChecked {
 
       }
 
-  
+  ngOnInit(){
+    
+  }
 
   async pagarCred() {
    
