@@ -20,6 +20,8 @@ export interface Processo {
     tellme: string;
     email: string;
     typeUser:string;
+    lat:any;
+    long:any;
 }
 @Component({
   selector: 'app-user',

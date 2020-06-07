@@ -4,13 +4,18 @@ import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestor
 import { Storage } from '@ionic/storage';
 import { ModalController } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
+import{ ViewChild, ElementRef} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ServiceService } from '../service.service';
 import * as firebase from 'firebase/app';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@ionic-native/native-geocoder/ngx';
 import {HttpClient} from '@angular/common/http';
-declare var google;
+import { google } from "google-maps";
+import { HaversineService, GeoCoord } from "ng2-haversine";
+
+declare var google: any;
+
 export interface Processo {
     zona: string;
     role: string;
@@ -20,6 +25,8 @@ export interface Processo {
     DislikeValue: number;
     tellme: string;
     email: string;
+    id:string;
+    nome:string;
 }
 @Component({
   selector: 'app-list',
@@ -27,7 +34,9 @@ export interface Processo {
   styleUrls: ['./list.page.scss'],
 })
 export class ListPage implements OnInit {
-
+  @ViewChild('map',  {static: true}) mapRef: ElementRef;
+  public map: google.maps.Map;
+  public mapOptions: google.maps.MapOptions;
     geoLatitude: number;
     geoLongitude: number;
     geoAccuracy: number;
@@ -56,18 +65,32 @@ export class ListPage implements OnInit {
     lat;
     lng;
     location;
-    latLngResult;
+   
     userLocationFromLatLng;
     mainuser: AngularFirestoreDocument;
     sub;
     name;
     boss;
     zona;
-    goalListFiltrado;
+    goalListFiltrado = new Array<Processo>();
     loadedGoalListFiltrado;
-  constructor(public navCtrl: NavController, public router: Router, private geolocation: Geolocation,
-              public modalController: ModalController,  public alertCtrl: AlertController, private storage: Storage, public afStore: AngularFirestore,
-              public services: ServiceService) {
+    pois:any[];
+    data
+    existe
+    lojaApr
+    lojaAprLat
+    lojaAprLng
+    km
+  constructor(public navCtrl: NavController, public Platform:Platform,
+              public router: Router, 
+              private geolocation: Geolocation,
+              public modalController: ModalController,  
+              public alertCtrl: AlertController,
+              private storage: Storage, 
+              public afStore: AngularFirestore,
+              public services: ServiceService,
+              private _haversineService: HaversineService) {
+
       this.proccessSubscription = this.services.getUsers().subscribe(data => {
           this.goalList = data;
           this.loadedGoalList = data;
@@ -83,11 +106,44 @@ export class ListPage implements OnInit {
           }
           this.sub = this.mainuser.valueChanges().subscribe(event => {
               this.zona = event.zona;
+              this.lat = event.lat;
+              this.lng = event.long  
+
               console.log();
-              this.goalListFiltrado = this.goalList.filter(i => i.zona === this.zona && i.tipo === 'Loja' && i.aprovado === true);
-              this.loadedGoalListFiltrado = this.loadedGoalList.filter(i => i.zona === this.zona && i.tipo === 'Loja' && i.aprovado === true);
+             // this.goalListFiltrado = this.goalList.filter(i => i.zona === this.zona && i.tipo === 'Loja' && i.aprovado === true);
+              //this.loadedGoalListFiltrado = this.loadedGoalList.filter(i => i.zona === this.zona && i.tipo === 'Loja' && i.aprovado === true);
+              this.lojaApr = this.goalList.filter(i => i.tipo === 'Loja' && i.aprovado === true)       
+              this.lojaApr.forEach(loja => {
+              console.log(loja)
+              this.lojaAprLat = loja.lat; 
+              this.lojaAprLng = loja.lng; 
+              console.log(this.lojaAprLng +" " + this.lojaAprLat)
+
+              let usuarioCaio: GeoCoord = {
+                   latitude: this.lat,
+                   longitude: this.lng
+              };
+ 
+              let taquara: GeoCoord = {
+                  latitude: this.lojaAprLat,
+                  longitude: this.lojaAprLng
+              };
+             let kilometers = this._haversineService.getDistanceInKilometers(usuarioCaio, taquara).toFixed(2);
+             console.log("The distance between Madrid and Bilbao is:" + kilometers);   
+              var km = Number(kilometers)
+               if(Number(kilometers) < 7.0 ){
+                    this.goalListFiltrado.push(loja)
+                    console.log(this.goalListFiltrado)
+                    
+                 }else{
+                   console.log("Out of range" + loja.lenght)
+               } 
+             
+            })
 
           });
+
+
     });
 
       const user = firebase.auth().currentUser;
@@ -101,9 +157,19 @@ export class ListPage implements OnInit {
   }
 
 
-  ngOnInit() {
+ 
 
+
+
+
+
+
+
+
+  ngOnInit() {
+     
   }
+
   initializeItems(): void {
     this.goalListFiltrado = this.loadedGoalListFiltrado;
   }

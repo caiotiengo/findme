@@ -98,7 +98,7 @@ export class LoginPage implements OnInit {
         this.navCtrl.navigateRoot('/register');
 
 
-      } else if (err.code === 'auth/wrong-password'){
+      }if (err.code === 'auth/wrong-password'){
           this.showalert('Hmmm...', 'Parece que você digitou a senha errada, tente novamente.');
 
       }

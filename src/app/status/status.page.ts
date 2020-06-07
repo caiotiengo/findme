@@ -63,7 +63,6 @@ export class StatusPage implements OnInit {
         this.somar = this.goalListST.map(i => {if(i.statusPag === 'Aprovado'){return i.valor}else{}}).reduce(function(a, b) { return a + b; })
         //calc porcentagem
         this.somei = this.goalListST.map(i => {return i.valor}).reduce(function(a, b) { return a + b; })
-
     console.log(this.somar)
         console.log(this.emailUsr);
       } else {
@@ -143,6 +142,15 @@ export class StatusPage implements OnInit {
         }
       }
     });
+  }
+  perfilPage() {
+      const user = firebase.auth().currentUser;
+
+      if (user) {
+      this.navCtrl.navigateForward('/user');
+    } else {
+      this.navCtrl.navigateForward('/login');
+    }
   }
   home() {
 

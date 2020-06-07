@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import {AngularFirestore} from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import {AlertController, ModalController} from '@ionic/angular';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 @Component({
   selector: 'app-register',
@@ -27,14 +28,30 @@ export class RegisterPage implements OnInit {
     resumo = '';
     email = '';
     password = '';
+    lat 
+    long
     cnpj: any;
     strCNPJ: any;
   constructor(public navCtrl: NavController, private storage: Storage,
-              public afAuth: AngularFireAuth, public router: Router, public actRouter: ActivatedRoute,
+              public afAuth: AngularFireAuth, private geolocation: Geolocation, public router: Router, public actRouter: ActivatedRoute,
               public services: ServiceService, public afStore: AngularFirestore, public alertCtrl: AlertController,
               private modalController: ModalController) {
 
+         this.geolocation.getCurrentPosition().then((resp) => {
+              console.log(resp.coords.latitude)
+              console.log(resp.coords.longitude)
+              this.lat = resp.coords.latitude;
+              this.long = resp.coords.longitude;
+          }).catch((error) => {
+              console.log('Error getting location', error);
+          });
 
+              let watch = this.geolocation.watchPosition();
+                  watch.subscribe((data) => {
+           // data can be a set of coordinates, or an error (if an error occurred).
+           // data.coords.latitude
+           // data.coords.longitude
+          });
 
   }
 
@@ -58,6 +75,8 @@ export class RegisterPage implements OnInit {
             tipo: this.typeUser,
             LikeValue: 0,
             DislikeValue: 0,
+            lat: this.lat,
+            lng: this.long,
             aprovado: false,
             resumo: this.resumo
        }).then(() => {

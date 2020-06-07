@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -8,7 +8,7 @@ import { AddProcPageRoutingModule } from './add-proc-routing.module';
 
 import { AddProcPage } from './add-proc.page';
 import {NgxCurrencyModule} from 'ngx-currency';
-import {BrMaskerModule} from 'brmasker-ionic-3';
+import { BrMaskerModule } from 'br-mask';
 
 @NgModule({
     imports: [
@@ -17,7 +17,8 @@ import {BrMaskerModule} from 'brmasker-ionic-3';
         IonicModule,
         AddProcPageRoutingModule,
         NgxCurrencyModule,
-        BrMaskerModule
+        BrMaskerModule,
+        ReactiveFormsModule 
     ],
   declarations: [AddProcPage]
 })

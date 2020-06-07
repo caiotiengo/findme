@@ -5,6 +5,7 @@ import * as firebase from 'firebase/app';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 import {AlertController} from '@ionic/angular';
 import {ServiceService} from '../service.service';
+import {Validators, FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-add-proc',
@@ -29,9 +30,11 @@ export class AddProcPage implements OnInit {
     boss;
     procUser: any ;
     que;
+      private formulario : FormGroup;
+
   constructor(public navCtrl: NavController, public afStore: AngularFirestore,
               public alertCtrl: AlertController,
-              public services: ServiceService) {
+              public services: ServiceService,private formBuilder: FormBuilder) {
      // this.procUser = this.services.getProc(this.que);
       const user = firebase.auth().currentUser;
       console.log(user.email);
@@ -46,6 +49,13 @@ export class AddProcPage implements OnInit {
       this.nome = event.nome;
       this.boss = event.boss;
     });
+     this.formulario = this.formBuilder.group({
+      valor: ['', Validators.required],
+      nomePrd: ['', Validators.required],
+      resumo: ['', Validators.required]      
+
+    });
+     console.log(this.formulario.value.valor)
 
   }
 
@@ -55,11 +65,15 @@ export class AddProcPage implements OnInit {
     const user = firebase.auth().currentUser;
     if (user) {
       this.afStore.collection('produto').add({
-         nome: this.nomePrd,
+         nome: this.formulario.value.nomePrd,
          email: user.email,
-         valor: Number(this.valor),
+         valor: this.formulario.value.valor,
          tipoPrd: this.type,
-         resumo: this.resumo
+         resumo: this.formulario.value.resumo,
+         product: this.formulario.value.nomePrd,
+         quantity: 1,
+         detail:  this.resumo,
+         price:this.formulario.value.valor
       });
     }
     this.showalert('Obrigado!', 'Seu produto estará disponível em breve!');

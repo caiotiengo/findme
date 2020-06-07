@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import * as firebase from 'firebase';
-
+import { FormsModule } from '@angular/forms'; import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -61,7 +61,8 @@ const routes: Routes = [
 ];
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
+   FormsModule, ReactiveFormsModule
   ],
   exports: [RouterModule]
 })

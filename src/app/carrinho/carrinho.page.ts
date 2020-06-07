@@ -62,6 +62,12 @@ export class CarrinhoPage implements OnInit {
   sub;
   lojaUID;
   produtinz;
+  numeroCard = "";
+  nomeCartao = "";
+  CVV = "";
+  mesValidade = "";
+  anoValidade = "";
+
   constructor(private payPal: PayPal, public afStore: AngularFirestore,
               public navCtrl: NavController, public alertCtrl: AlertController, private storage: Storage) {
     this.storage.get('carrinhoUser').then((data) => {
@@ -106,10 +112,10 @@ teste(){
     .setEncrypter(jsencrypt, 'ionic')
     .setPubKey(this.pubKey)
     .setCreditCard({
-        number: '4012001037141112',
-        cvc: '123',
-        expirationMonth: '05',
-        expirationYear: '22'
+        number: this.numeroCard, //'4012001037141112',
+        cvc: this.CVV, //'123',
+        expirationMonth: this.mesValidade ,//'05',
+        expirationYear: this.anoValidade//'22'
     })
     .hash()
     .then(hash => {
@@ -127,7 +133,7 @@ teste(){
                 product: 'Descrição do pedido',
                 quantity: 1,
                 detail: 'Mais info...',
-                price: 1000
+                price: 10.00
             }],
             customer: {
                 ownId: '1521656726',

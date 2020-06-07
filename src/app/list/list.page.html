@@ -15,24 +15,33 @@
     </ion-fab-button>
   </ion-fab>
 <ion-content>
-<div class="background-traco">
+
+
+
+
+
+
+
+<div class="background-traco" >
           <ion-list style="background: transparent" *ngFor="let items of goalListFiltrado">
-            <ion-card   style=" background:white; border: 1px solid #ffcb02;">
+            <ion-card [routerLink]="['/item/' + items.id]"  style=" background:white;box-shadow:5px 5px rgba(128, 128, 128, 0.5215686274509804);border: 1px solid #ffcb02;">
                 <img style="margin:auto;" src="/assets/slide3.png" alt="" />
 
                 <ion-item>
-                    <ion-icon name="pin" slot="start"></ion-icon>
+                    <ion-icon style="color: black;"name="pin" slot="start"></ion-icon>
                     <ion-label>{{items.bairro}},{{items.cidade}}</ion-label>
-                    <ion-button fill="solid" color="warning" slot="end" [routerLink]="['/item/' + items.id]">Veja</ion-button>
+                    <ion-button fill="solid" color="warning" slot="end" [routerLink]="['/item/' + items.id]" >Veja</ion-button>
                 </ion-item>
-
               <ion-card-header>
-                <h4 style="text-align: center;">{{items.nome}}</h4>
+                <h4 style="text-align: center; border: 2px solid #ffce00;
+    border-radius: 25px;
+    box-shadow: 2px 2px rgba(66, 66, 66, 0.52156862745)">{{items.nome}}</h4>
               </ion-card-header>
 
-                <ion-card-content>
-                    {{items.resumo}}
-                    <p slot="end">Likes  • {{items.LikeValue}}</p><br/>
+                <ion-card-content style="text-align: center;">
+                    {{items.resumo}}<br/>
+                       <ion-icon style="color: red;"name="heart"></ion-icon>
+                    <ion-label>{{items.LikeValue}}</ion-label>
                 </ion-card-content>  
                 <ion-label *ngIf="items.tipo === 'admin'">
                   <ion-button fill="clear" (click)="verifica()" color="findme" [routerLink]="['edit-page/' + items.id]" > Editar

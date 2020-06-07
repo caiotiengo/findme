@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -20,10 +20,12 @@ import { ListPage } from './list/list.page';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder,  NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
 import {HttpClientModule} from '@angular/common/http';
-import {BrMaskerModule} from 'brmasker-ionic-3';
 import { PayPal, PayPalPayment, PayPalConfiguration } from '@ionic-native/paypal/ngx';
 import { HttpModule } from '@angular/http';
-
+import { HaversineService } from "ng2-haversine";
+import { BrMaskerModule } from 'br-mask';
+import { FormsModule } from '@angular/forms'; 
+import { ReactiveFormsModule } from '@angular/forms';
 
 firebase.initializeApp(firebaseConfig);
 @NgModule({
@@ -35,12 +37,16 @@ firebase.initializeApp(firebaseConfig);
     HttpModule,
   BrowserModule,
   HttpClientModule,
+      BrMaskerModule,
   IonicModule.forRoot(),
   IonicStorageModule.forRoot(),
-  AppRoutingModule, BrMaskerModule
+  AppRoutingModule,
+      FormsModule,ReactiveFormsModule
+
   ],
   providers: [
     StatusBar,
+    HaversineService,
     NativeGeocoder,
     Geolocation,
     SplashScreen,
@@ -49,6 +55,8 @@ firebase.initializeApp(firebaseConfig);
     PayPal,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+    schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+
 })
 export class AppModule {}

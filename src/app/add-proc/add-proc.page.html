@@ -31,14 +31,15 @@
 					<ion-select-option value="Jogos">Jogos</ion-select-option>
 
 				</ion-select>
+				<form [formGroup]="formulario" (ngSubmit)="logForm()">
 				<ion-item>
 				  <ion-label position="floating">Nome do produto</ion-label>
-				  <ion-input [(ngModel)]="nomePrd"></ion-input>
+				  <ion-input formControlName="nomePrd"></ion-input>
 				</ion-item>
 
 				<ion-item>
 				  <ion-label position="floating">Descrição</ion-label>
-				  <ion-input maxLenght="40" [(ngModel)]="resumo" type="text"></ion-input>
+				  <ion-input maxLenght="40" formControlName="resumo" type="text"></ion-input>
 				</ion-item>	
 
 				<ion-item>
@@ -48,7 +49,8 @@
 
 				<ion-item>
 					<ion-label position="floating">Valor</ion-label>
-					<ion-input placeholder="   "  [(ngModel)]="valor"type="text">R$</ion-input>
+					<ion-input name="money" formControlName="valor" placeholder="(R$) Real"
+					[brmasker]="{money: true}" type="text"></ion-input>
 				</ion-item>
 				<p style="color: red"><b>Atenção: Coloque o valor separado por PONTO. Ex: 110.00</b></p>
 
@@ -62,7 +64,7 @@
 				<ion-button (click)="create()" color="findme" style="color:white !important; max-width: 25vh;" >
 					 Create 
 				</ion-button>
-			
+				</form>
 			</ion-card-content>
 			
 	</ion-card>

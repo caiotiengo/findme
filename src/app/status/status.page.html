@@ -9,11 +9,10 @@
   </ion-toolbar>
 </ion-header>
 <ion-fab  vertical="top" horizontal="end" slot="fixed">
-  <ion-fab-button class="findme" color="findme">
-    <ion-icon style="color:#ffcb02 !important" name="home" (click)="home()"></ion-icon>
-  </ion-fab-button>
-</ion-fab>
-
+    <ion-fab-button class="findme" color="findme" (click)="perfilPage()">
+      <ion-icon style="color:#ffcb02 !important" name="person"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 <ion-content>
   <ion-searchbar  animated style="margin-top:3.5% !important;" placeholder="Pesquise" (ionInput)="filterList($event)"></ion-searchbar>
 <div style="text-align-last: center;" *ngIf="typeUser === 'Loja'">
@@ -31,12 +30,21 @@
   </ion-row>
 </ion-grid>
 </div>
-<div class="background-traco">
-  <h2 style="text-align-last: center;">Seus Pedidos</h2>
-  <ion-list style="background: transparent"  *ngFor="let items of goalListUs" >
-    <ion-card   style=" background:white; border: 1px solid #ffcb02;">
-      <img style="margin:auto;" src="/assets/slide3.png" alt="" />
+<div style="text-align: center;" *ngIf="goalListUs?.lenght < 1">
+  <p>Parece que você não tem pedidos...</p>
+  <p>Começe a comprar agora!</p>
+        <ion-button fill="solid" color="warning" slot="end">Comprar</ion-button>
 
+</div>
+<div *ngIf="goalListUs?.lenght > 0" class="background-traco">
+  <h2 style="text-align-last: center;">Seus Pedidos</h2>
+
+  <ion-list style="background: transparent" *ngFor="let items of goalListUs" >
+      
+
+
+    <ion-card style=" background:white; border: 1px solid #ffcb02;">
+      <img style="margin:auto;" src="/assets/slide3.png" alt="" />
       <ion-item>
         <ion-icon name="notifications" color="danger" slot="start"></ion-icon>
         <ion-label> {{items.statusEnt}}</ion-label>
@@ -46,11 +54,18 @@
 
       <ion-card-header>
         <h4 style="text-align: center;">{{items.nomeLoja}}</h4>
-        <ion-item *ngIf="items.statusEnt === 'Entregue' && typeUser === 'user'">
+        <ion-label style="" *ngIf="items.statusEnt === 'Entregue'">
+          <ion-item>
             <p>Avalie essa loja!</p>
           <ion-icon slot="end" style="color: red" name="heart" (click)="handleLike(items)"></ion-icon>
           <ion-icon name="heart-dislike" slot="end" (click)="handleDislike(items)"></ion-icon>
+       </ion-item>
+        <ion-item>
+          <ion-label position="floating">Adicione um comentario</ion-label>
+          <ion-input [(ngModel)]="comentario"></ion-input>
         </ion-item>
+         <ion-button fill="solid" expand="block" color="warning">Enviar</ion-button>
+          </ion-label>
       </ion-card-header>
 
       <ion-card-content>
@@ -63,6 +78,13 @@
     </ion-card>
 
   </ion-list>
+  
+</div>
+<div style="text-align: center;" *ngIf="goalListST?.lenght < 1">
+  <p>Parece que você não tem pedidos...</p>
+  <p>Começe a comprar agora!</p>
+</div>
+<div *ngIf="goalListST?.lenght > 0" class="background-traco">
   <ion-list *ngFor="let items of goalListST" >
     <ion-card   style=" background:white; border: 1px solid #ffcb02;">
       <img style="margin:auto;" src="/assets/slide3.png" alt="" />
@@ -76,11 +98,11 @@
 
       <ion-card-header>
         <h4 style="text-align: center;">{{items.nomeLoja}}</h4>
-        <ion-item *ngIf="items.statusEnt === 'Entregue' && typeUser === 'user'">
+        <!--ion-item *ngIf="items.statusEnt === 'Entregue' && typeUser === 'user'">
             <p>Avalie essa loja!</p>
           <ion-icon slot="end" style="color: red" name="heart" (click)="handleLike(items)"></ion-icon>
           <ion-icon name="heart-dislike" slot="end" (click)="handleDislike(items)"></ion-icon>
-        </ion-item>
+        </ion-item-->
       </ion-card-header>
 
       <ion-card-content>
