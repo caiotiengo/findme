@@ -20,9 +20,15 @@
 
 
 
+<div style="text-align: center;" *ngIf="semLoja === 0">
+   <img style="max-width: 55vh" src="/assets/logo.png" alt="" />
 
+  <p>Parece que você não temos loja em sua região...</p>
+  <p>Não se preocupe! Compartilhe o app com pessoas e comerciantes da sua área e faça a festa!</p>
 
-<div class="background-traco" >
+</div>
+
+<div class="background-traco"  *ngIf="semLoja > 0">
           <ion-list style="background: transparent" *ngFor="let items of goalListFiltrado">
             <ion-card [routerLink]="['/item/' + items.id]"  style=" background:white;box-shadow:5px 5px rgba(128, 128, 128, 0.5215686274509804);border: 1px solid #ffcb02;">
                 <img style="margin:auto;" src="/assets/slide3.png" alt="" />

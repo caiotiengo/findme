@@ -81,6 +81,7 @@ export class ListPage implements OnInit {
     lojaAprLat
     lojaAprLng
     km
+    semLoja
   constructor(public navCtrl: NavController, public Platform:Platform,
               public router: Router, 
               private geolocation: Geolocation,
@@ -133,10 +134,13 @@ export class ListPage implements OnInit {
               var km = Number(kilometers)
                if(Number(kilometers) < 7.0 ){
                     this.goalListFiltrado.push(loja)
-                    console.log(this.goalListFiltrado)
-                    
+                    console.log(this.goalListFiltrado.length)
+                    this.semLoja = this.goalListFiltrado.length
+
                  }else{
                    console.log("Out of range" + loja.lenght)
+                  this.semLoja = this.goalListFiltrado.length
+
                } 
              
             })

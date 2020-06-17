@@ -7,13 +7,19 @@ import { IonicModule } from '@ionic/angular';
 import { RegisterPageRoutingModule } from './register-routing.module';
 
 import { RegisterPage } from './register.page';
+import { BrMaskerModule } from 'br-mask';
+import {ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    RegisterPageRoutingModule
+    RegisterPageRoutingModule,
+    BrMaskerModule,
+            ReactiveFormsModule
+
+
   ],
   declarations: [RegisterPage]
 })

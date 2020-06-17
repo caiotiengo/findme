@@ -17,61 +17,121 @@
 		</div>
 <div class="background-traco">
 <p>Escolha o tipo de usuario entrar como:</p>
-				<ion-select placeholder="Tipo de Usuario" style="border: 1px solid black; border-radius: 25px; padding: 10px;" [(ngModel)]="typeUser">
+				<ion-select placeholder="Tipo de Usuario" style="border: 1px solid black; border-radius: 25px; padding: 10px;" [(ngModel)]="typeUser" required>
 					<ion-select-option value="Loja">Loja</ion-select-option>
 					<ion-select-option value="user">Usúario</ion-select-option>
 				</ion-select>
 				<br/>
 				<p>Qual a sua região?</p>
 
-				<ion-select placeholder="Sua região" style="border: 1px solid black;border-radius: 25px;padding: 10px;" [(ngModel)]="type">
+				<ion-select placeholder="Sua região" required style="border: 1px solid black;border-radius: 25px;padding: 10px;" [(ngModel)]="type">
 					<ion-select-option value="Centro">Centro</ion-select-option>
 					<ion-select-option value="Zona Oeste">Zona Oeste</ion-select-option>
 					<ion-select-option value="Zona Norte">Zona Norte</ion-select-option>
 					<ion-select-option value="Zona Sul">Zona Sul</ion-select-option>
 					<ion-select-option value="Baixada">Baixada</ion-select-option>
 				</ion-select>
-			<div>
- 
-			  <ion-label position="floating">E-mail</ion-label>
-			  <ion-input type="text" [(ngModel)]="email" ></ion-input>
-			</div>
 
-			<div>
-			  <ion-label position="floating"> 
-			  	Senha
-			  </ion-label>
-			  <ion-input [(ngModel)]="password" type="password" ></ion-input>
-			</div>
-				<div *ngIf="typeUser === 'Loja'">
-					<ion-label position="floating">Nome da sua Loja</ion-label>
-					<ion-input [(ngModel)]="nome"></ion-input>
-				</div>
-				<div *ngIf="typeUser === 'user'" >
-				  <ion-label position="floating">Seu nome</ion-label>
-				  <ion-input [(ngModel)]="nome"></ion-input>
-				</div>
 
-				<div>
-				  <ion-label position="floating">Endereço</ion-label>
-				  <ion-input [(ngModel)]="endereco" type="text"></ion-input>
-				</div>
-				<div>
-				  <ion-label position="floating">Bairro</ion-label>
-				  <ion-input [(ngModel)]="bairro" type="text"></ion-input>
-				</div>
-				<div>
-				  <ion-label position="floating">Cidade</ion-label>
-				  <ion-input [(ngModel)]="cidade" type="text"></ion-input>
-				</div>
-				<div>
-				  <ion-label position="floating">Telefone</ion-label>
-				  <ion-input [(ngModel)]="telefone" type="text"></ion-input>
-				</div>
-				<div *ngIf="typeUser === 'Loja'">
-					<ion-label position="floating">Descrição</ion-label>
-					<ion-input maxLenght="40" [(ngModel)]="resumo" type="text"></ion-input>
-				</div>
+			<form [formGroup]="cadastro" (ngSubmit)="logForm()">	
+					<div>
+		 
+					  <ion-label position="floating">E-mail</ion-label>
+					  <ion-input type="text" formControlName="email" required ></ion-input>
+					</div>
+
+					<div>
+					  <ion-label position="floating"> 
+					  	Senha
+					  </ion-label>
+					  <ion-input formControlName="password" type="password" required ></ion-input>
+					</div>
+						<div *ngIf="typeUser === 'Loja'">
+							<ion-label position="floating">Nome da sua Loja</ion-label>
+							<ion-input formControlName="nome" required></ion-input>
+						</div>
+						<div *ngIf="typeUser === 'user'" >
+						  <ion-label position="floating">Seu nome</ion-label>
+						  <ion-input formControlName="nome" required></ion-input>
+						</div>
+						<div *ngIf="typeUser === 'user'" >
+							<ion-label position="floating"> Data de Nascimento</ion-label>
+
+						   <ion-datetime
+		    						[dayShortNames]="customDayShortNames"
+		    						displayFormat="DD MMM, YYYY"
+		    						monthShortNames="Janeiro, Fevereiro, Março, Abril, Maio, Junho, Julho, Agosto, Setembro, Outubro, Novembro, Dezembro" formControlName="DOB" placeholder="Clique aqui" required></ion-datetime>
+
+						</div>
+
+						<div *ngIf="typeUser === 'Loja'">
+							<ion-label position="floating">CNPJ</ion-label>
+							<ion-input maxLenght="40" [brmasker]="{person: true}" formControlName="CPF" required type="text"></ion-input>
+						</div>
+						<div *ngIf="typeUser === 'user'" >
+						  <ion-label position="floating">CPF</ion-label>
+						  <ion-input formControlName="CPF" [brmasker]="{person: true}" required></ion-input>
+						</div>
+						<div>
+						  <ion-label position="floating">Endereço</ion-label>
+						  <ion-input formControlName="endereco" type="text" required></ion-input>
+						</div>
+
+						<ion-grid>
+					      <ion-row>
+					          <ion-col>
+					             	<div>
+						  				<ion-label position="floating">Número</ion-label>
+						  				<ion-input formControlName="numeroEND" required></ion-input>
+									</div>
+
+					          </ion-col>
+					          <ion-col>
+									<div>
+						 				<ion-label position="floating">CEP</ion-label>
+						  				<ion-input formControlName="CEP" required></ion-input>
+									</div>
+					          </ion-col>
+					      </ion-row>
+					    </ion-grid>
+						
+
+						<div>
+						  <ion-label position="floating">Bairro</ion-label>
+						  <ion-input formControlName="bairro" required type="text"></ion-input>
+						</div>
+						
+
+
+						<ion-grid>
+					      <ion-row>
+					          <ion-col>
+					             	<div>
+									  <ion-label position="floating">Cidade</ion-label>
+									  <ion-input placeholder="EX: Rio de Janeiro" required formControlName="cidade" type="text"></ion-input>
+									</div>
+
+					          </ion-col>
+					          <ion-col>
+									<div>
+									  <ion-label position="floating">Estado</ion-label>
+									  <ion-input placeholder="EX: RJ" required formControlName="estado" type="text"></ion-input>
+									</div>
+					          </ion-col>
+					      </ion-row>
+					    </ion-grid>
+
+
+
+						<div>
+						  <ion-label position="floating">Telefone</ion-label>
+						  <ion-input formControlName="telefone" required type="text"></ion-input>
+						</div>
+						<div *ngIf="typeUser === 'Loja'">
+							<ion-label position="floating">Descrição</ion-label>
+							<ion-input maxLenght="40" formControlName="resumo" required type="text"></ion-input>
+						</div>
+			</form>
 				<br/>
 				<p>Foto de perfil:
 					<ion-button shape="outline" (click)="photo()" color="findme" ><ion-icon name="camera"></ion-icon></ion-button>

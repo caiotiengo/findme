@@ -81,7 +81,7 @@
       </ion-row>
       </ion-grid>
       <ion-item>
-          <ion-label position="stacked">CVV</ion-label>
+          <ion-label position="stacked">CVC</ion-label>
           <ion-input [(ngModel)]="CVV"></ion-input>
       </ion-item>
          <br/>   
@@ -100,7 +100,7 @@
         <ion-avatar slot="start">
           <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
         </ion-avatar>
-        <ion-label >{{items.nome}}<p>{{items.valor}}</p></ion-label>
+        <ion-label >{{items.nome}}<p>R${{items.valor}}</p></ion-label>
         <ion-button color="warning" fill="solid" color="warning" slot="end"(click)="deletaItem(items)">X</ion-button>
       </ion-item>
     </ion-list>

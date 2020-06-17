@@ -10,6 +10,9 @@ import {AngularFirestore} from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import {AlertController, ModalController} from '@ionic/angular';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import {Validators, FormBuilder, FormGroup } from '@angular/forms';
+
+declare var google;
 
 @Component({
   selector: 'app-register',
@@ -28,15 +31,36 @@ export class RegisterPage implements OnInit {
     resumo = '';
     email = '';
     password = '';
+    CEP = '';
+    DOB = '';
+    CPF = '';
+    numeroEND = '';
     lat 
     long
     cnpj: any;
     strCNPJ: any;
+    private cadastro : FormGroup;
+
   constructor(public navCtrl: NavController, private storage: Storage,
               public afAuth: AngularFireAuth, private geolocation: Geolocation, public router: Router, public actRouter: ActivatedRoute,
               public services: ServiceService, public afStore: AngularFirestore, public alertCtrl: AlertController,
-              private modalController: ModalController) {
+              private modalController: ModalController,private formBuilder: FormBuilder) {
+             this.cadastro = this.formBuilder.group({
+                  resumo: [''],
+                  nome: ['', Validators.required],
+                  endereco: ['', Validators.required],
+                  telefone: ['', Validators.required],
+                  bairro: ['', Validators.required],
+                  cidade: ['', Validators.required],
+                  estado: ['', Validators.required],
+                  email: ['', Validators.required],
+                  password: ['', Validators.required],
+                  CEP: ['', Validators.required],
+                  DOB: [''],
+                  CPF: ['', Validators.required],
+                  numeroEND: ['', Validators.required],     
 
+            });
          this.geolocation.getCurrentPosition().then((resp) => {
               console.log(resp.coords.latitude)
               console.log(resp.coords.longitude)
@@ -51,6 +75,8 @@ export class RegisterPage implements OnInit {
            // data can be a set of coordinates, or an error (if an error occurred).
            // data.coords.latitude
            // data.coords.longitude
+
+          //AIzaSyB1IBIxpEAg1qTweg3ZU2Q1SQpgz9yrG28
           });
 
   }
@@ -58,19 +84,21 @@ export class RegisterPage implements OnInit {
   ngOnInit() {
   }
   async registrar() {
-   const{email, password } = this;
+   const{email, password } = this.cadastro.value;
+    if(this.cadastro.valid){
+
 
     try {
        const res = await this.afAuth.auth.createUserWithEmailAndPassword(email, password).then(() => {
 
        const user = firebase.auth().currentUser;
        this.afStore.doc(`users/${user.uid}`).set({
-            nome: this.nome,
-            email: this.email,
-            endereco: this.endereco,
-            telefone:  this.telefone,
-            bairro: this.bairro,
-            cidade: this.cidade,
+            nome: this.cadastro.value.nome,
+            email: this.cadastro.value.email,
+            endereco: this.cadastro.value.endereco,
+            telefone:  this.cadastro.value.telefone,
+            bairro: this.cadastro.value.bairro,
+            cidade: this.cadastro.value.cidade,
             zona: this.type,
             tipo: this.typeUser,
             LikeValue: 0,
@@ -78,10 +106,16 @@ export class RegisterPage implements OnInit {
             lat: this.lat,
             lng: this.long,
             aprovado: false,
-            resumo: this.resumo
+            resumo: this.cadastro.value.resumo,
+            numeroEND: this.cadastro.value.numeroEND,
+            CPFCNPJ: this.cadastro.value.CPF,
+            CEP: this.cadastro.value.CEP,
+            DOB: this.cadastro.value.DOB
+            //CNPJ: this.cnpj
        }).then(() => {
               this.navCtrl.navigateRoot('/user');
               console.log(user);
+              this.showalert('Bem-vindo ao Axé Delivery!', 'Agora é só aproveitar!')
 
        });
 
@@ -91,6 +125,9 @@ export class RegisterPage implements OnInit {
     } catch (err) {
         console.dir(err);
     }
+  }else{
+    this.showalert('Hm...', 'Preencha todos os campos!')
+  }
       // tslint:disable-next-line:indent
       // tslint:disable-next-line:indent
   	 console.log('Fine');
@@ -112,7 +149,7 @@ export class RegisterPage implements OnInit {
    this.showalert('Desculpe', 'Não disponivel nessa versão');
 
   }
-  testaCNPJ() {
+  testaCNPJ(event) {
     // Verifica se a variável cnpj é igua a "undefined", exibindo uma msg de erro
     if (this.cnpj === undefined) {
       this.cnpjAlert();

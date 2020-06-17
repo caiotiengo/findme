@@ -27,7 +27,7 @@ export interface Produtos {
   dia?: number;
   lojaUID?:any;
   emailLoja?:string;
-
+  price?:number;
 }
 @Component({
   selector: 'app-carrinho',
@@ -61,13 +61,17 @@ export class CarrinhoPage implements OnInit {
   mainuser: AngularFirestoreDocument;
   sub;
   lojaUID;
+  userCPF
   produtinz;
   numeroCard = "";
   nomeCartao = "";
   CVV = "";
   mesValidade = "";
   anoValidade = "";
-
+  DOB
+  CEP
+  estado
+  numeroEND
   constructor(private payPal: PayPal, public afStore: AngularFirestore,
               public navCtrl: NavController, public alertCtrl: AlertController, private storage: Storage) {
     this.storage.get('carrinhoUser').then((data) => {
@@ -79,10 +83,32 @@ export class CarrinhoPage implements OnInit {
       console.log(this.loja);
     });
     this.storage.get('valorFinal').then((data) => {
-      this.valor =  data + 8;
+      this.valor =  Number(data.toFixed(2));
       console.log(this.valor);
     });
+    const user = firebase.auth().currentUser;
+    if (user) {
+      this.mainuser = this.afStore.doc(`users/${user.uid}`);
+      console.log(user);
+    } else {
 
+    }
+    this.sub = this.mainuser.valueChanges().subscribe(event => {
+      this.nome = event.nome;
+      this.endereco = event.endereco;
+      this.cidade = event.cidade;
+      this.email = event.email;
+      this.bairro = event.bairro;
+      this.telefone = event.telefone;
+      this.zona = event.zona;
+      this.like = event.LikeValue;
+      this.disklike = event.DislikeValue;
+      this.userCPF = event.cpf;
+      this.DOB = event.DOB;
+      this.numeroEND = event.numeroEND;
+      this.CEP = event.CEP;
+      this.estado = event.estado
+    });
     console.log(this.moip);
     this.hash = 'Gerando hash...';
 
@@ -122,42 +148,37 @@ teste(){
       console.log('hash', hash)
       this.hash = hash;
         this.moip.order.create({
-            ownId: '1521656695',
+            ownId: this.userCPF,
             amount: {
                 currency: 'BRL',
                 subtotals: {
-                    shipping: 1000
+                    shipping: 800
                 }
             },
-            items: [{
-                product: 'Descrição do pedido',
-                quantity: 1,
-                detail: 'Mais info...',
-                price: 10.00
-            }],
+            items: this.carrinho,
             customer: {
-                ownId: '1521656726',
-                fullname: 'Jose Silva',
-                email: 'jose_silva0@email.com',
-                birthDate: '1988-12-30',
+                ownId: this.userCPF,
+                fullname: this.nome,
+                email: this.email,
+                birthDate: '1980-01-02',
                 taxDocument: {
                     type: 'CPF',
-                    number: '22222222222'
+                    number: this.userCPF
                 },
                 phone: {
                     countryCode: '55',
-                    areaCode: '11',
-                    number: '66778899'
+                    areaCode: '21',
+                    number: this.telefone
                 },
                 shippingAddress: {
-                    street: 'Avenida Faria Lima',
-                    streetNumber: 2927,
+                    street: this.endereco,
+                    streetNumber: this.numeroEND,
                     complement: 8,
-                    district: 'Itaim',
-                    city: 'Sao Paulo',
-                    state: 'SP',
+                    district: this.bairro,
+                    city: this.cidade,
+                    state: this.estado,
                     country: 'BRA',
-                    zipCode: '01234000'
+                    zipCode: this.CEP
                 }
             }
         }).then((response) => {
@@ -169,22 +190,79 @@ teste(){
                 creditCard: {
                     hash: this.hash,
                     holder: {
-                        fullname: 'Jose Santos',
+                        fullname: this.nome,
                         birthdate: '1980-01-02',
                         taxDocument: {
                             type: 'CPF',
-                            number: '12345679891'
+                            number: this.userCPF
                         },
                         phone: {
                             countryCode: '55',
                             areaCode: '11',
-                            number: '25112511'
+                            number: this.telefone
                         }
                     }
                 }
             }
         }).then((response) => {
-            console.log(response.body)
+
+          if(response.body.status === 'IN_ANALYSIS'){
+
+              const user = firebase.auth().currentUser;
+    if (user) {
+      this.mainuser = this.afStore.doc(`users/${user.uid}`);
+      console.log(user);
+    } else {}
+               this.showalert('Obrigado pela compra!', 'A loja foi informada e você' +
+        ' pode acompanhar o seu pedido pela aba "Seus Pedidos"')
+            this.sub = this.mainuser.valueChanges().subscribe(event => {
+      this.nome = event.nome;
+      this.endereco = event.endereco;
+      this.cidade = event.cidade;
+      this.email = event.email;
+      this.bairro = event.bairro;
+      this.telefone = event.telefone;
+      this.zona = event.zona;
+      this.like = event.LikeValue;
+      this.disklike = event.DislikeValue;
+
+      const date = new Date();
+      date.setMonth(date.getMonth() + 1);
+      const dia = date.getDate() + '/' + date.getMonth()  + '/' + date.getFullYear();
+      console.log(dia);
+      this.valores = this.carrinho.map(res => res.valor);
+      this.valorCompra = this.valores.reduce((acc, val) => acc += val, 0);
+      this.storage.get('valorFinal').then((data) => {
+        this.valor =  data + 8;
+        console.log(this.valor);
+      });
+
+      this.storage.get('carrinhoUser').then((data) => {
+        this.produtos =  JSON.parse(data);
+        console.log(this.produtos);
+        var seq = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
+        console.log(seq);
+        this.afStore.collection('vendas').add({
+          nPedido:Number(seq),
+          nomeComprador: this.nome,
+          endereco: this.endereco + ', ' + this.bairro + ', ' + this.cidade,
+          nomeLoja: this.loja.nome,
+          valor: this.valor,
+          dia,
+          produtos: this.produtos,
+          emailComprador: this.email,
+          lojaUID: this.produtos[0].lojaUID,
+          emailLoja: this.produtos[0].emailLoja,
+          statusPag: 'Aprovado',
+          statusEnt: 'Loja informada'
+        }).then(() => {
+          this.storage.remove('carrinhoUser').then(() => {
+            this.navCtrl.navigateRoot('/tabs/tab3');
+          });        
+        });
+      });
+    });
+          }
         }).catch((err) => {
             console.log(err)
         })
@@ -235,7 +313,10 @@ teste(){
       this.storage.get('carrinhoUser').then((data) => {
         this.produtos =  JSON.parse(data);
         console.log(this.produtos);
+        var seq = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
+        console.log(seq);
         this.afStore.collection('vendas').add({
+          nPedido:Number(seq),
           nomeComprador: this.nome,
           endereco: this.endereco + ', ' + this.bairro + ', ' + this.cidade,
           nomeLoja: this.loja.nome,
@@ -249,8 +330,9 @@ teste(){
           statusEnt: 'Loja informada'
         }).then(() => {
           this.storage.remove('carrinhoUser').then(() => {
-            this.navCtrl.navigateRoot('/status');
-          });        });
+            this.navCtrl.navigateRoot('/tabs/tab3');
+          });        
+        });
       });
     });
 

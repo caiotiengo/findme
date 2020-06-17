@@ -16,6 +16,7 @@ export interface User {
     boss: string;
     company: string;
     email: string;
+    comments:string
 }
 export interface Loja {
     nome?: string;
@@ -27,6 +28,7 @@ export interface Loja {
     cidade?: string;
     email?: string;
     resumo?: string;
+    comments?:string;
 }
 export interface Produtos {
     nome?: string;
@@ -38,6 +40,10 @@ export interface Produtos {
     dia?: number;
     lojaUID?: string;
     emailLoja?: string;
+    price?:number;
+    product?:string;
+    quantity: number;
+    detail?: string;
 }
 
 @Component({
@@ -70,6 +76,7 @@ export class ItemPage implements OnInit {
     private lojaSubscription: Subscription;
     private productSubscription: Subscription;
     private goalList: any[];
+    public commentsSubscription: Subscription;
     private loadedGoalList: any[];
     emailLoja;
     qualquer;
@@ -89,6 +96,10 @@ export class ItemPage implements OnInit {
     bairro;
     telefone;
     zona;
+    visu
+    comments
+    commentsLen
+    lojaID
   constructor(public navCtrl: NavController, public alertCtrl: AlertController,
               private route: ActivatedRoute, private storage: Storage,
               public afStore: AngularFirestore,  public services: ServiceService,
@@ -117,9 +128,11 @@ export class ItemPage implements OnInit {
 
       console.log(this.que);
       this.procUser = this.services.getProc(this.que);
+      //this.comments = this.services.comment(this.que);
       console.log(this.services.getProc(this.que));
       if (this.que) {
             this.loadProduct();
+            //this.loadComments();
         }
       console.log(this.services.getLikes(this.que));
 
@@ -134,6 +147,11 @@ export class ItemPage implements OnInit {
 
 
   }
+
+  
+
+
+
     loadData(event) {
         setTimeout(() => {
             console.log('Done');
@@ -164,7 +182,11 @@ export class ItemPage implements OnInit {
            this.goalList = res.filter(i => i.email === this.emailLoja);
            this.loadedGoalList = res.filter(i => i.email === this.emailLoja);
        });
+    this.commentsSubscription = this.services.getComments().subscribe(res =>{
+           this.lojaID = res.filter(i => i.emailLoja === this.emailLoja)
+           this.commentsLen = Number(this.lojaID.length)
 
+    })
   }
       nextSlide(mySlider) {
         console.log(mySlider);
@@ -194,6 +216,10 @@ export class ItemPage implements OnInit {
       this.produtos.push({
             nome: items.nome,
             valor: items.valor,
+            price: items.price,
+            product:items.nome,
+            quantity: 1,
+            detail: items.resumo,
             email: items.email,
             itemId: items.id,
             lojaUID: this.que,
@@ -201,14 +227,16 @@ export class ItemPage implements OnInit {
             emailLoja: this.loja.email
         });
       this.valores = this.produtos.map(res => res.valor);
-      this.valorCompra = this.valores.reduce((acc, val) => acc += val, 0);
-      console.log(this.valorCompra);
+      this.valorCompra = this.valores.reduce((acc, val) => acc += val);
+      
+      this.visu = Number(this.valorCompra.toFixed(2))
+      console.log(this.valorCompra.toFixed(2));
       console.log(this.produtos);
 
     }
     finalizarCompra() {
         this.valores = this.produtos.map(res => res.valor);
-        this.valorCompra = this.valores.reduce((acc, val) => acc += val, 0);
+        this.valorCompra = this.valores.reduce((acc, val) => acc += val);
         const date = new Date();
         date.setMonth(date.getMonth() + 1);
         const dia = date.getDate() + '/' + date.getMonth()  + '/' + date.getFullYear();

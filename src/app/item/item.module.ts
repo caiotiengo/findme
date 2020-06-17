@@ -7,14 +7,18 @@ import { IonicModule } from '@ionic/angular';
 import { ItemPageRoutingModule } from './item-routing.module';
 
 import { ItemPage } from './item.page';
+import { BrMaskerModule } from 'br-mask';
+
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ItemPageRoutingModule
+    ItemPageRoutingModule,
+    BrMaskerModule
   ],
-  declarations: [ItemPage]
+  declarations: [ItemPage],
+  
 })
 export class ItemPageModule {}

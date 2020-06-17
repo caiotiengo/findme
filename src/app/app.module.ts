@@ -26,6 +26,13 @@ import { HaversineService } from "ng2-haversine";
 import { BrMaskerModule } from 'br-mask';
 import { FormsModule } from '@angular/forms'; 
 import { ReactiveFormsModule } from '@angular/forms';
+import {LOCALE_ID} from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+
+import ptBr from '@angular/common/locales/pt';
+
+registerLocaleData(ptBr)
+
 
 firebase.initializeApp(firebaseConfig);
 @NgModule({
@@ -53,7 +60,11 @@ firebase.initializeApp(firebaseConfig);
     ServiceService,
     AngularFirestore,
     PayPal,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+     {
+      provide: LOCALE_ID,
+      useValue: 'pt'
+    }
   ],
   bootstrap: [AppComponent],
     schemas: [ CUSTOM_ELEMENTS_SCHEMA ]

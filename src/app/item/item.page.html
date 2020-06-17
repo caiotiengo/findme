@@ -51,7 +51,7 @@
       </ion-slide>
      
     </ion-slides>  
-    
+   
    <!--ion-item >
      <ion-button fill="clear" expand="block" style=" margin-right: auto; margin-left: auto; " (click)="slidePrev(mySlider)"> <ion-icon color="findme" style="" name="arrow-round-back"></ion-icon> Prev </ion-button>
      <ion-button fill="clear" expand="block" style=" margin-right: auto; margin-left: auto; "  (click)="nextSlide(mySlider)"> Next <ion-icon color="findme" style="" name="arrow-round-forward"></ion-icon></ion-button>
@@ -73,7 +73,7 @@
     box-shadow: 3px 3px rgba(128, 128, 128, 0.4);">
             <ion-icon slot="start" style="color: green" name="cash"></ion-icon>
             <p>Valor da suas compras</p>
-            <p slot="end">R${{valorCompra}}</p>
+            <p slot="end">R${{visu}}</p>
         </ion-item>
     </ion-card-content>
 
@@ -87,8 +87,35 @@
         <ion-select-option value="Fumos">Fumos</ion-select-option>
         <ion-select-option value="Decoracao">Decoração</ion-select-option>
         <ion-select-option value="Jogos">Jogos</ion-select-option>
-    </ion-select-->
 
+
+        style="background: linear-gradient(95deg, rgba(0,0,0,.2), transparent);
+       border-top-left-radius: 25px;height:25vh;border-bottom-left-radius: 25px;
+    margin-bottom: 10%;"
+
+    </ion-select-->
+          <h3 style="text-align: center">Comentários</h3>
+
+    <div *ngIf="commentsLen === 0">
+
+      <p style="text-align: center">Essa loja ainda não tem comentários</p>
+    </div>
+    <div *ngIf="commentsLen > 0">
+      
+      <ion-slides>
+        <ion-slide *ngFor="let items of lojaID">
+
+            
+          <ion-card>
+              <ion-card-header>
+                <ion-card-title><h4><i>{{items.comments}}</i></h4></ion-card-title>
+                <ion-card-subtitle>{{items.nomeComprador}}</ion-card-subtitle>
+              </ion-card-header>
+                  
+          </ion-card>
+        </ion-slide>
+      </ion-slides>
+    </div>
 
     <h4 style="background: rgb(255, 209, 18);
     margin: 0;
@@ -111,7 +138,7 @@
                 <ion-avatar slot="start">
                     <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
                 </ion-avatar>
-                <ion-label >{{items.nome}}<p>{{items.valor}}</p></ion-label>
+                <ion-label >{{items.nome}}<p>R${{items.valor}}</p></ion-label>
 
                 <ion-button (click)="addCarrinho(items)" slot="end" fill="solid" color="warning" style="color:#ffcb02 !important">
                     <ion-icon name="cart"></ion-icon>

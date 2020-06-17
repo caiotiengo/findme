@@ -30,7 +30,7 @@ export class AddProcPage implements OnInit {
     boss;
     procUser: any ;
     que;
-      private formulario : FormGroup;
+    private formulario : FormGroup;
 
   constructor(public navCtrl: NavController, public afStore: AngularFirestore,
               public alertCtrl: AlertController,
@@ -55,25 +55,29 @@ export class AddProcPage implements OnInit {
       resumo: ['', Validators.required]      
 
     });
-     console.log(this.formulario.value.valor)
-
   }
 
   ngOnInit() {
   }
   create() {
+        console.log()
+
     const user = firebase.auth().currentUser;
     if (user) {
+     var valorN
+     var valorS
+     valorN = this.formulario.value.valor.replace(',','')
+     valorS = this.formulario.value.valor.replace(',','.')
       this.afStore.collection('produto').add({
          nome: this.formulario.value.nomePrd,
          email: user.email,
-         valor: this.formulario.value.valor,
+         valor: Number(valorS),
          tipoPrd: this.type,
          resumo: this.formulario.value.resumo,
          product: this.formulario.value.nomePrd,
          quantity: 1,
          detail:  this.resumo,
-         price:this.formulario.value.valor
+         price: Number(valorN)
       });
     }
     this.showalert('Obrigado!', 'Seu produto estará disponível em breve!');

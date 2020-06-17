@@ -7,6 +7,7 @@ import {ServiceService} from '../service.service';
 import {Subscription} from 'rxjs';
 import * as firebase from 'firebase';
 import {Loja} from '../item/item.page';
+import {Validators, FormBuilder, FormGroup } from '@angular/forms';
 
 export interface Vendas {
   nomeComprador: string;
@@ -20,6 +21,13 @@ export interface Vendas {
   statusEnt: string;
   emailLoja: string;
 }
+export interface Comentario{
+        comments: any,
+        loja: string,
+        lojaUID: any,
+        emailLoja: string,
+        usuario: any
+}
 @Component({
   selector: 'app-status',
   templateUrl: './status.page.html',
@@ -32,11 +40,14 @@ export class StatusPage implements OnInit {
   private goalListST: any[];
   private loadedGoalListST: any[];
   public  loja: Loja = {};
+  public commentsSubscription: Subscription;
+
   mainuser: AngularFirestoreDocument;
   emailUsr;
   sub;
   typeUser;
   statusEnt = '';
+  comentario = '';
   que;
   venda;
   itemVenda;
@@ -44,36 +55,128 @@ export class StatusPage implements OnInit {
   dislikes: 0;
   somar: any[];
   somei: any[];
+  valorre
+  valorreST
+  emailCom
+  hideMe
+  usuario: Array<Comentario> = [];
+  private formulario : FormGroup;
+  lojaUIDvenda
+  comentou
 
   constructor(public navCtrl: NavController, public alertCtrl: AlertController,
               private route: ActivatedRoute, private storage: Storage,
               public afStore: AngularFirestore,  public services: ServiceService,
-              public modalController: ModalController) {
+              public modalController: ModalController,private formBuilder: FormBuilder) {
 
     this.vendasSub = this.services.getVendas().subscribe(res => {
       const user = firebase.auth().currentUser;
       console.log(user);
+      this.lojaUIDvenda = res.filter(i => {return i.nPedido})
+
+      console.log(this.lojaUIDvenda)
+
       if (user) {
+           this.commentsSubscription = this.services.getComments().subscribe(res =>{
+                   var compra
+                   compra = this.lojaUIDvenda.filter(i => i.emailComprador === this.emailUsr)
+                   var compraMap
+                   compraMap = compra.map(i => {return i.nPedido})
+                   console.log(compraMap)
+                   var comentarioFeito
+                   comentarioFeito = res.map(i => {return i.nPedido})
+                   console.log(Number(comentarioFeito))
+                   var comentou
+                   this.comentou = compra.find(i => i.nPedido === Number(comentarioFeito))
+                   console.log(this.comentou)
+                  
+
+            })
         this.mainuser = this.afStore.doc(`users/${user.uid}`);
         this.emailUsr = user.email;
         this.goalListUs = res.filter(i => i.emailComprador === this.emailUsr);
         this.loadedGoalListUs = res.filter(i => i.emailComprador  === this.emailUsr);
         this.goalListST = res.filter(i => i.emailLoja === this.emailUsr);
-        this.loadedGoalListST = res.filter(i => i.emailLoja  === this.emailUsr);
+        this.loadedGoalListST = res.filter(i => i.emailLoja  === this.emailUsr); 
+        var data
+        data = res.find(i => i.nPedido === this.comentou)
+        console.log(data)
+        if(data){
+             this.hideMe = true;
+         }else{
+             this.hideMe = false;
+        }
+        this.valorre =  this.goalListUs.length
+        console.log(this.valorre)
+        this.valorreST = this.goalListST.length
+        console.log(this.valorreST)
+        this.sub = this.mainuser.valueChanges().subscribe(event => {
+        this.typeUser = event.tipo;
+
+
+      });
         this.somar = this.goalListST.map(i => {if(i.statusPag === 'Aprovado'){return i.valor}else{}}).reduce(function(a, b) { return a + b; })
         //calc porcentagem
+        
         this.somei = this.goalListST.map(i => {return i.valor}).reduce(function(a, b) { return a + b; })
     console.log(this.somar)
         console.log(this.emailUsr);
       } else {
 
       }
-      this.sub = this.mainuser.valueChanges().subscribe(event => {
-        this.typeUser = event.tipo;
-
-      });
+   
     });
- 
+    console.log(this.typeUser)
+             console.log(this.goalListUs)
+      this.formulario = this.formBuilder.group({
+          comentario: ['', Validators.required],
+          starRating2:[0]
+           
+    });
+
+
+  }
+  tomaComment(items, rating){
+    console.log(items)
+         console.log("changed rating: ", this.formulario.value.starRating2);
+       if(this.formulario.value.comentario != '' ){
+
+     this.afStore.collection('comments').add({
+         comments: this.formulario.value.comentario,
+         loja: items.nomeLoja,
+         nomeComprador: items.nomeComprador,
+         lojaUID: items.lojaUID,
+         emailLoja: items.emailLoja,
+         emailComprador: items.emailComprador,
+         nPedido: Number(items.nPedido),
+         rating: Number(this.formulario.value.starRating2)
+
+      }).then(()=>{
+           this.showalert('Obrigado pelo feedback!', 'Isso ajuda a todos nós!');
+
+           this.commentsSubscription = this.services.getComments().subscribe(res =>{
+                   this.emailCom = res.filter(i => i.lojaUID === items.lojaUID)
+                   var comentarioFeito
+                   comentarioFeito = this.emailCom.filter(i => i.emailComprador === items.emailComprador)
+                   console.log(comentarioFeito)
+                   if(comentarioFeito){
+                       this.hideMe = true;
+
+                   }else{
+                      this.hideMe = false;
+
+                   }
+
+            })
+          
+      })
+    }else{
+            rating = 0;
+            this.showalert('Falta Pouco!', 'Agora é só adicionar um comentário');
+    } 
+  
+   
+    
   }
 
   async handleLike(items) {

@@ -49,12 +49,10 @@
 
 				<ion-item>
 					<ion-label position="floating">Valor</ion-label>
-					<ion-input name="money" formControlName="valor" placeholder="(R$) Real"
+					<ion-input name="valor" [(ngModel)]="valor" formControlName="valor" placeholder="(R$) Real"
 					[brmasker]="{money: true}" type="text"></ion-input>
 				</ion-item>
-				<p style="color: red"><b>Atenção: Coloque o valor separado por PONTO. Ex: 110.00</b></p>
-
-				<br/>
+			
 				<p>Coloque uma foto do produto:
 					<ion-button shape="outline" (click)="photo()" color="findme" ><ion-icon name="camera"></ion-icon>	</ion-button>
 				</p>
@@ -62,7 +60,7 @@
 				<!-- <img src="{{img.src}}"> -->
 				
 				<ion-button (click)="create()" color="findme" style="color:white !important; max-width: 25vh;" >
-					 Create 
+					 Publicar 
 				</ion-button>
 				</form>
 			</ion-card-content>
