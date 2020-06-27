@@ -63,7 +63,10 @@ export class StatusPage implements OnInit {
   private formulario : FormGroup;
   lojaUIDvenda
   comentou
-
+  idComent
+  comentariando
+  compraMap
+  comment
   constructor(public navCtrl: NavController, public alertCtrl: AlertController,
               private route: ActivatedRoute, private storage: Storage,
               public afStore: AngularFirestore,  public services: ServiceService,
@@ -72,40 +75,53 @@ export class StatusPage implements OnInit {
     this.vendasSub = this.services.getVendas().subscribe(res => {
       const user = firebase.auth().currentUser;
       console.log(user);
-      this.lojaUIDvenda = res.filter(i => {return i.nPedido})
-
-      console.log(this.lojaUIDvenda)
-
+      
       if (user) {
-           this.commentsSubscription = this.services.getComments().subscribe(res =>{
-                   var compra
-                   compra = this.lojaUIDvenda.filter(i => i.emailComprador === this.emailUsr)
-                   var compraMap
-                   compraMap = compra.map(i => {return i.nPedido})
-                   console.log(compraMap)
-                   var comentarioFeito
-                   comentarioFeito = res.map(i => {return i.nPedido})
-                   console.log(Number(comentarioFeito))
-                   var comentou
-                   this.comentou = compra.find(i => i.nPedido === Number(comentarioFeito))
-                   console.log(this.comentou)
-                  
 
-            })
+   
+           
         this.mainuser = this.afStore.doc(`users/${user.uid}`);
         this.emailUsr = user.email;
         this.goalListUs = res.filter(i => i.emailComprador === this.emailUsr);
+        
         this.loadedGoalListUs = res.filter(i => i.emailComprador  === this.emailUsr);
         this.goalListST = res.filter(i => i.emailLoja === this.emailUsr);
         this.loadedGoalListST = res.filter(i => i.emailLoja  === this.emailUsr); 
+             this.commentsSubscription = this.services.getComments().subscribe(data =>{
+                console.log(data)
+                this.comentariando = data
+                for (var i = this.comentariando.length -1; i >= 0; i--) {
+                  console.log(this.comentariando[i].nPedido)
+                  this.compraMap = this.comentariando[i].nPedido
+                  var x = document.getElementById(this.compraMap)
+                  //console.log(Number(x.id))
+                        if(this.comentariando.length > 0){
+                              
+                              if(this.lojaUIDvenda = res.find(i => i.nPedido === this.compraMap)){
+                                  var x = document.getElementById(this.comentariando[i].nPedido)
+                                  console.log(x)
+                                  if(x != null && x.style.display === "block"){
+                                      x.style.display = "none";
+                                  }
+
+                              }else{
+                                  this.hideMe = false
+
+                              }                            
+                        }else{
+                              console.log("this.")
+                    }
+
+                }
+
+                
+            })
+  
         var data
-        data = res.find(i => i.nPedido === this.comentou)
+        console.log(this.comentou)
+        data = res.filter(i => i.nPedido === this.comentou)
         console.log(data)
-        if(data){
-             this.hideMe = true;
-         }else{
-             this.hideMe = false;
-        }
+        
         this.valorre =  this.goalListUs.length
         console.log(this.valorre)
         this.valorreST = this.goalListST.length
@@ -154,20 +170,7 @@ export class StatusPage implements OnInit {
       }).then(()=>{
            this.showalert('Obrigado pelo feedback!', 'Isso ajuda a todos nós!');
 
-           this.commentsSubscription = this.services.getComments().subscribe(res =>{
-                   this.emailCom = res.filter(i => i.lojaUID === items.lojaUID)
-                   var comentarioFeito
-                   comentarioFeito = this.emailCom.filter(i => i.emailComprador === items.emailComprador)
-                   console.log(comentarioFeito)
-                   if(comentarioFeito){
-                       this.hideMe = true;
-
-                   }else{
-                      this.hideMe = false;
-
-                   }
-
-            })
+          
           
       })
     }else{
@@ -203,6 +206,30 @@ export class StatusPage implements OnInit {
     this.storage.set('itemAberto', JSON.stringify(items)).then(() => {
       this.navCtrl.navigateForward('/item-view');
     });
+  }
+    async showalert2(header: string, message: string) {
+    const alert = await this.alertCtrl.create({
+      header,
+      message,
+      buttons: [
+         {
+        text: 'Sim',
+        role: 'sim',
+        handler: () => {
+          console.log('sim clicked');
+
+        }
+      },
+      {
+        text: 'Não',
+        role: 'nao',
+        handler: () => {
+          console.log('não clicked');
+        }
+      }]
+    });
+
+    await alert.present();
   }
   async showalert(header: string, message: string) {
     const alert = await this.alertCtrl.create({
@@ -245,6 +272,31 @@ export class StatusPage implements OnInit {
         }
       }
     });
+  }
+
+    async save(items) {
+    const alert = await this.alertCtrl.create({
+      header:'Pense bem...',
+      message:'Você tem certeza que quer cancelar a sua compra?',
+      buttons: [
+         {
+        text: 'Sim',
+        role: 'sim',
+        handler: () => {
+          console.log('sim clicked');
+          this.services.vendasCollection.doc<Vendas>(items.id).update({statusEnt: 'Cancelada' });
+        }
+      },
+      {
+        text: 'Não',
+        role: 'nao',
+        handler: () => {
+          console.log('não clicked');
+        }
+      }]
+    });
+
+    await alert.present();
   }
   perfilPage() {
       const user = firebase.auth().currentUser;

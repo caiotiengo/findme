@@ -1,9 +1,31 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>chat</ion-title>
+    <ion-title>
+            <img style="max-height: 5vh;" src="/assets/logo_menor.png" alt="" />
+     		       <p style="    text-align: center;
+    font-weight: bold;">Nome da Loja</p>
+    </ion-title>
+      <ion-buttons  slot="start">
+          <ion-back-button></ion-back-button>
+      </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
 <ion-content>
 
+
 </ion-content>
+
+ <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button style="--background:#ffcb02; ">
+		<ion-icon name="send" style="color: black;"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+<ion-footer class="ion-no-border">
+
+<ion-item style="width: 80%">
+  <ion-input placeholder="Digite aqui a sua mensagem"></ion-input>
+
+</ion-item>
+
+</ion-footer>

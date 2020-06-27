@@ -326,7 +326,7 @@ teste(){
           emailComprador: this.email,
           lojaUID: this.produtos[0].lojaUID,
           emailLoja: this.produtos[0].emailLoja,
-          statusPag: 'Aprovado',
+          statusPag: 'Em dinheiro',
           statusEnt: 'Loja informada'
         }).then(() => {
           this.storage.remove('carrinhoUser').then(() => {
