@@ -4,7 +4,7 @@
 .background-traco{
 
 
-    background: linear-gradient(#ffffff, rgba(34, 36, 40, 0.14));
+    background: #fff;
     border-top-left-radius: 30px;
     padding: 25px;
     position: absolute;
@@ -28,7 +28,7 @@ div{
 	}
 #motion {animation-timing-function: linear;}
 @keyframes mymove {
-  from {bottom: -100px;}
+  from {bottom: 0px;}
   to {bottom: 0px;}
 }
 ion-card{

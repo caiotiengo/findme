@@ -1,4 +1,4 @@
-<ion-header>
+    <ion-header>
   <ion-toolbar>
     <ion-title>
         <img style="max-height: 6vh;" src="/assets/logo_menor.png" alt="" />
@@ -18,12 +18,20 @@
 
 
 
-
-
-<div style="text-align: center;" *ngIf="semLoja === 0">
+<div style="text-align: center;" *ngIf="goalListFiltrado.length === 0">
    <img style="max-width: 55vh" src="/assets/logo.png" alt="" />
 
-  <p>Parece que você não temos loja em sua região...</p>
+  <h3>Hm...</h3>
+  <p>Parece que não encontramos a loja desejada. Já pesquisou por outra?</p>
+ 
+
+</div>
+
+
+<div style="text-align: center;" *ngIf="semLoja === 0 ">
+   <img style="max-width: 55vh" src="/assets/logo.png" alt="" />
+
+  <p>Parece que não temos loja em sua região...</p>
   <p>Não se preocupe! Compartilhe o app com pessoas e comerciantes da sua área e faça a festa!</p>
 
 </div>
@@ -35,7 +43,7 @@
 
                 <ion-item>
                     <ion-icon style="color: black;"name="pin" slot="start"></ion-icon>
-                    <ion-label>{{items.bairro}},{{items.cidade}}</ion-label>
+                    <ion-label>{{items.bairro}}</ion-label>
                     <ion-button fill="solid" color="warning" slot="end" [routerLink]="['/item/' + items.id]" >Veja</ion-button>
                 </ion-item>
               <ion-card-header>

@@ -17,8 +17,9 @@ ion-content{
 .background-traco{
   background: linear-gradient(#ffcb02, #ffcb02), url('../../assets/logo.png') no-repeat no-repeat center;
 	border-top-left-radius: 30px;
-    padding: 10px;
+   // padding: 10px;
     border-top-right-radius: 30px;
+    height: auto ;
 
 }
 ion-col{

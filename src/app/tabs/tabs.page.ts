@@ -44,6 +44,15 @@ export class TabsPage {
 		});
 	}
 
+
+ doRefresh(event) {
+    console.log('Begin async operation');
+
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      event.target.complete();
+    }, 2000);
+  }
   addProc() {
 	  const user = firebase.auth().currentUser;
 
@@ -68,6 +77,11 @@ export class TabsPage {
 	    });
 
 	    await alert.present();
+	  }
+
+
+	  status(){
+	  	this.navCtrl.navigateForward('/status')
 	  }
 
 }

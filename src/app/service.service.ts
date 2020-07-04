@@ -20,6 +20,10 @@ export interface User {
     resumo?: string;
     lastEdit?: string;
     comments?:any;
+    CEP?:any;
+    numeroEND?:any;
+    pontoREF?:any
+    estado?:any
 }
 export interface Processo {
     // tslint:disable-next-line:indent
@@ -175,8 +179,17 @@ addUser(user: User) {
     this.dislikes++;
     return this.userCollection.doc<User>(id).update({DislikeValue: Number(this.dislikes)});
   }
-
-
+  deletarItem(id){
+      return this.processoCollection.doc<Processo>(id).delete();
+  }
+updateEnd(id: string, end: string, cep:string, bairro:string, numero:string, cidade:string, estado:string) {
+    this.userCollection.doc<User>(id).update({endereco: end,
+                                              CEP:cep,
+                                              bairro:bairro,
+                                              numeroEND: numero,           
+                                              cidade: cidade,
+                                              estado: estado  });
+  }
 /*
 
  addProduct(product: Product) {

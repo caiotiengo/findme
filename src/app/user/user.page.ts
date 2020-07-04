@@ -7,6 +7,7 @@ import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestor
 import * as firebase from 'firebase/app';
 import { Subscription } from 'rxjs';
 import { ModalController } from '@ionic/angular';
+import {Validators, FormBuilder, FormGroup } from '@angular/forms';
 
 
 export interface Processo {
@@ -52,13 +53,39 @@ export class UserPage implements OnInit {
     private proccessSubscription: Subscription;
     goalListFiltrado;
     loadedGoalListFiltrado;
+    userID
+    enderecoNew = '';
+    bairroNew = '';
+    cidadeNew = '';
+    estadoNew = '';
+    numeroENDNew = '';
+    CEPNew = '';
+    hideMe = true
+    newCadastro
+    CEP:string
+    estado:string
   constructor(public navCtrl: NavController, private storage: Storage,
-              public afStore: AngularFirestore, public modalController: ModalController,  public services: ServiceService) {
+              public afStore: AngularFirestore, public modalController: ModalController,  public services: ServiceService,private formBuilder: FormBuilder) {
+    
+
+
+        this.newCadastro = this.formBuilder.group({
+                  
+                  enderecoNew: ['', Validators.required],
+                  numeroENDNew: ['', Validators.required],
+                  CEPNew: ['', Validators.required],
+                  bairroNew: ['', Validators.required],
+                  cidadeNew: ['', Validators.required],
+                  estadoNew: ['', Validators.required],
+                  
+            });
+
     const user = firebase.auth().currentUser;
     console.log(user);
     if (user) {
             this.mainuser = this.afStore.doc(`users/${user.uid}`);
-
+               this.userID = user.uid
+               console.log(this.userID)
       } else {
 
       }
@@ -80,11 +107,27 @@ export class UserPage implements OnInit {
       this.telefone = event.telefone;
       this.zona = event.zona;
       this.typeUser = event.tipo;
-
+      this.CEP = event.CEP;
+      this.estado = event.estado;
+   
     });
    }
 
   ngOnInit() {
+  }
+
+  updateEnd(){
+      this.hideMe = false;
+  }
+  update(){
+    this.services.updateEnd(this.userID,this.newCadastro.value.enderecoNew, this.newCadastro.value.CEPNew,
+     this.newCadastro.value.bairroNew, this.newCadastro.value.numeroENDNew, this.newCadastro.value.cidadeNew, this.newCadastro.value.estadoNew)
+    this.hideMe = true
+
+    
+  }
+  deletarItem(items){
+    this.services.deletarItem(items.id)
   }
 
   sair() {

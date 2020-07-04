@@ -53,8 +53,8 @@ export class StatusPage implements OnInit {
   itemVenda;
   likes: 0;
   dislikes: 0;
-  somar: any[];
-  somei: any[];
+  receber: number;
+  total: number;
   valorre
   valorreST
   emailCom
@@ -67,12 +67,26 @@ export class StatusPage implements OnInit {
   comentariando
   compraMap
   comment
+  mapVal
   constructor(public navCtrl: NavController, public alertCtrl: AlertController,
               private route: ActivatedRoute, private storage: Storage,
               public afStore: AngularFirestore,  public services: ServiceService,
               public modalController: ModalController,private formBuilder: FormBuilder) {
 
-    this.vendasSub = this.services.getVendas().subscribe(res => {
+      this.atualiza();
+    console.log(this.typeUser)
+             console.log(this.goalListUs)
+      this.formulario = this.formBuilder.group({
+          comentario: ['', Validators.required],
+          starRating2:[0]
+           
+    });
+
+      
+  }
+
+  atualiza(){
+        this.vendasSub = this.services.getVendas().subscribe(res => {
       const user = firebase.auth().currentUser;
       console.log(user);
       
@@ -104,12 +118,8 @@ export class StatusPage implements OnInit {
                                       x.style.display = "none";
                                   }
 
-                              }else{
-                                  this.hideMe = false
-
-                              }                            
+                              }                          
                         }else{
-                              console.log("this.")
                     }
 
                 }
@@ -131,26 +141,28 @@ export class StatusPage implements OnInit {
 
 
       });
-        this.somar = this.goalListST.map(i => {if(i.statusPag === 'Aprovado'){return i.valor}else{}}).reduce(function(a, b) { return a + b; })
-        //calc porcentagem
         
-        this.somei = this.goalListST.map(i => {return i.valor}).reduce(function(a, b) { return a + b; })
-    console.log(this.somar)
-        console.log(this.emailUsr);
+        this.mapVal = this.goalListST.map(i => {
+          if(i.statusEnt != 'Cancelada'){
+            return i.valor
+          }
+          else{
+            return null
+          }
+        }).reduce(function(a, b) { return a + b; })
+        var count = 84 * Number(this.mapVal.toFixed(2))
+        console.log(count/100)   
+        var percent = count/100
+        this.receber = Number(percent.toFixed(2))
+        this.total = Number(this.mapVal.toFixed(2))
+        console.log(this.mapVal.toFixed(2))
+        console.log(this.receber.toFixed(2))
+      //  console.log(this.emailUsr);
       } else {
 
       }
    
     });
-    console.log(this.typeUser)
-             console.log(this.goalListUs)
-      this.formulario = this.formBuilder.group({
-          comentario: ['', Validators.required],
-          starRating2:[0]
-           
-    });
-
-
   }
   tomaComment(items, rating){
     console.log(items)
@@ -284,6 +296,7 @@ export class StatusPage implements OnInit {
         role: 'sim',
         handler: () => {
           console.log('sim clicked');
+          this.atualiza();
           this.services.vendasCollection.doc<Vendas>(items.id).update({statusEnt: 'Cancelada' });
         }
       },
@@ -317,5 +330,14 @@ export class StatusPage implements OnInit {
   }
   ngOnInit() {
   }
+ doRefresh(event) {
+    console.log('Begin async operation');
 
+    setTimeout(() => {
+      this.atualiza();
+      console.log('Async operation has ended');
+      event.target.complete();
+    }, 2000);
+  }
+ 
 }

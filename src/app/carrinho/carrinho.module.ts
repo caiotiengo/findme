@@ -8,6 +8,7 @@ import { CarrinhoPageRoutingModule } from './carrinho-routing.module';
 
 import { CarrinhoPage } from './carrinho.page';
 
+
 @NgModule({
   imports: [
     CommonModule,

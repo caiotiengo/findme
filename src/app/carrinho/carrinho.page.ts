@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewChecked } from '@angular/core';
 import {Storage} from '@ionic/storage';
 import {AlertController, NavController} from '@ionic/angular';
 import Azpay from 'azpay';
+import { LoadingController } from '@ionic/angular';
 
 import jsencrypt from 'jsencrypt';
 import { MoipCreditCard } from 'moip-sdk-js';
@@ -72,7 +73,7 @@ export class CarrinhoPage implements OnInit {
   CEP
   estado
   numeroEND
-  constructor(private payPal: PayPal, public afStore: AngularFirestore,
+  constructor(private payPal: PayPal, public afStore: AngularFirestore,public loadingController: LoadingController,
               public navCtrl: NavController, public alertCtrl: AlertController, private storage: Storage) {
     this.storage.get('carrinhoUser').then((data) => {
       this.carrinho =  JSON.parse(data);
@@ -133,7 +134,21 @@ export class CarrinhoPage implements OnInit {
 
   }
 
+   async presentLoading() {
+    const loading = await this.loadingController.create({
+      cssClass: 'my-custom-class',
+      message: 'Aguarde...',
+      duration: 5000
+    });
+    await loading.present();
+
+    const { role, data } = await loading.onDidDismiss();
+    console.log('Loading dismissed!');
+  }
+
 teste(){
+  this.presentLoading() 
+
   MoipCreditCard
     .setEncrypter(jsencrypt, 'ionic')
     .setPubKey(this.pubKey)
@@ -205,7 +220,6 @@ teste(){
                 }
             }
         }).then((response) => {
-
           if(response.body.status === 'IN_ANALYSIS'){
 
               const user = firebase.auth().currentUser;
@@ -247,7 +261,7 @@ teste(){
           nomeComprador: this.nome,
           endereco: this.endereco + ', ' + this.bairro + ', ' + this.cidade,
           nomeLoja: this.loja.nome,
-          valor: this.valor,
+          valor: Number(this.valor.toFixed(2)),
           dia,
           produtos: this.produtos,
           emailComprador: this.email,
@@ -257,7 +271,7 @@ teste(){
           statusEnt: 'Loja informada'
         }).then(() => {
           this.storage.remove('carrinhoUser').then(() => {
-            this.navCtrl.navigateRoot('/tabs/tab3');
+            this.navCtrl.navigateRoot('/status');
           });        
         });
       });
@@ -308,7 +322,7 @@ teste(){
       this.valorCompra = this.valores.reduce((acc, val) => acc += val, 0);
       this.storage.get('valorFinal').then((data) => {
         this.valor =  data + 8;
-        console.log(this.valor);
+        console.log(this.valor.toFixed(2));
       });
       this.storage.get('carrinhoUser').then((data) => {
         this.produtos =  JSON.parse(data);
@@ -320,7 +334,7 @@ teste(){
           nomeComprador: this.nome,
           endereco: this.endereco + ', ' + this.bairro + ', ' + this.cidade,
           nomeLoja: this.loja.nome,
-          valor: this.valor,
+          valor: Number(this.valor.toFixed(2)),
           dia,
           produtos: this.produtos,
           emailComprador: this.email,
@@ -330,7 +344,7 @@ teste(){
           statusEnt: 'Loja informada'
         }).then(() => {
           this.storage.remove('carrinhoUser').then(() => {
-            this.navCtrl.navigateRoot('/tabs/tab3');
+            this.navCtrl.navigateRoot('/status');
           });        
         });
       });

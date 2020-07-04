@@ -82,6 +82,7 @@ export class ListPage implements OnInit {
     lojaAprLng
     km
     semLoja
+    lojinha
   constructor(public navCtrl: NavController, public Platform:Platform,
               public router: Router, 
               private geolocation: Geolocation,
@@ -108,7 +109,7 @@ export class ListPage implements OnInit {
           this.sub = this.mainuser.valueChanges().subscribe(event => {
               this.zona = event.zona;
               this.lat = event.lat;
-              this.lng = event.long  
+              this.lng = event.lng  
 
               console.log();
              // this.goalListFiltrado = this.goalList.filter(i => i.zona === this.zona && i.tipo === 'Loja' && i.aprovado === true);
@@ -121,20 +122,22 @@ export class ListPage implements OnInit {
               console.log(this.lojaAprLng +" " + this.lojaAprLat)
 
               let usuarioCaio: GeoCoord = {
-                   latitude: this.lat,
-                   longitude: this.lng
+                   latitude: Number(this.lat),
+                   longitude: Number(this.lng)
               };
- 
+              console.log(usuarioCaio)
               let taquara: GeoCoord = {
-                  latitude: this.lojaAprLat,
-                  longitude: this.lojaAprLng
+                  latitude: Number(this.lojaAprLat),
+                  longitude:Number( this.lojaAprLng)
               };
+              console.log(taquara)
              let kilometers = this._haversineService.getDistanceInKilometers(usuarioCaio, taquara).toFixed(2);
              console.log("The distance between Madrid and Bilbao is:" + kilometers);   
               var km = Number(kilometers)
-               if(Number(kilometers) < 7.0 ){
-                    this.goalListFiltrado.push(loja)
+               if(Number(kilometers) < 9.0 ){
+                     this.goalListFiltrado.push(loja)
                     console.log(this.goalListFiltrado.length)
+                    this.lojinha = this.goalListFiltrado
                     this.semLoja = this.goalListFiltrado.length
 
                  }else{
@@ -175,7 +178,7 @@ export class ListPage implements OnInit {
   }
 
   initializeItems(): void {
-    this.goalListFiltrado = this.loadedGoalListFiltrado;
+    this.goalListFiltrado = this.lojinha;
   }
   filterList(evt) {
     this.initializeItems();
@@ -185,12 +188,13 @@ export class ListPage implements OnInit {
     if (!searchTerm) {
        return;
      }
-    this.goalListFiltrado = this.goalListFiltrado.filter(currentGoal => {
+    this.goalListFiltrado = this.lojinha.filter(currentGoal => {
        if (currentGoal.nome && searchTerm) {
            if (currentGoal.nome.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1) {
 
              return true;
            } else {
+
              return false;
            }
        }

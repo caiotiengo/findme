@@ -30,11 +30,79 @@
       <p>Cidade: {{cidade}}</p>
       <p>Zona: {{zona}}</p>
       <br/>
-      <ion-button color="findme" (click)="sair()">Logout</ion-button>
+      <ion-button style="height: 4vh;" color="warning" (click)="sair()">Logout</ion-button>
 
     </ion-card-content>
   </ion-card>
+<ion-card>
+    <ion-card-content>  
+     <h4 style="color: gray"> <ion-icon name="paper-plane"></ion-icon> - {{endereco}}</h4>
+     <p><i>{{bairro}}, CEP:{{CEP}}</i></p>
+     <p><i>{{cidade}} - {{estado}}</i></p>
+      <ion-button style="height: 4vh;" (click)="updateEnd()" color="warning">  
+        alterar
+      </ion-button>
+  <form [formGroup]="newCadastro" [hidden]="hideMe">
+   <br/>
 
+    <h4 style="text-align: center;">Qual o novo endereço de entrega?</h4>
+    <br/>
+    <div>
+              <ion-label position="floating">Endereço</ion-label>
+              <ion-input formControlName="enderecoNew" type="text" required></ion-input>
+            </div>
+
+            <ion-grid>
+                <ion-row>
+                    <ion-col>
+                        <div>
+                      <ion-label position="floating">Número</ion-label>
+                      <ion-input formControlName="numeroENDNew" required></ion-input>
+                  </div>
+
+                    </ion-col>
+                    <ion-col>
+                  <div>
+                    <ion-label position="floating">CEP</ion-label>
+                      <ion-input formControlName="CEPNew" required></ion-input>
+                  </div>
+                    </ion-col>
+                </ion-row>
+              </ion-grid>
+            
+
+            <div>
+              <ion-label position="floating">Bairro</ion-label>
+              <ion-input formControlName="bairroNew" required type="text"></ion-input>
+            </div>
+            
+
+
+            <ion-grid>
+                <ion-row>
+                    <ion-col>
+                        <div>
+                    <ion-label position="floating">Cidade</ion-label>
+                    <ion-input placeholder="EX: Rio de Janeiro" required formControlName="cidadeNew" type="text"></ion-input>
+                  </div>
+
+                    </ion-col>
+                    <ion-col>
+                  <div>
+                    <ion-label position="floating">Estado</ion-label>
+                    <ion-input placeholder="EX: RJ" required formControlName="estadoNew" type="text"></ion-input>
+                  </div>
+                    </ion-col>
+                </ion-row>
+              </ion-grid>
+
+      <ion-button  style="height: 4vh;" (click)="update()" color="success" slot="end">Atualizar</ion-button><br/>
+
+
+  </form>
+</ion-card-content>
+
+</ion-card>
   <ion-card *ngIf="typeUser === 'Loja'">
     <ion-card-header > <h3 text center>{{nome}}, Aqui está seus produtos!</h3>  <!--ion-button color="findme" (click)="addProc()"></ion-button--></ion-card-header>
 
@@ -42,7 +110,7 @@
       <ion-list *ngFor="let items of goalListFiltrado">
       <ion-item>
             <h2>{{items.nome}}</h2><br/>
-            <ion-button color="findme" slot="end">deletar produto</ion-button><br/>
+            <ion-button (click)="deletarItem(items)" color="danger" slot="end">deletar produto</ion-button><br/>
       </ion-item>
 
     </ion-list>

@@ -7,7 +7,8 @@ import { ServiceService } from '../service.service';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
 import { ModalController } from '@ionic/angular';
-declare let paypal: any;
+import { LoadingController } from '@ionic/angular';
+import * as firebase from 'firebase/app';
 
 
 @Component({
@@ -22,58 +23,31 @@ export class LoginPage implements OnInit {
   paypalConfig
   valor = '';
 
-  constructor(public navCtrl: NavController, private storage: Storage,
+  constructor(public navCtrl: NavController, private storage: Storage,public loadingController: LoadingController,
               public router: Router, public alertCtrl: AlertController, public afAuth: AngularFireAuth,
               public services: ServiceService, public modalController: ModalController) {
-
 
 
       }
 
   ngOnInit(){
-    
+        
+        
+      
   }
 
-  async pagarCred() {
-   
-  this.paypalConfig ={
-    env:'sandbox',
-    client:{
-      sandbox:'AUL78e1xYqL9BppwbCQWmrVNd46DpEdPI7guKwwC9k8pTqacP608ORZSEwp6jla8jKgx6ZD6ya7CPvld'
-    },
-    commit: true,
-    payment:(data, actions) =>{
-      return actions.payment.create({
-        payment: {
-          transactions: [
-            {amount:{total: this.valor, currency: 'BRL'}}
-          ]
-        }
-      })
-    },
-    onAutorize: (data, actions) =>{
-      return actions.payment.execute().then((payment) => {
-        console.log('pagamento lindo! foi papai!')
-      })
-    },
-    ngAfterViewChecked():void{
-      if(!this.addPaypalScript){
-        this.addPaypalScript().then(() =>{
-          paypal.Button.render(this.paypalConfig, '#paypal-checkout-btn')
-        })
-      }
-    },
-    addPaypalScript() {
-      this.addScript = true;
-      return new Promise((resolve,reject) =>{
-        let scriptagElement= document.createElement('script')
-        scriptagElement.src = 'http://www.paypalobjects.com/api/checkout.js'
-        scriptagElement.onload = resolve
-        document.body.appendChild(scriptagElement)
-      })
-    }
+async presentLoading() {
+    const loading = await this.loadingController.create({
+      cssClass: 'my-custom-class',
+      message: 'Aguarde...',
+      duration: 3000
+    });
+    await loading.present();
+
+    const { role, data } = await loading.onDidDismiss();
+    console.log('Loading dismissed!');
   }
-}
+ 
   registrar() {
 
   	this.navCtrl.navigateForward('/register');
@@ -82,20 +56,41 @@ export class LoginPage implements OnInit {
   }
  async entrar() {
     const{email, password } = this;
+      this.presentLoading() 
+
     try {
       const res = await this.afAuth.auth.signInWithEmailAndPassword(email, password);
       if (res.user) {
         this.storage.set('email', res.user.email);
         this.showalert('Bem-vindo de volta!', 'Vamos macumbar!');
-        this.navCtrl.navigateRoot('/user');
+        this.navCtrl.navigateRoot('/tabs/tab1');
       }
 
     } catch (err) {
       console.dir(err);
       if (err.code === 'auth/user-not-found') {
         console.log('password not match');
-        this.showalert('Opa!', 'Parece que você ainda não é cadastrado, mas não tem problema! Clique em "Ok" para se cadastrar');
-        this.navCtrl.navigateRoot('/register');
+        const alert = await this.alertCtrl.create({
+          header:'Opa!',
+          message:'Parece que você ainda não é cadastrado, mas não tem problema! Clique em "Ok" para se cadastrar',
+          buttons: [
+             {
+                text: 'Cancelar',
+                role: 'cancelar',
+                handler: () => {
+                  console.log('sim clicked');
+
+              }
+          },
+              {
+                text: 'Ok',
+                role: 'ok',
+                handler: () => {
+                this.navCtrl.navigateRoot('/register');
+          }
+          }]
+        });
+        await alert.present();
 
 
       }if (err.code === 'auth/wrong-password'){
