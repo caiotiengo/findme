@@ -83,6 +83,17 @@ export class ListPage implements OnInit {
     km
     semLoja
     lojinha
+    latitudeNow
+    longitudeNow
+    endereco
+    cidade
+    bairro
+    cep
+    numero
+    estado
+    nomeUser
+    datou
+    goalListFiltrei
   constructor(public navCtrl: NavController, public Platform:Platform,
               public router: Router, 
               private geolocation: Geolocation,
@@ -91,7 +102,8 @@ export class ListPage implements OnInit {
               private storage: Storage, 
               public afStore: AngularFirestore,
               public services: ServiceService,
-              private _haversineService: HaversineService) {
+              private _haversineService: HaversineService
+              ) {
 
       this.proccessSubscription = this.services.getUsers().subscribe(data => {
           this.goalList = data;
@@ -102,40 +114,53 @@ export class ListPage implements OnInit {
               this.mainuser = this.afStore.doc(`users/${user.uid}`);
 
           } else {
-              this.showalert('Bem-vindo ao Axé delivery!', 'Faça o login para começar a explorar o mundo macumbistico na sua região');
+              this.showalert('Bem-vindo ao Axé delivery!', 'Faça o login para' 
+             +'começar a explorar o mundo macumbistico na sua região');
               this.navCtrl.navigateRoot('/login');
 
           }
+
           this.sub = this.mainuser.valueChanges().subscribe(event => {
               this.zona = event.zona;
               this.lat = event.lat;
-              this.lng = event.lng  
-
+              this.lng = event.lng
+              this.endereco = event.endereco;
+              this.cidade = event.cidade;
+              this.cep = event.CEP;
+              this.bairro = event.bairro;
+              this.numero = event.numeroEND;
+              this.estado = event.estado;
+              this.nomeUser = event.nome
+               
               console.log();
-             // this.goalListFiltrado = this.goalList.filter(i => i.zona === this.zona && i.tipo === 'Loja' && i.aprovado === true);
+               // this.goalListFiltrado = this.goalList.filter(i => i.zona === this.zona && i.tipo === 'Loja' && i.aprovado === true);
               //this.loadedGoalListFiltrado = this.loadedGoalList.filter(i => i.zona === this.zona && i.tipo === 'Loja' && i.aprovado === true);
               this.lojaApr = this.goalList.filter(i => i.tipo === 'Loja' && i.aprovado === true)       
+                                  this.goalListFiltrado = []
+
               this.lojaApr.forEach(loja => {
               console.log(loja)
               this.lojaAprLat = loja.lat; 
               this.lojaAprLng = loja.lng; 
               console.log(this.lojaAprLng +" " + this.lojaAprLat)
 
-              let usuarioCaio: GeoCoord = {
+              let Usuario: GeoCoord = {
                    latitude: Number(this.lat),
                    longitude: Number(this.lng)
               };
-              console.log(usuarioCaio)
-              let taquara: GeoCoord = {
+              console.log(Usuario)
+              let Loja: GeoCoord = {
                   latitude: Number(this.lojaAprLat),
-                  longitude:Number( this.lojaAprLng)
+                  longitude:Number(this.lojaAprLng)
               };
-              console.log(taquara)
-             let kilometers = this._haversineService.getDistanceInKilometers(usuarioCaio, taquara).toFixed(2);
-             console.log("The distance between Madrid and Bilbao is:" + kilometers);   
-              var km = Number(kilometers)
-               if(Number(kilometers) < 9.0 ){
-                     this.goalListFiltrado.push(loja)
+              
+              
+             let kilometers = this._haversineService.getDistanceInKilometers(Usuario, Loja).toFixed(1);
+             console.log("A distancia entre as lojas é de:" + kilometers); 
+
+             var km = Number(kilometers)
+               if(Number(kilometers) < 8.0 ){
+                    this.goalListFiltrado.push(loja)
                     console.log(this.goalListFiltrado.length)
                     this.lojinha = this.goalListFiltrado
                     this.semLoja = this.goalListFiltrado.length
@@ -147,12 +172,14 @@ export class ListPage implements OnInit {
                } 
              
             })
+         
 
           });
 
 
     });
 
+            
       const user = firebase.auth().currentUser;
       console.log(user);
       if (user) {
@@ -167,7 +194,8 @@ export class ListPage implements OnInit {
  
 
 
-
+  
+  
 
 
 

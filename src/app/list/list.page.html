@@ -2,11 +2,13 @@
   <ion-toolbar>
     <ion-title>
         <img style="max-height: 6vh;" src="/assets/logo_menor.png" alt="" />
-
+        Olá {{nomeUser}}
+      
     </ion-title>
     <ion-buttons slot="start">
     </ion-buttons>
   </ion-toolbar>
+   
     <ion-searchbar  animated style="margin-top:3.5% !important; margin: auto;" placeholder="Pesquise sua loja favorita" (ionInput)="filterList($event)"></ion-searchbar>
 </ion-header>
 <ion-fab  vertical="top" horizontal="end" slot="fixed">
@@ -14,9 +16,21 @@
       <ion-icon style="color:#ffcb02 !important" name="person"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+ 
 <ion-content>
 
+<div style="font-size: 13px;
+    background: black;
+    color: var(--ion-color-warning);
+    padding: 1px;
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    border-bottom-right-radius: 25px;
+    border-top-right-radius: 25px;">
 
+        <p><i>Seu endereço: {{endereco}}, {{numero}} - {{bairro}}</i></p>
+      </div>
 
 <div style="text-align: center;" *ngIf="goalListFiltrado.length === 0">
    <img style="max-width: 55vh" src="/assets/logo.png" alt="" />

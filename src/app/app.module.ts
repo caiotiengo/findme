@@ -41,6 +41,8 @@ firebase.initializeApp(firebaseConfig);
   imports: [
   AngularFireModule.initializeApp(firebaseConfig),
   AngularFireAuthModule,
+          HttpClientModule,
+
     HttpModule,
   BrowserModule,
   HttpClientModule,

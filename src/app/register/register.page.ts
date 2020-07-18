@@ -11,8 +11,8 @@ import * as firebase from 'firebase/app';
 import {AlertController, ModalController} from '@ionic/angular';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import {Validators, FormBuilder, FormGroup } from '@angular/forms';
+import {HttpClient} from '@angular/common/http';
 
-declare var google;
 
 @Component({
   selector: 'app-register',
@@ -39,12 +39,13 @@ export class RegisterPage implements OnInit {
     long
     cnpj: any;
     strCNPJ: any;
+    datou
     private cadastro : FormGroup;
 
   constructor(public navCtrl: NavController, private storage: Storage,
               public afAuth: AngularFireAuth, private geolocation: Geolocation, public router: Router, public actRouter: ActivatedRoute,
               public services: ServiceService, public afStore: AngularFirestore, public alertCtrl: AlertController,
-              private modalController: ModalController,private formBuilder: FormBuilder) {
+              private modalController: ModalController,private http: HttpClient,private formBuilder: FormBuilder) {
              this.cadastro = this.formBuilder.group({
                   resumo: [''],
                   nome: ['', Validators.required],
@@ -83,13 +84,22 @@ export class RegisterPage implements OnInit {
 
   ngOnInit() {
   }
-  async registrar() {
+  registrar() {
    const{email, password } = this.cadastro.value;
     if(this.cadastro.valid){
+     return new Promise(resolve => {
+            this.http.get<any[]>('https://nominatim.openstreetmap.org/search?q='+this.cadastro.value.endereco+','+
+              this.cadastro.value.bairro+','+
+               this.cadastro.value.numeroEND+','+ this.cadastro.value.cidade+'&format=json').subscribe(data => {
+                      resolve(data);
+                      console.log(data.length);
+                      if (data.length === 0){
+                       this.showalert('Hm...', 'Parece que não encontramos seu endereço. Já tentou sem abreviações?')
+                      }else{
+                        this.datou = data[0].lat;
 
-
-    try {
-       const res = await this.afAuth.auth.createUserWithEmailAndPassword(email, password).then(() => {
+                        try {
+       const res =  this.afAuth.auth.createUserWithEmailAndPassword(email, password).then(() => {
 
        const user = firebase.auth().currentUser;
        this.afStore.doc(`users/${user.uid}`).set({
@@ -103,8 +113,8 @@ export class RegisterPage implements OnInit {
             tipo: this.typeUser,
             LikeValue: 0,
             DislikeValue: 0,
-            lat: this.lat,
-            lng: this.long,
+            lat: data[0].lat,
+            lng: data[0].lon,
             aprovado: false,
             resumo: this.cadastro.value.resumo,
             numeroEND: this.cadastro.value.numeroEND,
@@ -125,6 +135,15 @@ export class RegisterPage implements OnInit {
     } catch (err) {
         console.dir(err);
     }
+                       //Av. Ten-Cel. Muniz de Aragão 
+                      }
+                      
+                  }, err => {
+                   console.log(err);
+          });
+      });
+
+  
   }else{
     this.showalert('Hm...', 'Preencha todos os campos!')
   }

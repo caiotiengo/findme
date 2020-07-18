@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {NavController} from '@ionic/angular';
+import {NavController,AlertController} from '@ionic/angular';
 import { ServiceService } from '../service.service';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
@@ -8,6 +8,8 @@ import * as firebase from 'firebase/app';
 import { Subscription } from 'rxjs';
 import { ModalController } from '@ionic/angular';
 import {Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import {HttpClient} from '@angular/common/http';
 
 
 export interface Processo {
@@ -64,8 +66,16 @@ export class UserPage implements OnInit {
     newCadastro
     CEP:string
     estado:string
+    lat
+    lng
+    datou
+    numero
   constructor(public navCtrl: NavController, private storage: Storage,
-              public afStore: AngularFirestore, public modalController: ModalController,  public services: ServiceService,private formBuilder: FormBuilder) {
+              public afStore: AngularFirestore, 
+              public modalController: ModalController,
+                public services: ServiceService,
+                private formBuilder: FormBuilder,
+                private geolocation: Geolocation,private http: HttpClient, public alertCtrl: AlertController) {
     
 
 
@@ -79,7 +89,23 @@ export class UserPage implements OnInit {
                   estadoNew: ['', Validators.required],
                   
             });
+        this.geolocation.getCurrentPosition().then((resp) => {
+              console.log(resp.coords.latitude)
+              console.log(resp.coords.longitude)
+              this.lat = resp.coords.latitude;
+              this.lng = resp.coords.longitude;
+          }).catch((error) => {
+              console.log('Error getting location', error);
+          });
 
+              let watch = this.geolocation.watchPosition();
+                  watch.subscribe((data) => {
+           // data can be a set of coordinates, or an error (if an error occurred).
+           // data.coords.latitude
+           // data.coords.longitude
+
+          //AIzaSyB1IBIxpEAg1qTweg3ZU2Q1SQpgz9yrG28
+          });
     const user = firebase.auth().currentUser;
     console.log(user);
     if (user) {
@@ -109,9 +135,12 @@ export class UserPage implements OnInit {
       this.typeUser = event.tipo;
       this.CEP = event.CEP;
       this.estado = event.estado;
-   
+      this.numero = event.numeroEND   
     });
+
    }
+
+  
 
   ngOnInit() {
   }
@@ -120,16 +149,43 @@ export class UserPage implements OnInit {
       this.hideMe = false;
   }
   update(){
-    this.services.updateEnd(this.userID,this.newCadastro.value.enderecoNew, this.newCadastro.value.CEPNew,
-     this.newCadastro.value.bairroNew, this.newCadastro.value.numeroENDNew, this.newCadastro.value.cidadeNew, this.newCadastro.value.estadoNew)
-    this.hideMe = true
+    
+    return new Promise(resolve => {
+            this.http.get<any[]>('https://nominatim.openstreetmap.org/search?q='+this.newCadastro.value.enderecoNew+','+this.newCadastro.value.bairroNew+','+
+               this.newCadastro.value.numeroENDNew+','+ this.newCadastro.value.cidadeNew+'&format=json').subscribe(data => {
+                      resolve(data);
+                      console.log(data.length);
+                      if (data.length === 0){
+                       this.showalert('Hm...', 'Parece que não encontramos seu endereço. Já tentou sem abreviações?')
+                      }else{
+                        this.datou = data[0].lat;
+                       this.services.updateEnd(this.userID,this.newCadastro.value.enderecoNew, this.newCadastro.value.CEPNew,
+                       this.newCadastro.value.bairroNew, this.newCadastro.value.numeroENDNew, this.newCadastro.value.cidadeNew,
+                       this.newCadastro.value.estadoNew, data[0].lat, data[0].lon)
+                       this.hideMe = true
+                       //Av. Ten-Cel. Muniz de Aragão 
+                      }
+                      
+                  }, err => {
+                   console.log(err);
+          });
+      });
+   
 
     
   }
   deletarItem(items){
     this.services.deletarItem(items.id)
   }
+ async showalert(header: string, message: string) {
+    const alert = await this.alertCtrl.create({
+      header,
+      message,
+      buttons: ['Ok']
+    });
 
+    await alert.present();
+  }
   sair() {
     
     this.storage.clear();

@@ -24,6 +24,8 @@ export interface User {
     numeroEND?:any;
     pontoREF?:any
     estado?:any
+    lat?:any
+    lng?:any
 }
 export interface Processo {
     // tslint:disable-next-line:indent
@@ -182,13 +184,15 @@ addUser(user: User) {
   deletarItem(id){
       return this.processoCollection.doc<Processo>(id).delete();
   }
-updateEnd(id: string, end: string, cep:string, bairro:string, numero:string, cidade:string, estado:string) {
+updateEnd(id: string, end: string, cep:string, bairro:string, numero:string, cidade:string, estado:string, lat:string,lng:string) {
     this.userCollection.doc<User>(id).update({endereco: end,
                                               CEP:cep,
                                               bairro:bairro,
                                               numeroEND: numero,           
                                               cidade: cidade,
-                                              estado: estado  });
+                                              estado: estado,
+                                              lat:lat,
+                                              lng:lng  });
   }
 /*
 
