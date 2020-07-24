@@ -47,56 +47,111 @@
 
     <h4 style="text-align: center;">Qual o novo endereço de entrega?</h4>
     <br/>
-    <div>
+    <ion-item>
               <ion-label position="floating">Endereço</ion-label>
               <ion-input formControlName="enderecoNew" type="text" required></ion-input>
-            </div>
+            </ion-item>
 
             <ion-grid>
                 <ion-row>
                     <ion-col>
-                        <div>
+                        <ion-item>
                       <ion-label position="floating">Número</ion-label>
                       <ion-input formControlName="numeroENDNew" required></ion-input>
-                  </div>
+                  </ion-item>
 
                     </ion-col>
                     <ion-col>
-                  <div>
+                  <ion-item>
                     <ion-label position="floating">CEP</ion-label>
                       <ion-input formControlName="CEPNew" required></ion-input>
-                  </div>
+                  </ion-item>
                     </ion-col>
                 </ion-row>
               </ion-grid>
             
 
-            <div>
+            <ion-item>
               <ion-label position="floating">Bairro</ion-label>
               <ion-input formControlName="bairroNew" required type="text"></ion-input>
-            </div>
+            </ion-item>
             
 
 
             <ion-grid>
                 <ion-row>
                     <ion-col>
-                        <div>
+                        <ion-item>
                     <ion-label position="floating">Cidade</ion-label>
                     <ion-input placeholder="EX: Rio de Janeiro" required formControlName="cidadeNew" type="text"></ion-input>
-                  </div>
+                  </ion-item>
 
                     </ion-col>
                     <ion-col>
-                  <div>
+                  <ion-item>
                     <ion-label position="floating">Estado</ion-label>
                     <ion-input placeholder="EX: RJ" required formControlName="estadoNew" type="text"></ion-input>
-                  </div>
+                  </ion-item>
                     </ion-col>
                 </ion-row>
               </ion-grid>
 
       <ion-button  style="height: 4vh;" (click)="update()" color="success" slot="end">Atualizar</ion-button><br/>
+
+
+  </form>
+</ion-card-content>
+</ion-card>
+<ion-card *ngIf="typeUser === 'Loja'">
+    <ion-card-content>  
+     <h4 style="color: green"> <ion-icon name="cash"></ion-icon> - {{banco}}</h4>
+     <p><i>Agência:{{agencia}} - Conta:{{conta}}</i></p>
+     <p><i>Corrente ou Poupança? {{tipoConta}}</i></p>
+      <ion-button style="height: 4vh;" (click)="updateBank()" color="warning">  
+        alterar
+      </ion-button>
+  <form [formGroup]="newBanco" [hidden]="hideMe2">
+   <br/>
+
+    <h4 style="text-align: center;">Qual a nova conta bancária?</h4>
+    <br/>
+        <ion-select placeholder="Corrente ou Poupança" required style="border: 1px solid black;border-radius: 25px;padding: 10px;" formControlName="tipoContaNew">
+            <ion-select-option value="Corrente">Corrente</ion-select-option>
+            <ion-select-option value="Poupanca">Poupança</ion-select-option>
+        </ion-select>
+    <ion-item>
+              <ion-label position="floating">Banco</ion-label>
+              <ion-input formControlName="bancoNew" type="text" required></ion-input>
+            </ion-item>
+
+            <ion-grid>
+                <ion-row>
+                    <ion-col>
+                        <ion-item>
+                      <ion-label position="floating">Agência</ion-label>
+                      <ion-input formControlName="agenciaNew" required></ion-input>
+                  </ion-item>
+
+                    </ion-col>
+                    <ion-col>
+                  <ion-item>
+                    <ion-label position="floating">Conta com o digito</ion-label>
+                      <ion-input formControlName="contaNew" required></ion-input>
+                  </ion-item>
+                    </ion-col>
+                </ion-row>
+              </ion-grid>
+            
+
+            <ion-item>
+              <ion-label position="floating">Nome na Conta</ion-label>
+              <ion-input formControlName="nomeContaNew" required type="text"></ion-input>
+            </ion-item>
+            
+
+
+           
+      <ion-button  style="height: 4vh;" (click)="updateBanco()" color="success" slot="end">Atualizar</ion-button><br/>
 
 
   </form>

@@ -135,7 +135,7 @@ export class ListPage implements OnInit {
               console.log();
                // this.goalListFiltrado = this.goalList.filter(i => i.zona === this.zona && i.tipo === 'Loja' && i.aprovado === true);
               //this.loadedGoalListFiltrado = this.loadedGoalList.filter(i => i.zona === this.zona && i.tipo === 'Loja' && i.aprovado === true);
-              this.lojaApr = this.goalList.filter(i => i.tipo === 'Loja' && i.aprovado === true)       
+              this.lojaApr = this.goalList.filter(i => i.tipo === 'Loja' && i.aprovado === "Sim")       
                                   this.goalListFiltrado = []
 
               this.lojaApr.forEach(loja => {

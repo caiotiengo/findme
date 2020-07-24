@@ -26,30 +26,26 @@
 					<ion-select-option value="Fumos">Fumos</ion-select-option>
 					<ion-select-option value="Decoracao">Decoração</ion-select-option>
 					<ion-select-option value="Instrumentos">Jogos</ion-select-option>
-					<ion-select-option value="Jogos">Jogos</ion-select-option>
-					<ion-select-option value="Jogos">Jogos</ion-select-option>
-					<ion-select-option value="Jogos">Jogos</ion-select-option>
+					
 
 				</ion-select>
 				<form [formGroup]="formulario" (ngSubmit)="logForm()">
-				<ion-label position="floating">Nome do produto</ion-label>
 
 				<ion-item>
+				  <ion-label position="floating">Nome do produto</ion-label>
 				  <ion-input formControlName="nomePrd"></ion-input>
 				</ion-item>
-				  <ion-label position="floating">Descrição</ion-label>
 
 				<ion-item>
+				  <ion-label position="floating">Descrição</ion-label>
 				  <ion-input maxLenght="40" formControlName="resumo" type="text"></ion-input>
 				</ion-item>	
-				  <ion-label position="floating">Nome da Loja</ion-label>
-
 				<ion-item>
+				  <ion-label position="floating">Nome da Loja</ion-label>
 				  <ion-input placeholder="{{nome}}" disabled type="text"></ion-input>
 				</ion-item>
-					<ion-label position="floating">Valor</ion-label>
-
 				<ion-item>
+					<ion-label position="floating">Valor</ion-label>
 					<ion-input name="valor" [(ngModel)]="valor" formControlName="valor"
 					[brmasker]="{money: true}" type="text"></ion-input>
 				</ion-item>

@@ -9,6 +9,7 @@ import { Storage } from '@ionic/storage';
 import { ModalController } from '@ionic/angular';
 import { LoadingController } from '@ionic/angular';
 import * as firebase from 'firebase/app';
+import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
 
 
 @Component({
@@ -22,13 +23,25 @@ export class LoginPage implements OnInit {
   password = '';
   paypalConfig
   valor = '';
+  mainuser: AngularFirestoreDocument;
+  userID
+
 
   constructor(public navCtrl: NavController, private storage: Storage,public loadingController: LoadingController,
               public router: Router, public alertCtrl: AlertController, public afAuth: AngularFireAuth,
-              public services: ServiceService, public modalController: ModalController) {
-
-
+              public services: ServiceService, public modalController: ModalController,public afStore: AngularFirestore) {
+        const user = firebase.auth().currentUser;
+    console.log(user);
+    if (user) {
+            this.mainuser = this.afStore.doc(`users/${user.uid}`);
+               this.userID = user.uid
+               //console.log(this.userID)
+               this.navCtrl.navigateRoot('/tabs/tab1')
+      } else {
+          console.log('No user')
       }
+   
+  }
 
   ngOnInit(){
         

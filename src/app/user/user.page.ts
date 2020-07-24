@@ -61,15 +61,27 @@ export class UserPage implements OnInit {
     cidadeNew = '';
     estadoNew = '';
     numeroENDNew = '';
+    agenciaNew = '';
+    contaNew = '';
+    nomeContaNew = '';
+    bancoNew = '';
+    tipoContaNew = '';
     CEPNew = '';
     hideMe = true
+    hideMe2 = true
     newCadastro
     CEP:string
     estado:string
     lat
+    newBanco
     lng
     datou
     numero
+    banco
+    conta
+    nomeNaConta
+    tipoConta 
+    agencia
   constructor(public navCtrl: NavController, private storage: Storage,
               public afStore: AngularFirestore, 
               public modalController: ModalController,
@@ -89,6 +101,15 @@ export class UserPage implements OnInit {
                   estadoNew: ['', Validators.required],
                   
             });
+        this.newBanco = this.formBuilder.group({
+                  
+                  bancoNew: ['', Validators.required],
+                  contaNew: ['', Validators.required],
+                  agenciaNew: ['', Validators.required],
+                  nomeContaNew: ['', Validators.required],
+                  tipoContaNew: ['', Validators.required]
+                  
+            });        
         this.geolocation.getCurrentPosition().then((resp) => {
               console.log(resp.coords.latitude)
               console.log(resp.coords.longitude)
@@ -135,7 +156,12 @@ export class UserPage implements OnInit {
       this.typeUser = event.tipo;
       this.CEP = event.CEP;
       this.estado = event.estado;
-      this.numero = event.numeroEND   
+      this.numero = event.numeroEND
+      this.banco = event.banco
+      this.agencia = event.agencia
+      this.conta = event.conta
+      this.nomeNaConta = event.nomeNaConta
+      this.tipoConta = event.correnteoupou
     });
 
    }
@@ -147,6 +173,15 @@ export class UserPage implements OnInit {
 
   updateEnd(){
       this.hideMe = false;
+  }
+  updateBank(){
+    this.hideMe2 = false
+  }
+  updateBanco(){
+
+      this.services.updateBanco(this.userID, this.newBanco.value.bancoNew, this.newBanco.value.agenciaNew, this.newBanco.value.contaNew,this.newBanco.value.tipoContaNew,this.newBanco.value.nomeContaNew)
+      this.showalert('Opa!', 'Dados atualizados!')
+       this.hideMe2 = true;
   }
   update(){
     
@@ -163,6 +198,8 @@ export class UserPage implements OnInit {
                        this.newCadastro.value.bairroNew, this.newCadastro.value.numeroENDNew, this.newCadastro.value.cidadeNew,
                        this.newCadastro.value.estadoNew, data[0].lat, data[0].lon)
                        this.hideMe = true
+                       this.showalert('Opa!', 'Dados atualizados!')
+
                        //Av. Ten-Cel. Muniz de Aragão 
                       }
                       

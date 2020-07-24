@@ -24,7 +24,7 @@ ion-content{
 div{
 		animation: mymove 1s;
 		position: relative;
-        text-align-last: center;
+        //text-align-last: center;
 	}
 #motion {animation-timing-function: linear;}
 @keyframes mymove {
@@ -32,8 +32,8 @@ div{
   to {bottom: 0px;}
 }
 ion-card{
-	  --background: white !important;
-	  width: 90%;
+	--background: white !important;
+	width: 90%;
     height: auto;
     display: block;
     margin: auto;
@@ -44,8 +44,8 @@ ion-label{
   font-size: 18px;
 }
 ion-input{
-      --background: rgba(255, 255, 255, 0.29);
-    border: 1px solid rgba(34, 36, 40, 0.51);
-    border-radius: 15px;
+    //--background: rgba(255, 255, 255, 0.29);
+    //border: 1px solid rgba(34, 36, 40, 0.51);
+    //border-radius: 15px;
     margin-top: 1%;
 }

@@ -6,12 +6,14 @@
 
 </ion-content>
 <div class="background-traco">
- <ion-label position="floating">E-mail</ion-label>
+<ion-item>
+ 		<ion-label position="floating">E-mail</ion-label>
   		<ion-input type="text" [(ngModel)]="email" ></ion-input>
- 		<br/>
-  <ion-label position="floating">Senha</ion-label>
-    	<ion-input [(ngModel)]="password" type="password" ></ion-input>
-		<br/>
+</ion-item>
+<ion-item style="margin-bottom: 5%">
+  		<ion-label position="floating">Senha</ion-label>
+      	<ion-input [(ngModel)]="password" type="password" ></ion-input>
+</ion-item>		
 <div style="text-align-last: center;">
 		<ion-button (click)="entrar()" expand="" color="findme" style="color:white !important; max-width: 25vh;" >Entrar</ion-button>
 		<ion-button (click)="registrar()" expand="" color="warning" style="color:black !important;" >Cadastre-se</ion-button>

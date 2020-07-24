@@ -13,7 +13,7 @@ ion-content{
     border: 0.2px solid white;
 }
 .background-traco{
-	background: linear-gradient(#ffffff, rgba(212, 216, 226, 0.88));
+	background: white;
 	border-top-left-radius: 30px;
     padding: 10px;
     border-top-right-radius: 30px;
@@ -27,13 +27,13 @@ ion-label{
 }
 ion-datetime,
 ion-input{
-      --background: rgba(255, 255, 255, 0.29);
-    border: 1px solid rgba(34, 36, 40, 0.51);
-    border-radius: 15px;
+    //  --background: rgba(255, 255, 255, 0.29);
+    //border: 1px solid rgba(34, 36, 40, 0.51);
+    //border-radius: 15px;
     margin-top: 1%;
     margin-bottom: 1%
 }
 div{
-          text-align-last: center;
+          //text-align-last: center;
 
 }

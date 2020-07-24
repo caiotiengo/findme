@@ -96,9 +96,9 @@ export class StatusPage implements OnInit {
            
         this.mainuser = this.afStore.doc(`users/${user.uid}`);
         this.emailUsr = user.email;
-        this.goalListUs = res.filter(i => i.emailComprador === this.emailUsr);
+        this.goalListUs = res.filter(i => i.emailComprador === this.emailUsr && i.statusEnt != 'Cancelada');
         
-        this.loadedGoalListUs = res.filter(i => i.emailComprador  === this.emailUsr);
+        this.loadedGoalListUs = res.filter(i => i.emailComprador  === this.emailUsr && i.statusEnt != 'Cancelada');
         this.goalListST = res.filter(i => i.emailLoja === this.emailUsr);
         this.loadedGoalListST = res.filter(i => i.emailLoja  === this.emailUsr); 
              this.commentsSubscription = this.services.getComments().subscribe(data =>{
@@ -292,19 +292,19 @@ export class StatusPage implements OnInit {
       message:'Você tem certeza que quer cancelar a sua compra?',
       buttons: [
          {
+        text: 'Não',
+        role: 'nao',
+        handler: () => {
+          
+        }
+      },
+      {
         text: 'Sim',
         role: 'sim',
         handler: () => {
           console.log('sim clicked');
           this.atualiza();
           this.services.vendasCollection.doc<Vendas>(items.id).update({statusEnt: 'Cancelada' });
-        }
-      },
-      {
-        text: 'Não',
-        role: 'nao',
-        handler: () => {
-          console.log('não clicked');
         }
       }]
     });

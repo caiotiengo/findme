@@ -16,13 +16,13 @@
 				
 		</div>
 <div class="background-traco">
-<p>Escolha o tipo de usuario entrar como:</p>
+<p style="text-align-last: center;">Escolha o tipo de usuario entrar como:</p>
 				<ion-select placeholder="Tipo de Usuario" style="border: 1px solid black; border-radius: 25px; padding: 10px;" [(ngModel)]="typeUser" required>
 					<ion-select-option value="Loja">Loja</ion-select-option>
 					<ion-select-option value="user">Usúario</ion-select-option>
 				</ion-select>
 				<br/>
-				<p>Qual a sua região?</p>
+				<p style="text-align-last: center;">Qual a sua região?</p>
 
 				<ion-select placeholder="Sua região" required style="border: 1px solid black;border-radius: 25px;padding: 10px;" [(ngModel)]="type">
 					<ion-select-option value="Centro">Centro</ion-select-option>
@@ -34,27 +34,27 @@
 
 
 			<form [formGroup]="cadastro" (ngSubmit)="logForm()">	
-					<div>
+					<ion-item>
 		 
 					  <ion-label position="floating">E-mail</ion-label>
 					  <ion-input type="text" formControlName="email" required ></ion-input>
-					</div>
+					</ion-item>
 
-					<div>
+					<ion-item>
 					  <ion-label position="floating"> 
 					  	Senha
 					  </ion-label>
 					  <ion-input formControlName="password" type="password" required ></ion-input>
-					</div>
-						<div *ngIf="typeUser === 'Loja'">
+					</ion-item>
+						<ion-item *ngIf="typeUser === 'Loja'">
 							<ion-label position="floating">Nome da sua Loja</ion-label>
 							<ion-input formControlName="nome" required></ion-input>
-						</div>
-						<div *ngIf="typeUser === 'user'" >
+						</ion-item>
+						<ion-item *ngIf="typeUser === 'user'" >
 						  <ion-label position="floating">Seu nome</ion-label>
 						  <ion-input formControlName="nome" required></ion-input>
-						</div>
-						<div *ngIf="typeUser === 'user'" >
+						</ion-item>
+						<ion-item *ngIf="typeUser === 'user'" >
 							<ion-label position="floating"> Data de Nascimento</ion-label>
 
 						   <ion-datetime
@@ -62,81 +62,109 @@
 		    						displayFormat="DD MMM, YYYY"
 		    						monthShortNames="Janeiro, Fevereiro, Março, Abril, Maio, Junho, Julho, Agosto, Setembro, Outubro, Novembro, Dezembro" formControlName="DOB" placeholder="Clique aqui" required></ion-datetime>
 
-						</div>
+						</ion-item>
 
-						<div *ngIf="typeUser === 'Loja'">
+						<ion-item *ngIf="typeUser === 'Loja'">
 							<ion-label position="floating">CNPJ</ion-label>
 							<ion-input maxLenght="40" [brmasker]="{person: true}" formControlName="CPF" required type="text"></ion-input>
-						</div>
-						<div *ngIf="typeUser === 'user'" >
+						</ion-item>
+						<ion-item *ngIf="typeUser === 'user'" >
 						  <ion-label position="floating">CPF</ion-label>
 						  <ion-input formControlName="CPF" [brmasker]="{person: true}" required></ion-input>
-						</div>
-						<div>
+						</ion-item>
+						<ion-item>
 						  <ion-label position="floating">Endereço</ion-label>
 						  <ion-input formControlName="endereco" type="text" required></ion-input>
-						</div>
+						</ion-item>
 
 						<ion-grid>
 					      <ion-row>
 					          <ion-col>
-					             	<div>
+					             	<ion-item>
 						  				<ion-label position="floating">Número</ion-label>
 						  				<ion-input formControlName="numeroEND" required></ion-input>
-									</div>
+									</ion-item>
 
 					          </ion-col>
 					          <ion-col>
-									<div>
+									<ion-item>
 						 				<ion-label position="floating">CEP</ion-label>
 						  				<ion-input formControlName="CEP" required></ion-input>
-									</div>
+									</ion-item>
 					          </ion-col>
 					      </ion-row>
 					    </ion-grid>
 						
 
-						<div>
+						<ion-item>
 						  <ion-label position="floating">Bairro</ion-label>
 						  <ion-input formControlName="bairro" required type="text"></ion-input>
-						</div>
-						
-
-
+						</ion-item>
+						<ion-item>
+						  <ion-label position="floating">Complemento</ion-label>
+						  <ion-input formControlName="complemento" required type="text"></ion-input>
+						</ion-item>
 						<ion-grid>
 					      <ion-row>
 					          <ion-col>
-					             	<div>
+					             	<ion-item>
 									  <ion-label position="floating">Cidade</ion-label>
-									  <ion-input placeholder="EX: Rio de Janeiro" required formControlName="cidade" type="text"></ion-input>
-									</div>
+									  <ion-input placeholder="Ex: Rio de Janeiro" required formControlName="cidade" type="text"></ion-input>
+									</ion-item>
 
 					          </ion-col>
 					          <ion-col>
-									<div>
+									<ion-item>
 									  <ion-label position="floating">Estado</ion-label>
-									  <ion-input placeholder="EX: RJ" required formControlName="estado" type="text"></ion-input>
-									</div>
+									  <ion-input placeholder="Ex: RJ" required formControlName="estado" type="text"></ion-input>
+									</ion-item>
 					          </ion-col>
 					      </ion-row>
 					    </ion-grid>
-
-
-
-						<div>
+						<ion-item>
 						  <ion-label position="floating">Telefone</ion-label>
 						  <ion-input formControlName="telefone" required type="text"></ion-input>
-						</div>
-						<div *ngIf="typeUser === 'Loja'">
+						</ion-item>
+						<ion-item *ngIf="typeUser === 'Loja'">
 							<ion-label position="floating">Descrição</ion-label>
 							<ion-input maxLenght="40" formControlName="resumo" required type="text"></ion-input>
-						</div>
+						</ion-item>
+<div *ngIf="typeUser === 'Loja'">						
+		<h3 style="text-align-last: center ">Informações bancárias</h3>
+				<ion-select placeholder="Corrente ou Poupança" required style="border: 1px solid black;border-radius: 25px;padding: 10px;" formControlName="correnteoupou">
+					<ion-select-option value="Corrente">Corrente</ion-select-option>
+					<ion-select-option value="Poupanca">Poupança</ion-select-option>
+				</ion-select>
+				
+						<ion-item>
+						  <ion-label position="floating">Banco</ion-label>
+						  <ion-input formControlName="banco" required type="text"></ion-input>
+						</ion-item>
+						<ion-item>
+						  <ion-label position="floating">Nome na conta</ion-label>
+						  <ion-input formControlName="nomeNaConta" required type="text"></ion-input>
+						</ion-item>								
+						<ion-grid>
+					      <ion-row>
+					          <ion-col>
+					             	<ion-item>
+						  				<ion-label position="floating">Agência</ion-label>
+						  				<ion-input formControlName="agencia" required></ion-input>
+									</ion-item>
+
+					          </ion-col>
+					          <ion-col>
+									<ion-item>
+						 				<ion-label position="floating">Conta com o digito</ion-label>
+						  				<ion-input formControlName="conta" required></ion-input>
+									</ion-item>
+					          </ion-col>
+					      </ion-row>
+					    </ion-grid>
+</div>
+
 			</form>
-				<br/>
-				<p>Foto de perfil:
-					<ion-button shape="outline" (click)="photo()" color="findme" ><ion-icon name="camera"></ion-icon></ion-button>
-				</p>
-				<br/>
+				
 				<!-- <img src="{{img.src}}"> -->
 				<ion-label *ngIf="typeUser && type != null">
 					<ion-button (click)="registrar()" color="findme" style="color:white !important; max-width: 25vh;" >

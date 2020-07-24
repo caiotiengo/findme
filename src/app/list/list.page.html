@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-title>
         <img style="max-height: 6vh;" src="/assets/logo_menor.png" alt="" />
-        Olá {{nomeUser}}
+        Olá, {{nomeUser}}!
       
     </ion-title>
     <ion-buttons slot="start">
@@ -68,13 +68,8 @@
 
                 <ion-card-content style="text-align: center;">
                     {{items.resumo}}<br/>
-                       <ion-icon style="color: red;"name="heart"></ion-icon>
-                    <ion-label>{{items.LikeValue}}</ion-label>
                 </ion-card-content>  
-                <ion-label *ngIf="items.tipo === 'admin'">
-                  <ion-button fill="clear" (click)="verifica()" color="findme" [routerLink]="['edit-page/' + items.id]" > Editar
-                  </ion-button>
-                </ion-label>
+                
           </ion-card>
           </ion-list>
 </div>

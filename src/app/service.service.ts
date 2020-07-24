@@ -26,6 +26,11 @@ export interface User {
     estado?:any
     lat?:any
     lng?:any
+    banco?:any
+    agencia?:any
+    conta?:any
+    correnteoupou?:any
+    nomeNaConta?:any
 }
 export interface Processo {
     // tslint:disable-next-line:indent
@@ -194,8 +199,23 @@ updateEnd(id: string, end: string, cep:string, bairro:string, numero:string, cid
                                               lat:lat,
                                               lng:lng  });
   }
+  updateBanco(id:string,banco:string, agencia:string,conta:string,correnteoupou:string, nomeNaConta:string) {
+    this.userCollection.doc<User>(id).update({
+      banco:banco,
+      agencia:agencia,
+      conta:conta,
+      correnteoupou:correnteoupou,
+      nomeNaConta:nomeNaConta
+    });
+  }
 /*
 
+
+.nomeNaConta}}</p>
+      <p>{{loja.banco}}</p>
+      <p>{{loja.agencia}}</p>
+      <p>{{loja.conta}}</p>
+      <p>{{loja.correnteoupou}}
  addProduct(product: Product) {
     return this.productsCollection.add(product);
   }

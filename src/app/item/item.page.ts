@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { ModalController } from '@ionic/angular';
 import { IonSlides} from '@ionic/angular';
 import {AlertController} from '@ionic/angular';
+import { HaversineService, GeoCoord } from "ng2-haversine";
 
 export interface User {
     name: string;
@@ -100,10 +101,17 @@ export class ItemPage implements OnInit {
     comments
     commentsLen
     lojaID
+    valorFrete
+    valorDelivery
+    lat 
+    lng
+    lojaLng
+    lojaLat
   constructor(public navCtrl: NavController, public alertCtrl: AlertController,
               private route: ActivatedRoute, private storage: Storage,
               public afStore: AngularFirestore,  public services: ServiceService,
-              public modalController: ModalController) {
+              public modalController: ModalController,private _haversineService: HaversineService
+) {
 
 
       const user = firebase.auth().currentUser;
@@ -122,6 +130,8 @@ export class ItemPage implements OnInit {
           this.bairro = event.bairro;
           this.telefone = event.telefone;
           this.zona = event.zona;
+          this.lat = event.lat;
+          this.lng = event.lng
 
       });
       this.que = this.route.snapshot.paramMap.get('id');
@@ -136,7 +146,7 @@ export class ItemPage implements OnInit {
         }
       console.log(this.services.getLikes(this.que));
 
-
+      
    }
     optionsFn(value: any ) {
         this.segmento = value;
@@ -174,9 +184,27 @@ export class ItemPage implements OnInit {
       this.likes = data.LikeValue;
       this.dislikes = data.LikeValue;
       this.emailLoja = data.email;
+      this.lojaLat = data.lat;
+      this.lojaLng = data.lng;
       console.log(this.loja);
       console.log(this.likes);
       console.log(this.dislikes);
+      let Usuario: GeoCoord = {
+                   latitude: Number(this.lat),
+                   longitude: Number(this.lng)
+              };
+              console.log(Usuario)
+              let Loja: GeoCoord = {
+                  latitude: Number(this.lojaLat),
+                  longitude:Number(this.lojaLng)
+              };
+              
+              
+             let kilometers = this._haversineService.getDistanceInKilometers(Usuario, Loja).toFixed(1);
+             console.log("A distancia entre as lojas é de:" + Number(kilometers));
+             this.valorFrete = Math.floor(1.40+2.0)*Number(kilometers)
+             this.valorDelivery = this.valorFrete.toFixed(2)
+
     });
     this.productSubscription = this.services.getProccessos().subscribe(res => {
            this.goalList = res.filter(i => i.email === this.emailLoja);
@@ -243,6 +271,7 @@ export class ItemPage implements OnInit {
         console.log(dia);
         this.storage.set('loja', this.loja);
         this.storage.set('valorFinal', this.valorCompra);
+        this.storage.set('valorFrete', this.valorDelivery)
         this.storage.set('carrinhoUser', JSON.stringify(this.produtos)).then(() =>{
             this.navCtrl.navigateRoot('/carrinho');
         });

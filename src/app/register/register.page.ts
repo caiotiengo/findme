@@ -35,6 +35,12 @@ export class RegisterPage implements OnInit {
     DOB = '';
     CPF = '';
     numeroEND = '';
+    agencia = '';
+    conta = '';
+    correnteoupou ='';
+    complemento ='';
+    nomeNaConta = '';
+    banco = '';
     lat 
     long
     cnpj: any;
@@ -58,8 +64,14 @@ export class RegisterPage implements OnInit {
                   password: ['', Validators.required],
                   CEP: ['', Validators.required],
                   DOB: [''],
+                  complemento:['', Validators.required],
+                  banco:['', Validators.required],
                   CPF: ['', Validators.required],
-                  numeroEND: ['', Validators.required],     
+                  agencia: ['', Validators.required],
+                  nomeNaConta: ['', Validators.required],
+                  conta: ['', Validators.required],                  
+                  numeroEND: ['', Validators.required],
+                  correnteoupou:['',Validators.required]
 
             });
          this.geolocation.getCurrentPosition().then((resp) => {
@@ -115,7 +127,12 @@ export class RegisterPage implements OnInit {
             DislikeValue: 0,
             lat: data[0].lat,
             lng: data[0].lon,
-            aprovado: false,
+            aprovado: "Nao",
+            banco: this.cadastro.value.banco,
+            agencia: this.cadastro.value.agencia,
+            nomeNaConta: this.cadastro.value.nomeNaConta,
+            conta: this.cadastro.value.conta,
+            correnteoupou:this.correnteoupou,
             resumo: this.cadastro.value.resumo,
             numeroEND: this.cadastro.value.numeroEND,
             CPFCNPJ: this.cadastro.value.CPF,
@@ -145,7 +162,7 @@ export class RegisterPage implements OnInit {
 
   
   }else{
-    this.showalert('Hm...', 'Preencha todos os campos!')
+    this.showalert('Hm...', 'Preencha todos os campos!'+ this.cadastro.valid)
   }
       // tslint:disable-next-line:indent
       // tslint:disable-next-line:indent

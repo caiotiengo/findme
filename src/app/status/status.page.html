@@ -46,7 +46,7 @@
         <ion-button fill="solid" color="warning" slot="end">Comprar</ion-button>
     </div> 
 <div class="background-traco" *ngIf=" typeUser === 'user' && valorre > 0 ">
-  <h2 style="text-align-last: center;">Seus Pedidos</h2>
+  <h2 style="text-align-last: center;     padding-top: 22px;">Seus Pedidos</h2>
     
 
   <ion-list style="background: transparent" *ngFor="let items of goalListUs" >
@@ -95,6 +95,7 @@
         <p> Valor • R${{items.valor}}</p>
         <p> Data da compra • {{items.dia}}</p>
         <p> Status de pagamento • {{items.statusPag}}</p>
+        <p> Número do pedido • {{items.nPedido}}
         <p slot="end">Endereço • {{items.endereco}} </p><br/> 
         <div *ngIf="items.statusEnt === 'Loja informada'" >
             <ion-button fill="solid" expand="block" (click)="save(items)" color="danger">Cancelar Compra</ion-button>
@@ -117,10 +118,8 @@
 
 </div>
 <div *ngIf="typeUser === 'Loja' && valorreST > 0" class="background-traco">
-  <ion-list *ngFor="let items of goalListST  | slice:0:5;" >
+  <ion-list *ngFor="let items of goalListST" >
     <ion-card   style=" background:white; border: 1px solid #ffcb02;">
-      <img style="margin:auto;" src="/assets/slide3.png" alt="" />
-
       <ion-item>
         <ion-icon name="notifications" color="danger" slot="start"></ion-icon>
         <ion-label> {{items.statusEnt}}</ion-label>

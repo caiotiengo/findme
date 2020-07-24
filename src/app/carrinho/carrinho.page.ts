@@ -11,6 +11,7 @@ import * as _ from 'lodash';
 import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
 import * as firebase from 'firebase';
 import moipSdk from 'moip-sdk-node'
+import { HaversineService, GeoCoord } from "ng2-haversine";
 
 declare let paypal: any;
 
@@ -73,8 +74,16 @@ export class CarrinhoPage implements OnInit {
   CEP
   estado
   numeroEND
+  valorFrete
+    valorDelivery
+    lat 
+    lng
+    lojaLng
+    lojaLat
+    telefoneComprador
   constructor(private payPal: PayPal, public afStore: AngularFirestore,public loadingController: LoadingController,
-              public navCtrl: NavController, public alertCtrl: AlertController, private storage: Storage) {
+              public navCtrl: NavController, private _haversineService: HaversineService
+, public alertCtrl: AlertController, private storage: Storage) {
     this.storage.get('carrinhoUser').then((data) => {
       this.carrinho =  JSON.parse(data);
       console.log(this.carrinho);
@@ -83,10 +92,18 @@ export class CarrinhoPage implements OnInit {
       this.loja =  data;
       console.log(this.loja);
     });
+     this.storage.get('valorFrete').then((data) => {
+      this.valorDelivery =  data;
+      var y = this.valorDelivery.replace('.','') 
+      this.valorFrete = y
+      console.log(this.valorFrete);
+    });
     this.storage.get('valorFinal').then((data) => {
-      this.valor =  Number(data.toFixed(2));
+      var x =  Number(data);
+      this.valor = x.toFixed(2)
       console.log(this.valor);
     });
+   
     const user = firebase.auth().currentUser;
     if (user) {
       this.mainuser = this.afStore.doc(`users/${user.uid}`);
@@ -109,6 +126,7 @@ export class CarrinhoPage implements OnInit {
       this.numeroEND = event.numeroEND;
       this.CEP = event.CEP;
       this.estado = event.estado
+      this.telefoneComprador = event.telefone
     });
     console.log(this.moip);
     this.hash = 'Gerando hash...';
@@ -167,7 +185,7 @@ teste(){
             amount: {
                 currency: 'BRL',
                 subtotals: {
-                    shipping: 800
+                    shipping: 800//Number(this.valorFrete)
                 }
             },
             items: this.carrinho,
@@ -244,10 +262,12 @@ teste(){
       date.setMonth(date.getMonth() + 1);
       const dia = date.getDate() + '/' + date.getMonth()  + '/' + date.getFullYear();
       console.log(dia);
+      const mes = date.getMonth();
       this.valores = this.carrinho.map(res => res.valor);
       this.valorCompra = this.valores.reduce((acc, val) => acc += val, 0);
       this.storage.get('valorFinal').then((data) => {
-        this.valor =  data + 8;
+        var y =  Math.floor(Number(data) + 8) //Math.floor(Number(data) + Number(this.valorDelivery));
+        this.valor = y.toFixed(2)
         console.log(this.valor);
       });
 
@@ -259,16 +279,19 @@ teste(){
         this.afStore.collection('vendas').add({
           nPedido:Number(seq),
           nomeComprador: this.nome,
-          endereco: this.endereco + ', ' + this.bairro + ', ' + this.cidade,
+          endereco: this.endereco + ', '+ this.numeroEND +',' + this.bairro + ', ' + this.cidade +' - CEP:' + this.CEP,
           nomeLoja: this.loja.nome,
-          valor: Number(this.valor.toFixed(2)),
+          valor: Number(this.valor),
           dia,
+          mes,
           produtos: this.produtos,
           emailComprador: this.email,
           lojaUID: this.produtos[0].lojaUID,
           emailLoja: this.produtos[0].emailLoja,
           statusPag: 'Aprovado',
-          statusEnt: 'Loja informada'
+          statusEnt: 'Loja informada',
+          telefoneComprador: this.telefoneComprador,
+          CPFComprador: this.userCPF
         }).then(() => {
           this.storage.remove('carrinhoUser').then(() => {
             this.navCtrl.navigateRoot('/status');
@@ -318,10 +341,13 @@ teste(){
       date.setMonth(date.getMonth() + 1);
       const dia = date.getDate() + '/' + date.getMonth()  + '/' + date.getFullYear();
       console.log(dia);
+      const mes = date.getMonth();
+      console.log(mes)
       this.valores = this.carrinho.map(res => res.valor);
       this.valorCompra = this.valores.reduce((acc, val) => acc += val, 0);
       this.storage.get('valorFinal').then((data) => {
-        this.valor =  data + 8;
+        var y =  Math.floor(Number(data) + 8) //Math.floor(Number(data) + Number(this.valorDelivery));
+        this.valor = y.toFixed(2)
         console.log(this.valor.toFixed(2));
       });
       this.storage.get('carrinhoUser').then((data) => {
@@ -332,16 +358,18 @@ teste(){
         this.afStore.collection('vendas').add({
           nPedido:Number(seq),
           nomeComprador: this.nome,
-          endereco: this.endereco + ', ' + this.bairro + ', ' + this.cidade,
-          nomeLoja: this.loja.nome,
-          valor: Number(this.valor.toFixed(2)),
+          endereco: this.endereco + ', '+ this.numeroEND +',' + this.bairro + ', ' + this.cidade +' - CEP:' + this.CEP,          nomeLoja: this.loja.nome,
+          valor: Number(this.valor),
           dia,
+          mes,
           produtos: this.produtos,
           emailComprador: this.email,
           lojaUID: this.produtos[0].lojaUID,
           emailLoja: this.produtos[0].emailLoja,
           statusPag: 'Em dinheiro',
-          statusEnt: 'Loja informada'
+          statusEnt: 'Loja informada',
+          telefoneComprador: this.telefoneComprador,
+          CPFComprador: this.userCPF
         }).then(() => {
           this.storage.remove('carrinhoUser').then(() => {
             this.navCtrl.navigateRoot('/status');
@@ -371,8 +399,9 @@ teste(){
     this.valorCompra = this.valores.reduce((acc, val) => acc += val, 0);
     this.storage.remove('valorFinal').then(() => {
         this.storage.set('valorFinal', this.valorCompra).then((data) => {
-          this.valor =  data + 8;
-          console.log(this.valor);
+          this.valor =  data + Number(this.valorDelivery);
+          this.valor = this.valor.toFixed(2)
+          console.log(this.valor.toFixed(2));
         });
       });
   }
