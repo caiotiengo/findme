@@ -22,10 +22,14 @@
     "@angular/platform-browser-dynamic": "~8.1.2",
     "@angular/router": "~8.1.2",
     "@ionic-native/braintree": "^5.26.0",
+    "@ionic-native/camera": "^5.27.0",
     "@ionic-native/core": "^5.25.0",
+    "@ionic-native/file": "^5.27.0",
     "@ionic-native/geolocation": "^5.25.0",
     "@ionic-native/google-maps": "^5.5.0",
     "@ionic-native/http": "^5.26.0",
+    "@ionic-native/media": "^5.27.0",
+    "@ionic-native/media-capture": "^5.27.0",
     "@ionic-native/native-geocoder": "^5.25.0",
     "@ionic-native/paypal": "^5.25.0",
     "@ionic-native/sms": "^5.25.0",
@@ -39,11 +43,16 @@
     "brmasker-ionic-3": "^1.6.3",
     "card.io.cordova.mobilesdk": "^2.1.0",
     "com.paypal.cordova.mobilesdk": "^3.5.0",
-    "cordova-android": "8.1.0",
+    "cordova-android": "^8.1.0",
     "cordova-plugin-add-swift-support": "^2.0.2",
     "cordova-plugin-advanced-http": "^2.4.1",
+    "cordova-plugin-androidx": "^2.0.0",
+    "cordova-plugin-androidx-adapter": "^1.1.1",
+    "cordova-plugin-camera": "^4.1.0",
     "cordova-plugin-file": "^6.0.2",
     "cordova-plugin-geolocation": "^4.0.2",
+    "cordova-plugin-media": "^5.0.3",
+    "cordova-plugin-media-capture": "^3.0.3",
     "cordova-plugin-nativegeocoder": "^3.4.1",
     "cordova-sms-plugin": "^1.0.0",
     "cordova-sqlite-storage": "^3.4.1",
@@ -125,7 +134,14 @@
       "cordova-plugin-braintree": {},
       "cordova-plugin-advanced-http": {
         "OKHTTP_VERSION": "3.10.0"
-      }
+      },
+      "cordova-plugin-camera": {
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+      },
+      "cordova-plugin-androidx": {},
+      "cordova-plugin-androidx-adapter": {},
+      "cordova-plugin-media-capture": {},
+      "cordova-plugin-media": {}
     },
     "platforms": [
       "android"

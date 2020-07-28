@@ -30,6 +30,7 @@ export interface Produtos {
   lojaUID?:any;
   emailLoja?:string;
   price?:number;
+  CPFComprador?:any;
 }
 @Component({
   selector: 'app-carrinho',
@@ -121,12 +122,12 @@ export class CarrinhoPage implements OnInit {
       this.zona = event.zona;
       this.like = event.LikeValue;
       this.disklike = event.DislikeValue;
-      this.userCPF = event.cpf;
+      this.userCPF = event.CPFCNPJ;
       this.DOB = event.DOB;
       this.numeroEND = event.numeroEND;
       this.CEP = event.CEP;
-      this.estado = event.estado
-      this.telefoneComprador = event.telefone
+      this.estado = event.estado;
+      this.telefoneComprador = event.telefone;
     });
     console.log(this.moip);
     this.hash = 'Gerando hash...';
@@ -336,6 +337,7 @@ teste(){
       this.zona = event.zona;
       this.like = event.LikeValue;
       this.disklike = event.DislikeValue;
+      this.userCPF = event.CPFCNPJ
 
       const date = new Date();
       date.setMonth(date.getMonth() + 1);

@@ -45,6 +45,7 @@ export interface Produtos {
     product?:string;
     quantity: number;
     detail?: string;
+    fotos?: string
 }
 
 @Component({
@@ -252,7 +253,8 @@ export class ItemPage implements OnInit {
             itemId: items.id,
             lojaUID: this.que,
             itemNumber: this.qtd,
-            emailLoja: this.loja.email
+            emailLoja: this.loja.email,
+            fotos: items.fotos[0].link
         });
       this.valores = this.produtos.map(res => res.valor);
       this.valorCompra = this.valores.reduce((acc, val) => acc += val);

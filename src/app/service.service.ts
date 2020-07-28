@@ -21,6 +21,7 @@ export interface User {
     lastEdit?: string;
     comments?:any;
     CEP?:any;
+    CPFconta?:any
     numeroEND?:any;
     pontoREF?:any
     estado?:any
@@ -199,13 +200,14 @@ updateEnd(id: string, end: string, cep:string, bairro:string, numero:string, cid
                                               lat:lat,
                                               lng:lng  });
   }
-  updateBanco(id:string,banco:string, agencia:string,conta:string,correnteoupou:string, nomeNaConta:string) {
+  updateBanco(id:string,banco:string, agencia:string,conta:string,correnteoupou:string, nomeNaConta:string, CPFconta:string) {
     this.userCollection.doc<User>(id).update({
       banco:banco,
       agencia:agencia,
       conta:conta,
       correnteoupou:correnteoupou,
-      nomeNaConta:nomeNaConta
+      nomeNaConta:nomeNaConta,
+      CPFconta: CPFconta
     });
   }
 /*

@@ -67,6 +67,7 @@ export class UserPage implements OnInit {
     bancoNew = '';
     tipoContaNew = '';
     CEPNew = '';
+    CPFconta
     hideMe = true
     hideMe2 = true
     newCadastro
@@ -82,6 +83,7 @@ export class UserPage implements OnInit {
     nomeNaConta
     tipoConta 
     agencia
+    CPFcontaNew = '';
   constructor(public navCtrl: NavController, private storage: Storage,
               public afStore: AngularFirestore, 
               public modalController: ModalController,
@@ -107,7 +109,8 @@ export class UserPage implements OnInit {
                   contaNew: ['', Validators.required],
                   agenciaNew: ['', Validators.required],
                   nomeContaNew: ['', Validators.required],
-                  tipoContaNew: ['', Validators.required]
+                  tipoContaNew: ['', Validators.required],
+                  CPFcontaNew: ['', Validators.required]
                   
             });        
         this.geolocation.getCurrentPosition().then((resp) => {
@@ -162,6 +165,7 @@ export class UserPage implements OnInit {
       this.conta = event.conta
       this.nomeNaConta = event.nomeNaConta
       this.tipoConta = event.correnteoupou
+      this.CPFconta = event.CPFconta
     });
 
    }
@@ -179,7 +183,9 @@ export class UserPage implements OnInit {
   }
   updateBanco(){
 
-      this.services.updateBanco(this.userID, this.newBanco.value.bancoNew, this.newBanco.value.agenciaNew, this.newBanco.value.contaNew,this.newBanco.value.tipoContaNew,this.newBanco.value.nomeContaNew)
+      this.services.updateBanco(this.userID, this.newBanco.value.bancoNew, this.newBanco.value.agenciaNew,
+         this.newBanco.value.contaNew,this.newBanco.value.tipoContaNew,this.newBanco.value.nomeContaNew,
+        this.newBanco.value.CPFcontaNew)
       this.showalert('Opa!', 'Dados atualizados!')
        this.hideMe2 = true;
   }

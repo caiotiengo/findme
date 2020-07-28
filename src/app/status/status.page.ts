@@ -68,12 +68,12 @@ export class StatusPage implements OnInit {
   compraMap
   comment
   mapVal
+  nPedidoStr
   constructor(public navCtrl: NavController, public alertCtrl: AlertController,
               private route: ActivatedRoute, private storage: Storage,
               public afStore: AngularFirestore,  public services: ServiceService,
               public modalController: ModalController,private formBuilder: FormBuilder) {
 
-      this.atualiza();
     console.log(this.typeUser)
              console.log(this.goalListUs)
       this.formulario = this.formBuilder.group({
@@ -84,7 +84,10 @@ export class StatusPage implements OnInit {
 
       
   }
-
+  ngOnInit(){
+         this.atualiza();
+ 
+  }
   atualiza(){
         this.vendasSub = this.services.getVendas().subscribe(res => {
       const user = firebase.auth().currentUser;
@@ -274,9 +277,12 @@ export class StatusPage implements OnInit {
         }
       }
     });
+
     this.goalListST = this.goalListST.filter(currentGoal => {
-      if (currentGoal.nomeLoja && searchTerm) {
-        if (currentGoal.nomeLoja.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1) {
+      var x = currentGoal.nPedido
+      this.nPedidoStr = String(x)
+      if (this.nPedidoStr && searchTerm) {
+        if (this.nPedidoStr.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1) {
 
           return true;
         } else {
@@ -328,8 +334,7 @@ export class StatusPage implements OnInit {
     });
 
   }
-  ngOnInit() {
-  }
+
  doRefresh(event) {
     console.log('Begin async operation');
 

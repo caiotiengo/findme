@@ -31,6 +31,7 @@ export class RegisterPage implements OnInit {
     resumo = '';
     email = '';
     password = '';
+    CPFconta = '';
     CEP = '';
     DOB = '';
     CPF = '';
@@ -71,7 +72,8 @@ export class RegisterPage implements OnInit {
                   nomeNaConta: ['', Validators.required],
                   conta: ['', Validators.required],                  
                   numeroEND: ['', Validators.required],
-                  correnteoupou:['',Validators.required]
+                  correnteoupou:['',Validators.required],
+                  CPFconta:['', Validators.required]
 
             });
          this.geolocation.getCurrentPosition().then((resp) => {
@@ -129,6 +131,7 @@ export class RegisterPage implements OnInit {
             lng: data[0].lon,
             aprovado: "Nao",
             banco: this.cadastro.value.banco,
+            CPFconta:this.cadastro.value.CPFconta,
             agencia: this.cadastro.value.agencia,
             nomeNaConta: this.cadastro.value.nomeNaConta,
             conta: this.cadastro.value.conta,

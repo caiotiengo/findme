@@ -28,6 +28,11 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import {LOCALE_ID} from '@angular/core';
 import { registerLocaleData } from '@angular/common';
+import {AngularFireStorageModule} from '@angular/fire/storage';
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { Media } from '@ionic-native/media/ngx';
+import { MediaCapture } from '@ionic-native/media-capture/ngx';
+import { File } from '@ionic-native/File/ngx';
 
 import ptBr from '@angular/common/locales/pt';
 
@@ -40,6 +45,7 @@ firebase.initializeApp(firebaseConfig);
   entryComponents: [],
   imports: [
   AngularFireModule.initializeApp(firebaseConfig),
+  AngularFireStorageModule,
   AngularFireAuthModule,
           HttpClientModule,
 
@@ -56,12 +62,16 @@ firebase.initializeApp(firebaseConfig);
   providers: [
     StatusBar,
     HaversineService,
+    Camera,
     NativeGeocoder,
     Geolocation,
     SplashScreen,
     ServiceService,
     AngularFirestore,
     PayPal,
+    MediaCapture,
+    File,
+    Media,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
      {
       provide: LOCALE_ID,

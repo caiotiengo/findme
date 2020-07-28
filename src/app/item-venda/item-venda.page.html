@@ -43,10 +43,10 @@
     <ion-list *ngFor="let items of venda?.produtos">
       <ion-item>
         <ion-avatar slot="start">
-          <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+          <img src="{{items.fotos}}">
         </ion-avatar>
         <p>{{items.nome}}</p>
-        <ion-button fill="solid" color="warning" slot="end"(click)="veritem(items)">Veja</ion-button>
+        <!--ion-button fill="solid" color="warning" slot="end"(click)="veritem(items)">Veja</ion-button-->
 
       </ion-item>
     </ion-list>
