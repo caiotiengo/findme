@@ -167,7 +167,8 @@ export class RegisterPage implements OnInit {
             numeroEND: this.cadastro.value.numeroEND,
             CPFCNPJ: this.cadastro.value.CPF,
             CEP: this.cadastro.value.CEP,
-            DOB: this.cadastro.value.DOB
+            DOB: this.cadastro.value.DOB,
+            estado:this.cadastro.value.estado
             //CNPJ: this.cnpj
        }).then(() => {
               this.navCtrl.navigateRoot('/user');
