@@ -50,16 +50,16 @@
 					[brmasker]="{money: true}" type="text"></ion-input>
 				</ion-item>
 			
-				<p>Escolha 4 fotos do seu produto!</p>
+				<p>Escolha as fotos do seu produto!</p>
 				<p>Porcentagem de cada foto: {{uploadPercent | async}}% </p>
 				
-				<ion-button shape="outline" (click)="abrirGaleria1()" color="findme" ><ion-icon ng name="camera"></ion-icon>	</ion-button>
+				<ion-button shape="outline" (click)="abrirGaleria1()" color="findme" ><ion-icon name="camera"></ion-icon>	</ion-button>
 				<ion-button shape="outline" (click)="abrirGaleria2()" color="findme" ><ion-icon name="camera"></ion-icon>	</ion-button>
 				<ion-button shape="outline" (click)="abrirGaleria3()" color="findme" ><ion-icon name="camera"></ion-icon></ion-button>
 				<ion-button shape="outline" (click)="abrirGaleria4()" color="findme" ><ion-icon name="camera"></ion-icon>	</ion-button>
 				<!-- <img src="{{img.src}}"> -->
 				
-				<ion-button *ngIf="photos.lenght === 4"(click)="create()" color="findme" style="color:white !important; max-width: 25vh;" >
+				<ion-button (click)="create()" color="findme" style="color:white !important; max-width: 25vh;" >
 					 Publicar 
 				</ion-button>
 				</form>

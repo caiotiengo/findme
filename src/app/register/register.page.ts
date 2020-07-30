@@ -53,7 +53,8 @@ export class RegisterPage implements OnInit {
               public afAuth: AngularFireAuth, private geolocation: Geolocation, public router: Router, public actRouter: ActivatedRoute,
               public services: ServiceService, public afStore: AngularFirestore, public alertCtrl: AlertController,
               private modalController: ModalController,private http: HttpClient,private formBuilder: FormBuilder) {
-             this.cadastro = this.formBuilder.group({
+             if(this.typeUser === 'Loja'){
+                this.cadastro = this.formBuilder.group({
                   resumo: [''],
                   nome: ['', Validators.required],
                   endereco: ['', Validators.required],
@@ -75,7 +76,33 @@ export class RegisterPage implements OnInit {
                   correnteoupou:['',Validators.required],
                   CPFconta:['', Validators.required]
 
+                });
+             }else{
+                this.cadastro = this.formBuilder.group({
+                  resumo: [''],
+                  nome: ['', Validators.required],
+                  endereco: ['', Validators.required],
+                  telefone: ['', Validators.required],
+                  bairro: ['', Validators.required],
+                  cidade: ['', Validators.required],
+                  estado: ['', Validators.required],
+                  email: ['', Validators.required],
+                  password: ['', Validators.required],
+                  CEP: ['', Validators.required],
+                  DOB: [''],
+                  complemento:['', Validators.required],
+                  banco:[''],
+                  CPF: ['', Validators.required],
+                  agencia: [''],
+                  nomeNaConta: [''],
+                  conta: [''],                  
+                  numeroEND: ['', Validators.required],
+                  correnteoupou:[''],
+                  CPFconta:['']
+
             });
+             }
+            
          this.geolocation.getCurrentPosition().then((resp) => {
               console.log(resp.coords.latitude)
               console.log(resp.coords.longitude)
@@ -169,7 +196,7 @@ export class RegisterPage implements OnInit {
   }
       // tslint:disable-next-line:indent
       // tslint:disable-next-line:indent
-  	 console.log('Fine');
+  	 console.log(this.cadastro);
 
       // tslint:disable-next-line:indent
   	// Após o registro, ele fará a insersão no firebase.

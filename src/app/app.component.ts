@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import * as firebase from 'firebase/app';
 import {NavController} from '@ionic/angular';
+import {ServiceService} from './service.service';
 
 @Component({
   selector: 'app-root',
@@ -15,10 +16,9 @@ export class AppComponent {
   constructor(public navCtrl: NavController,
     private platform: Platform,
     private splashScreen: SplashScreen,
-    private statusBar: StatusBar) {
+    private statusBar: StatusBar,  public services: ServiceService) {
 
     this.initializeApp();
-      
   }
 
   initializeApp() {
@@ -26,7 +26,8 @@ export class AppComponent {
 
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-      
+
     });
+
   }
 }

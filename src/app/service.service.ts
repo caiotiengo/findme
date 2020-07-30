@@ -141,6 +141,7 @@ export class ServiceService {
             map(actions => actions.map(a => {
                 const data = a.payload.doc.data() as Vendas;
                 const id = a.payload.doc.id;
+                console.log('nova venda!')
                 return { id, ...data };
             }))
         );
