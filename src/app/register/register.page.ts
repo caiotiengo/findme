@@ -42,6 +42,7 @@ export class RegisterPage implements OnInit {
     complemento ='';
     nomeNaConta = '';
     banco = '';
+    ddd = '';
     lat 
     long
     cnpj: any;
@@ -74,7 +75,8 @@ export class RegisterPage implements OnInit {
                   conta: ['', Validators.required],                  
                   numeroEND: ['', Validators.required],
                   correnteoupou:['',Validators.required],
-                  CPFconta:['', Validators.required]
+                  CPFconta:['', Validators.required],
+                  ddd:['', Validators.required]
 
                 });
              }else{
@@ -98,7 +100,9 @@ export class RegisterPage implements OnInit {
                   conta: [''],                  
                   numeroEND: ['', Validators.required],
                   correnteoupou:[''],
-                  CPFconta:['']
+                  CPFconta:[''],
+                  ddd:['', Validators.required]
+
 
             });
              }
@@ -168,7 +172,8 @@ export class RegisterPage implements OnInit {
             CPFCNPJ: this.cadastro.value.CPF,
             CEP: this.cadastro.value.CEP,
             DOB: this.cadastro.value.DOB,
-            estado:this.cadastro.value.estado
+            estado:this.cadastro.value.estado,
+            ddd:this.cadastro.value.ddd
             //CNPJ: this.cnpj
        }).then(() => {
               this.navCtrl.navigateRoot('/user');

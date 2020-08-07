@@ -13,6 +13,7 @@ import { NativeGeocoder, NativeGeocoderOptions, NativeGeocoderResult } from '@io
 import {HttpClient} from '@angular/common/http';
 import { google } from "google-maps";
 import { HaversineService, GeoCoord } from "ng2-haversine";
+import {format} from "date-fns";
 
 declare var google: any;
 
@@ -93,7 +94,9 @@ export class ListPage implements OnInit {
     estado
     nomeUser
     datou
+    DOB
     goalListFiltrei
+    filtroLoja = '';
   constructor(public navCtrl: NavController, public Platform:Platform,
               public router: Router, 
               private geolocation: Geolocation,
@@ -131,12 +134,18 @@ export class ListPage implements OnInit {
               this.numero = event.numeroEND;
               this.estado = event.estado;
               this.nomeUser = event.nome
+              this.DOB = event.DOB
+              let birthdate = this.DOB
+              format(new Date(birthdate), "yyyy-MM-dd");
+              this.filtroLoja = this.zona
                
-              console.log();
+              console.log(birthdate);
+              console.log(format(new Date(birthdate), "yyyy-MM-dd"))
                // this.goalListFiltrado = this.goalList.filter(i => i.zona === this.zona && i.tipo === 'Loja' && i.aprovado === true);
               //this.loadedGoalListFiltrado = this.loadedGoalList.filter(i => i.zona === this.zona && i.tipo === 'Loja' && i.aprovado === true);
+
               this.lojaApr = this.goalList.filter(i => i.tipo === 'Loja' && i.aprovado === "Sim")       
-                                  this.goalListFiltrado = []
+                                 this.goalListFiltrado = []
 
               this.lojaApr.forEach(loja => {
               console.log(loja)
@@ -159,9 +168,10 @@ export class ListPage implements OnInit {
              console.log("A distancia entre as lojas é de:" + kilometers); 
 
              var km = Number(kilometers)
-               if(Number(kilometers) < 8.0 ){
+               if(Number(kilometers) >= 0 ){
                     this.goalListFiltrado.push(loja)
                     console.log(this.goalListFiltrado.length)
+                    
                     this.lojinha = this.goalListFiltrado
                     this.semLoja = this.goalListFiltrado.length
 

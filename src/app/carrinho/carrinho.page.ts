@@ -12,6 +12,7 @@ import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestor
 import * as firebase from 'firebase';
 import moipSdk from 'moip-sdk-node'
 import { HaversineService, GeoCoord } from "ng2-haversine";
+import {format} from "date-fns";
 
 declare let paypal: any;
 
@@ -82,6 +83,8 @@ export class CarrinhoPage implements OnInit {
     lojaLng
     lojaLat
     telefoneComprador
+    complemento
+    ddd
   constructor(private payPal: PayPal, public afStore: AngularFirestore,public loadingController: LoadingController,
               public navCtrl: NavController, private _haversineService: HaversineService
 , public alertCtrl: AlertController, private storage: Storage) {
@@ -128,6 +131,8 @@ export class CarrinhoPage implements OnInit {
       this.CEP = event.CEP;
       this.estado = event.estado;
       this.telefoneComprador = event.telefone;
+      this.complemento = event.complemento;
+      this.ddd = event.ddd;
     });
     console.log(this.moip);
     this.hash = 'Gerando hash...';
@@ -167,6 +172,8 @@ export class CarrinhoPage implements OnInit {
 
 teste(){
   this.presentLoading() 
+  let birthdate = this.DOB
+  var x = format(new Date(birthdate), "yyyy-MM-dd");
 
   MoipCreditCard
     .setEncrypter(jsencrypt, 'ionic')
@@ -186,7 +193,7 @@ teste(){
             amount: {
                 currency: 'BRL',
                 subtotals: {
-                    shipping: 800//Number(this.valorFrete)
+                    shipping: Number(this.valorFrete)
                 }
             },
             items: this.carrinho,
@@ -194,20 +201,20 @@ teste(){
                 ownId: this.userCPF,
                 fullname: this.nome,
                 email: this.email,
-                birthDate: '1980-01-02',
+                birthDate: x,
                 taxDocument: {
                     type: 'CPF',
                     number: this.userCPF
                 },
                 phone: {
                     countryCode: '55',
-                    areaCode: '21',
+                    areaCode: this.ddd,
                     number: this.telefone
                 },
                 shippingAddress: {
                     street: this.endereco,
                     streetNumber: this.numeroEND,
-                    complement: 8,
+                    complement: this.complemento,
                     district: this.bairro,
                     city: this.cidade,
                     state: this.estado,
@@ -225,14 +232,14 @@ teste(){
                     hash: this.hash,
                     holder: {
                         fullname: this.nome,
-                        birthdate: '1980-01-02',
+                        birthdate: x,
                         taxDocument: {
                             type: 'CPF',
                             number: this.userCPF
                         },
                         phone: {
                             countryCode: '55',
-                            areaCode: '11',
+                            areaCode: this.ddd,
                             number: this.telefone
                         }
                     }
@@ -267,7 +274,8 @@ teste(){
       this.valores = this.carrinho.map(res => res.valor);
       this.valorCompra = this.valores.reduce((acc, val) => acc += val, 0);
       this.storage.get('valorFinal').then((data) => {
-        var y =  Math.floor(Number(data) + 8) //Math.floor(Number(data) + Number(this.valorDelivery));
+        var y = Math.floor(Number(data) + Number(this.valorDelivery));
+ //Math.floor(Number(data) + 8) 
         this.valor = y.toFixed(2)
         console.log(this.valor);
       });
@@ -348,9 +356,10 @@ teste(){
       this.valores = this.carrinho.map(res => res.valor);
       this.valorCompra = this.valores.reduce((acc, val) => acc += val, 0);
       this.storage.get('valorFinal').then((data) => {
-        var y =  Math.floor(Number(data) + 8) //Math.floor(Number(data) + Number(this.valorDelivery));
+        var y = Math.floor(Number(data) + Number(this.valorDelivery));
+// Math.floor(Number(data) + 8) //Math.floor(Number(data) + Number(this.valorDelivery));
         this.valor = y.toFixed(2)
-        console.log(this.valor.toFixed(2));
+        console.log(this.valor);
       });
       this.storage.get('carrinhoUser').then((data) => {
         this.produtos =  JSON.parse(data);

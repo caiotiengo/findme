@@ -203,7 +203,7 @@ export class ItemPage implements OnInit {
               
              let kilometers = this._haversineService.getDistanceInKilometers(Usuario, Loja).toFixed(1);
              console.log("A distancia entre as lojas é de:" + Number(kilometers));
-             this.valorFrete = Math.floor(1.40+2.0)*Number(kilometers)
+             this.valorFrete = Math.floor(1.40+2.0)*Number(kilometers) + 5
              this.valorDelivery = this.valorFrete.toFixed(2)
 
     });
