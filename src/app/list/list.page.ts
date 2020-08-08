@@ -107,10 +107,6 @@ export class ListPage implements OnInit {
               public services: ServiceService,
               private _haversineService: HaversineService
               ) {
-
-      this.proccessSubscription = this.services.getUsers().subscribe(data => {
-          this.goalList = data;
-          this.loadedGoalList = data;
           let user = firebase.auth().currentUser;
           console.log(user);
           if (user) {
@@ -122,8 +118,12 @@ export class ListPage implements OnInit {
               this.navCtrl.navigateRoot('/login');
 
           }
+      this.proccessSubscription = this.services.getUsers().subscribe(data => {
+          this.goalList = data;
+          this.loadedGoalList = data;
 
-          this.sub = this.mainuser.valueChanges().subscribe(event => {
+
+          this.sub = this.storage.get('usuario').then(event => {
               this.zona = event.zona;
               this.lat = event.lat;
               this.lng = event.lng
@@ -138,11 +138,11 @@ export class ListPage implements OnInit {
               let birthdate = this.DOB
               format(new Date(birthdate), "yyyy-MM-dd");
               this.filtroLoja = this.zona
-               
+              this.storage.set('usuario', event) 
               console.log(birthdate);
               console.log(format(new Date(birthdate), "yyyy-MM-dd"))
                // this.goalListFiltrado = this.goalList.filter(i => i.zona === this.zona && i.tipo === 'Loja' && i.aprovado === true);
-              //this.loadedGoalListFiltrado = this.loadedGoalList.filter(i => i.zona === this.zona && i.tipo === 'Loja' && i.aprovado === true);
+              // this.loadedGoalListFiltrado = this.loadedGoalList.filter(i => i.zona === this.zona && i.tipo === 'Loja' && i.aprovado === true);
 
               this.lojaApr = this.goalList.filter(i => i.tipo === 'Loja' && i.aprovado === "Sim")       
                                  this.goalListFiltrado = []
@@ -190,14 +190,7 @@ export class ListPage implements OnInit {
     });
 
             
-      const user = firebase.auth().currentUser;
-      console.log(user);
-      if (user) {
-          this.mainuser = this.afStore.doc(`users/${user.uid}`);
-
-      } else {
-          // No user is signed in.
-      }
+      
   }
 
 

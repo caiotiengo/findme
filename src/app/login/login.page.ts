@@ -25,6 +25,7 @@ export class LoginPage implements OnInit {
   valor = '';
   mainuser: AngularFirestoreDocument;
   userID
+    sub;
 
 
   constructor(public navCtrl: NavController, private storage: Storage,public loadingController: LoadingController,
@@ -74,9 +75,15 @@ async presentLoading() {
     try {
       const res = await this.afAuth.auth.signInWithEmailAndPassword(email, password);
       if (res.user) {
-        this.storage.set('email', res.user.email);
-        this.showalert('Bem-vindo de volta!', 'Vamos macumbar!');
-        this.navCtrl.navigateRoot('/tabs/tab1');
+
+         this.sub = this.mainuser.valueChanges().subscribe(event => {
+             
+              this.storage.set('usuario', event) 
+              this.storage.set('email', res.user.email);
+              this.showalert('Bem-vindo de volta!', 'Vamos macumbar!');
+              this.navCtrl.navigateRoot('/tabs/tab1');
+            });
+
       }
 
     } catch (err) {

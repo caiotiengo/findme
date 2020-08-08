@@ -48,7 +48,7 @@
 </div>
 
 
-<div style="text-align: center;" *ngIf="semLoja === 0 ">
+<div style="text-align: center;" *ngIf="semLoja === 0 && filtroLoja  ">
    <img style="max-width: 55vh" src="/assets/logo.png" alt="" />
 
   <p>Parece que não temos loja em sua região...</p>
@@ -56,7 +56,7 @@
 
 </div>
 
-<div class="background-traco"  *ngIf="semLoja > 0 ">
+<div class="background-traco"  *ngIf="semLoja > 0 && filtroLoja ">
 
           <ion-list style="background: transparent" *ngFor="let items of goalListFiltrado">
          

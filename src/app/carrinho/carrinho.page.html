@@ -61,6 +61,26 @@
           <ion-label position="stacked">Nome no cartão</ion-label>
           <ion-input [(ngModel)]="nomeCartao"></ion-input>
       </ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+              <ion-item>
+                <ion-label position="stacked">CPF</ion-label>
+                <ion-input [(ngModel)]="cpfCartao"></ion-input>
+              </ion-item>            
+          </ion-col>
+          <ion-col>
+  
+                <ion-datetime
+                    [dayShortNames]="customDayShortNames"
+                    displayFormat="DD MMM, YYYY"
+                    monthShortNames="Janeiro, Fevereiro, Março, Abril, Maio, Junho, Julho, Agosto, Setembro, Outubro, Novembro, Dezembro" [(ngModel)]="dataNCartao" placeholder="Data de Nascimento" required></ion-datetime>
+
+           
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
       <ion-item>
           <ion-label position="stacked">Número do cartão</ion-label>
           <ion-input [(ngModel)]="numeroCard"></ion-input>

@@ -69,11 +69,15 @@ export class StatusPage implements OnInit {
   comment
   mapVal
   nPedidoStr
+  usuarioLogado
   constructor(public navCtrl: NavController, public alertCtrl: AlertController,
               private route: ActivatedRoute, private storage: Storage,
               public afStore: AngularFirestore,  public services: ServiceService,
               public modalController: ModalController,private formBuilder: FormBuilder) {
-
+        this.storage.get('usuario').then((data)=>{
+         this.usuarioLogado = data;
+         console.log(this.usuarioLogado)
+        })
     console.log(this.typeUser)
              console.log(this.goalListUs)
       this.formulario = this.formBuilder.group({
@@ -103,6 +107,14 @@ export class StatusPage implements OnInit {
         
         this.loadedGoalListUs = res.filter(i => i.emailComprador  === this.emailUsr && i.statusEnt != 'Cancelada');
         this.goalListST = res.filter(i => i.emailLoja === this.emailUsr);
+        if(res.filter(i => i.emailLoja === this.emailUsr)){
+          this.typeUser = 'Loja'
+          console.log(this.typeUser)
+        }if(res.filter(i => i.emailComprador === this.emailUsr)){
+          this.typeUser = 'User'
+                    console.log(this.typeUser)
+
+        }
         this.loadedGoalListST = res.filter(i => i.emailLoja  === this.emailUsr); 
              this.commentsSubscription = this.services.getComments().subscribe(data =>{
                 console.log(data)
@@ -144,8 +156,8 @@ export class StatusPage implements OnInit {
 
 
       });
-        
-        this.mapVal = this.goalListST.map(i => {
+        if(this.usuarioLogado.tipo === 'Loja'){
+          this.mapVal = this.goalListST.map(i => {
           if(i.statusEnt != 'Cancelada'){
             return i.valor
           }
@@ -161,6 +173,8 @@ export class StatusPage implements OnInit {
         console.log(this.mapVal.toFixed(2))
         console.log(this.receber.toFixed(2))
       //  console.log(this.emailUsr);
+        }
+        
       } else {
 
       }

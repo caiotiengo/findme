@@ -55,8 +55,9 @@ const routes: Routes = [
   {
     path: 'item-venda/:id',
     loadChildren: () => import('./item-venda/item-venda.module').then( m => m.ItemVendaPageModule)
-  },  {
-    path: 'chat',
+  },
+  {
+    path: 'chat/:id',
     loadChildren: () => import('./chat/chat.module').then( m => m.ChatPageModule)
   }
 

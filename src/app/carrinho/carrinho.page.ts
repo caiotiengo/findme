@@ -85,6 +85,8 @@ export class CarrinhoPage implements OnInit {
     telefoneComprador
     complemento
     ddd
+    cpfCartao ='';
+    dataNCartao ='';
   constructor(private payPal: PayPal, public afStore: AngularFirestore,public loadingController: LoadingController,
               public navCtrl: NavController, private _haversineService: HaversineService
 , public alertCtrl: AlertController, private storage: Storage) {
@@ -99,7 +101,7 @@ export class CarrinhoPage implements OnInit {
      this.storage.get('valorFrete').then((data) => {
       this.valorDelivery =  data;
       var y = this.valorDelivery.replace('.','') 
-      this.valorFrete = y
+      this.valorFrete = Number(y)
       console.log(this.valorFrete);
     });
     this.storage.get('valorFinal').then((data) => {
@@ -115,7 +117,7 @@ export class CarrinhoPage implements OnInit {
     } else {
 
     }
-    this.sub = this.mainuser.valueChanges().subscribe(event => {
+    this.sub = this.storage.get('usuario').then(event => {
       this.nome = event.nome;
       this.endereco = event.endereco;
       this.cidade = event.cidade;
@@ -174,6 +176,8 @@ teste(){
   this.presentLoading() 
   let birthdate = this.DOB
   var x = format(new Date(birthdate), "yyyy-MM-dd");
+  let birthdateCard = this.dataNCartao
+  var b = format(new Date(birthdateCard),"yyyy-MM-dd")
 
   MoipCreditCard
     .setEncrypter(jsencrypt, 'ionic')
@@ -231,11 +235,11 @@ teste(){
                 creditCard: {
                     hash: this.hash,
                     holder: {
-                        fullname: this.nome,
-                        birthdate: x,
+                        fullname: this.nomeCartao,
+                        birthdate: b,
                         taxDocument: {
                             type: 'CPF',
-                            number: this.userCPF
+                            number: this.cpfCartao
                         },
                         phone: {
                             countryCode: '55',
@@ -247,7 +251,7 @@ teste(){
             }
         }).then((response) => {
           if(response.body.status === 'IN_ANALYSIS'){
-
+              console.log(response)
               const user = firebase.auth().currentUser;
     if (user) {
       this.mainuser = this.afStore.doc(`users/${user.uid}`);
@@ -255,7 +259,7 @@ teste(){
     } else {}
                this.showalert('Obrigado pela compra!', 'A loja foi informada e você' +
         ' pode acompanhar o seu pedido pela aba "Seus Pedidos"')
-            this.sub = this.mainuser.valueChanges().subscribe(event => {
+      this.sub = this.storage.get('usuario').then(event => {
       this.nome = event.nome;
       this.endereco = event.endereco;
       this.cidade = event.cidade;
@@ -308,6 +312,9 @@ teste(){
         });
       });
     });
+          }else{
+            this.showalert('Ops...', 'Hove um erro na sua compra,' +
+        ' verifique suas informações e tente novamente.')
           }
         }).catch((err) => {
             console.log(err)
@@ -335,7 +342,7 @@ teste(){
     } else {}
     this.showalert('Obrigado pela compra!', 'A loja foi informada e você' +
         ' pode acompanhar o seu pedido pela aba "Seus Pedidos"');
-    this.sub = this.mainuser.valueChanges().subscribe(event => {
+    this.sub = this.storage.get('usuario').then(event => {
       this.nome = event.nome;
       this.endereco = event.endereco;
       this.cidade = event.cidade;
