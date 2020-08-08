@@ -51,6 +51,6 @@ export class ChatPage implements OnInit {
   	})
   }
   enviar(){
-  	
+  	// aqui eu farei o envio da mensagem, mas eu não consigo achar um PUSH para o firebase. só consigo atualizar um item
   }
 }
